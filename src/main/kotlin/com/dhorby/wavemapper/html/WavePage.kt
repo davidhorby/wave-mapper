@@ -21,7 +21,6 @@ class WavePage(waveData: String, mapsApiKey: String) {
                 });
                 google.charts.setOnLoadCallback(drawMap);
                 google.charts.load('current', {'packages':['corechart']});
-                google.charts.setOnLoadCallback(drawChart);
 
                 function drawChart() {
                 
@@ -90,8 +89,7 @@ class WavePage(waveData: String, mapsApiKey: String) {
         </head>
 
         <body>
-        <div id="map_div" style="width: 100%; height: 50%"></div>
-        <div id="chart_div" style="width: 100%; height: 50%"></div>
+        <div id="map_div" style="width: 100%; height: 100%"></div>
         </body>
         </html>
     """.trimIndent()

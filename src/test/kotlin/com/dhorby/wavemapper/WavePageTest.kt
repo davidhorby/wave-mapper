@@ -11,9 +11,9 @@ internal class WavePageTest {
     fun toGoogleMapFormat() {
         val expectedResult = """
              ['Lat', 'Long', 'Name', 'Marker'],
-             [51.41, 1.78, 'Sandettie 0.3m', 'verysmall'],
-             [50.04, -6.04, 'Seven Stones 0.5m', 'small'],
-             [51.41, -6.42, 'M5 2.3m', 'big']
+             [51.41, 1.78, 'Sandettie 0.3m 23km', 'verysmall'],
+             [50.04, -6.04, 'Seven Stones 0.5m 76km', 'small'],
+             [51.41, -6.42, 'M5 2.3m 1km', 'big']
         """.trimIndent().filter { !it.isWhitespace() }
 
         val testData = listOf(

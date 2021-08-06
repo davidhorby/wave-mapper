@@ -2,13 +2,13 @@ package com.dhorby.wavemapper
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.json.JsonMapper.*
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 val siteList: List<String> = listOf(
     "162103",
@@ -88,7 +88,8 @@ object XMLWaveParser {
         """.trimIndent()
         val map: List<String> = data.map { location ->
             val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
-            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m', '${waveHeight?.mapWaveHeight()}']"
+            val windSpeed = location.datePeriods.firstOrNull()?.windSpeed
+            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km', '${waveHeight?.mapWaveHeight()}']"
         }
         val joinToString = map.joinToString ( "," )
         return header + joinToString
@@ -130,7 +131,7 @@ object XMLWaveParser {
             periods.isArray -> {
                 periods.map { period ->
                     val waveHeight: Float = getWaveReps(period).maxOrNull() ?: 0.0F
-                    val windSpeed:Int = getWindSpeed(period).maxOrNull() ?: 0
+                    val windSpeed:Int = getWindSpeedInKm(period).maxOrNull() ?: 0
                     val dateStr: String? = period.get("value").toString()
                     dateStr?.let {
                         val date = it.toString().removeQuotes().parseToDate()
@@ -153,16 +154,19 @@ object XMLWaveParser {
         }.filterNotNull()
     }
 
-    private fun getWindSpeed(jsonNode: JsonNode): List<Int> {
+    private fun getWindSpeedInKm(jsonNode: JsonNode): List<Int> {
         val reps: JsonNode = jsonNode.path("Rep")
         return reps.map { rep ->
             val waveHeight = rep.get("S")?.toString()?.parseToInt()
-            waveHeight
+            val waveHeightKph: Double = waveHeight?.let {
+                it * 1.85
+            }?: 0.0
+            waveHeightKph.roundToInt()
         }.filterNotNull()
     }
 
 
-    fun String.parseToFloat(): Float  {
+    private fun String.parseToFloat(): Float  {
         if (this.isNullOrEmpty()) return 0.0F
         else
         return try {
@@ -173,7 +177,7 @@ object XMLWaveParser {
         }
     }
 
-    fun String.parseToInt(): Int  {
+    private fun String.parseToInt(): Int  {
         if (this.isNullOrEmpty()) return 0
         else
             return try {
