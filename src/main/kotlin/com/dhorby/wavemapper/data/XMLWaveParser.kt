@@ -36,7 +36,7 @@ val siteList: List<String> = listOf(
 )
 
 data class Location(val id: String, val name: String, val lat: Float, val lon: Float, val datePeriods: List<DatePeriod>)
-data class DatePeriod(val date: LocalDate, val waveHeight: Float, val windSpeed:Int)
+data class DatePeriod(val date: LocalDate, val waveHeight: Float, val windSpeed:Int, val windDirection:String)
 
 //<Period type="Day" value="2021-06-24Z">
 //<Rep D="N" H="72.3" P="1022" S="6" T="13.0" V="26" Dp="8.2" Wh="0.4" Wp="6.0" St="14.4">480</Rep>
@@ -89,7 +89,8 @@ object XMLWaveParser {
         val map: List<String> = data.map { location ->
             val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
             val windSpeed = location.datePeriods.firstOrNull()?.windSpeed
-            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km', '${waveHeight?.mapWaveHeight()}']"
+            val windDirection = location.datePeriods.firstOrNull()?.windDirection
+            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection} ', '${waveHeight?.mapWaveHeight()}']"
         }
         val joinToString = map.joinToString ( "," )
         return header + joinToString
@@ -132,11 +133,12 @@ object XMLWaveParser {
                 periods.map { period ->
                     val waveHeight: Float = getWaveReps(period).maxOrNull() ?: 0.0F
                     val windSpeed:Int = getWindSpeedInKm(period).maxOrNull() ?: 0
+                    val windDirection:String = getWindDirection(period).maxOrNull() ?: ""
                     val dateStr: String? = period.get("value").toString()
                     dateStr?.let {
                         val date = it.toString().removeQuotes().parseToDate()
                         date?.let {
-                            DatePeriod(it, waveHeight, windSpeed)
+                            DatePeriod(it, waveHeight, windSpeed, windDirection)
                         }
                     }
                 }.filterNotNull()
@@ -162,7 +164,14 @@ object XMLWaveParser {
                 it * 1.85
             }?: 0.0
             waveHeightKph.roundToInt()
-        }.filterNotNull()
+        }
+    }
+
+    private fun getWindDirection(jsonNode: JsonNode): List<String> {
+        val reps: JsonNode = jsonNode.path("Rep")
+        return reps.map { rep ->
+            rep.get("D")?.toString()?.removeQuotes()?: ""
+        }
     }
 
 

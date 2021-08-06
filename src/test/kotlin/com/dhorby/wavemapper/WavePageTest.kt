@@ -11,9 +11,9 @@ internal class WavePageTest {
     fun toGoogleMapFormat() {
         val expectedResult = """
              ['Lat', 'Long', 'Name', 'Marker'],
-             [51.41, 1.78, 'Sandettie 0.3m 23km', 'verysmall'],
-             [50.04, -6.04, 'Seven Stones 0.5m 76km', 'small'],
-             [51.41, -6.42, 'M5 2.3m 1km', 'big']
+             [51.41, 1.78, 'Sandettie 0.3m 23km ESE', 'verysmall'],
+             [50.04, -6.04, 'Seven Stones 0.5m 76km N', 'small'],
+             [51.41, -6.42, 'M5 2.3m 1km SW', 'big']
         """.trimIndent().filter { !it.isWhitespace() }
 
         val testData = listOf(
@@ -22,21 +22,21 @@ internal class WavePageTest {
                 name = "Sandettie",
                 lat = 51.41F,
                 lon = 1.78F,
-                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 0.3F, windSpeed = 23))
+                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 0.3F, windSpeed = 23, windDirection = "ESE"))
             ),
             Location(
                 id = "162305",
                 name = "Seven Stones",
                 lat = 50.04F,
                 lon = -6.04F,
-                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 0.5F, windSpeed = 76))
+                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 0.5F, windSpeed = 76, windDirection = "N"))
             ),
             Location(
                 id = "162306",
                 name = "M5",
                 lat = 51.41F,
                 lon = -6.42F,
-                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 2.3F, windSpeed = 1))
+                listOf(DatePeriod(date = LocalDate.now(), waveHeight = 2.3F, windSpeed = 1, windDirection = "SW"))
             )
         )
 

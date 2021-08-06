@@ -16,7 +16,7 @@ gcloud config get-value project
 gcloud config set functions/region europe-west1
 
 # Deploy the app
-gcloud app deploy wave-mapper-1.0-SNAPSHOT.jar
+gcloud app deploy ./build/libs/wave-mapper-1.0-SNAPSHOT.jar
 
 # Stream logs from the command line by running
 gcloud app logs tail -s default
