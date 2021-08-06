@@ -1,0 +1,118 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.1'
+    }
+}
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.20'
+}
+apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+
+compileKotlin.kotlinOptions.jvmTarget = "11"
+compileTestKotlin.kotlinOptions.jvmTarget = "11"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.dhorby.wavemapper.WaveMapperHttp4kAppKt'
+    }
+}
+
+group 'com.dhorby'
+version '1.0-SNAPSHOT'
+
+shadowJar {
+    archiveBaseName.set(project.name)
+    archiveClassifier.set(null)
+    archiveVersion.set(null)
+    mergeServiceFiles()
+}
+
+
+
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
+    }
+    mavenCentral()
+}
+
+ext {
+    junitPlatformVersion = "1.7.0"
+    junitJupiterVersion = "5.7.0"
+}
+
+
+dependencies {
+
+    implementation group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.89'
+
+    implementation "org.http4k:http4k-core:${http4kVersion}"
+    implementation "org.http4k:http4k-format-jackson:${http4kVersion}"
+    implementation "org.http4k:http4k-format-xml:${http4kVersion}"
+//    implementation "org.http4k:http4k-template-handlebars:${http4kVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+    implementation platform("com.google.cloud:libraries-bom:20.6.0");
+    implementation("com.google.cloud:google-cloud-secretmanager");
+
+
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation group: 'com.google.appengine', name: 'appengine-testing', version: '1.9.89'
+    testImplementation group: 'com.google.appengine', name: 'appengine-api-stubs', version: '1.9.89'
+    testImplementation group: 'com.google.appengine', name: 'appengine-tools-sdk', version: '1.9.89'
+
+//    testImplementation("org.jetbrains.kotlin:kotlin-test")
+//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.mockito:mockito-core:3.5.10")
+    testImplementation("com.google.truth:truth:1.0.1")
+    testImplementation("com.google.guava:guava-testlib:29.0-jre")
+    testImplementation("org.apiguardian:apiguardian-api:1.1.0")
+    testImplementation("org.opentest4j:opentest4j:1.2.0")
+    testImplementation("org.junit.platform:junit-platform-commons:$junitPlatformVersion")
+    testImplementation("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+    testImplementation("com.natpryce:hamkrest:1.8.0.1")
+    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+// Always run unit tests
+appengineDeploy.dependsOn test
+appengineStage.dependsOn test
+
+appengine {  // App Engine tasks configuration
+    deploy {   // deploy configuration
+        projectId = 'analytics-springernature'
+        version = '1'
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
