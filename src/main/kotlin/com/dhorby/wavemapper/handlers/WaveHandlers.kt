@@ -16,9 +16,9 @@ import java.util.*
 
 object WaveHandlers {
 
-    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
+//    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
 
-    val view = Body.viewModel(renderer, TEXT_HTML).toLens()
+//    val view = Body.viewModel(renderer, TEXT_HTML).toLens()
 
     fun getWaveHandler(): HttpHandler  = {
         val mapsApiKeyMaybe:String? = AccessSecretVersion.accessSecretVersion("mapsApiKey")
@@ -49,11 +49,11 @@ object WaveHandlers {
         Response(OK).body(allProperties)
     }
 
-    fun getDataSheet(): HttpHandler = {
-        val (renderer, resourceLoader) = buildResourceLoaders(false)
-        val viewModel = Wave("M5", 2.1.toLong())
-        Response(OK).body(renderer(viewModel))
-    }
+//    fun getDataSheet(): HttpHandler = {
+//        val (renderer, resourceLoader) = buildResourceLoaders(false)
+//        val viewModel = Wave("M5", 2.1.toLong())
+//        Response(OK).body(renderer(viewModel))
+//    }
 
     private fun buildResourceLoaders(hotReload: Boolean) = when {
         hotReload -> HandlebarsTemplates().HotReload("./src/main/resources") to ResourceLoader.Classpath("public")

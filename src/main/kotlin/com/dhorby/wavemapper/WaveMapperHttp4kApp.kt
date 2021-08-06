@@ -19,7 +19,7 @@ val app: HttpHandler = routes(
     "/" bind Method.GET to WaveHandlers.getWaveHandler(),
     "/data" bind Method.GET to WaveHandlers.getWaveData(),
     "/properties" bind Method.GET to WaveHandlers.getProperties(),
-    "/datasheet" bind Method.GET to WaveHandlers.getDataSheet()
+//    "/datasheet" bind Method.GET to WaveHandlers.getDataSheet()
 
 )
 
