@@ -3,10 +3,12 @@ package com.dhorby.wavemapper
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters
+import org.http4k.routing.ResourceLoader
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
+import org.http4k.template.HandlebarsTemplates
 
 
 val app: HttpHandler = routes(
@@ -16,7 +18,8 @@ val app: HttpHandler = routes(
 
     "/" bind Method.GET to WaveHandlers.getWaveHandler(),
     "/data" bind Method.GET to WaveHandlers.getWaveData(),
-    "/properties" bind Method.GET to WaveHandlers.getProperties()
+    "/properties" bind Method.GET to WaveHandlers.getProperties(),
+    "/datasheet" bind Method.GET to WaveHandlers.getDataSheet()
 
 )
 
@@ -27,3 +30,5 @@ fun main() {
 
     println("Server started on http://localhost:" + server.port())
 }
+
+

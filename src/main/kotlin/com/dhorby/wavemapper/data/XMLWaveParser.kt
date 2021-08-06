@@ -36,7 +36,7 @@ val siteList: List<String> = listOf(
 )
 
 data class Location(val id: String, val name: String, val lat: Float, val lon: Float, val datePeriods: List<DatePeriod>)
-data class DatePeriod(val date: LocalDate, val waveHeight: Float)
+data class DatePeriod(val date: LocalDate, val waveHeight: Float, val windSpeed:Int)
 
 //<Period type="Day" value="2021-06-24Z">
 //<Rep D="N" H="72.3" P="1022" S="6" T="13.0" V="26" Dp="8.2" Wh="0.4" Wp="6.0" St="14.4">480</Rep>
@@ -87,7 +87,8 @@ object XMLWaveParser {
             ['Lat', 'Long', 'Name', 'Marker'],
         """.trimIndent()
         val map: List<String> = data.map { location ->
-            "[${location.lat},${location.lon},'${location.name}', '${location.datePeriods.firstOrNull()?.waveHeight?.mapWaveHeight()}']"
+            val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
+            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m', '${waveHeight?.mapWaveHeight()}']"
         }
         val joinToString = map.joinToString ( "," )
         return header + joinToString
@@ -95,9 +96,11 @@ object XMLWaveParser {
 
     fun Float.mapWaveHeight():String {
         return when {
-            this <= 0.4 -> "small"
-            this > 0.4 && this <= 1.0 -> "medium"
-            this >= 1.0 -> "big"
+            this <= 0.4 -> "verysmall"
+            this > 0.4 && this <= 0.8 -> "small"
+            this > 0.8 && this <= 1.0 -> "medium"
+            this > 1.0 && this <= 3.0 -> "big"
+            this >= 3.0 -> "verybig"
             else -> "unknown"
         }
     }
@@ -127,11 +130,12 @@ object XMLWaveParser {
             periods.isArray -> {
                 periods.map { period ->
                     val waveHeight: Float = getWaveReps(period).maxOrNull() ?: 0.0F
+                    val windSpeed:Int = getWindSpeed(period).maxOrNull() ?: 0
                     val dateStr: String? = period.get("value").toString()
                     dateStr?.let {
                         val date = it.toString().removeQuotes().parseToDate()
                         date?.let {
-                            DatePeriod(it, waveHeight)
+                            DatePeriod(it, waveHeight, windSpeed)
                         }
                     }
                 }.filterNotNull()
@@ -149,6 +153,14 @@ object XMLWaveParser {
         }.filterNotNull()
     }
 
+    private fun getWindSpeed(jsonNode: JsonNode): List<Int> {
+        val reps: JsonNode = jsonNode.path("Rep")
+        return reps.map { rep ->
+            val waveHeight = rep.get("S")?.toString()?.parseToInt()
+            waveHeight
+        }.filterNotNull()
+    }
+
 
     fun String.parseToFloat(): Float  {
         if (this.isNullOrEmpty()) return 0.0F
@@ -160,6 +172,18 @@ object XMLWaveParser {
             return 0.0F
         }
     }
+
+    fun String.parseToInt(): Int  {
+        if (this.isNullOrEmpty()) return 0
+        else
+            return try {
+                this.removeQuotes().toInt()
+            } catch (e:Exception) {
+                println("Error parsing $this")
+                return 0
+            }
+    }
+
     fun String.removeQuotes(): String = this.toString().replace("\"", "")
     fun String.parseToDate(): LocalDate? {
         // 2021-06-24Z
