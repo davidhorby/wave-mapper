@@ -1,10 +1,10 @@
 Data Point Site List
 
-http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/sitelist?res=3hourly&key=1e9e146a-63d3-4b42-b145-b581a45d4b8a
+http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/sitelist?res=3hourly&key=<metofficekey>
 
 Wave URL
 
-http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=1e9e146a-63d3-4b42-b145-b581a45d4b8a
+http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=<metofficekey>
 
 ### Setup Application Default Credentials (ADC)
 gcloud auth login --update-adc

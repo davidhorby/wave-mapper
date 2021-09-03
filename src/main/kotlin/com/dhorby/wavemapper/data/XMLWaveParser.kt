@@ -37,12 +37,6 @@ val siteList: List<String> = listOf(
     "162030"
 )
 
-
-//<Period type="Day" value="2021-06-24Z">
-//<Rep D="N" H="72.3" P="1022" S="6" T="13.0" V="26" Dp="8.2" Wh="0.4" Wp="6.0" St="14.4">480</Rep>
-// waveUrl =  "http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=1e9e146a-63d3-4b42-b145-b581a45d4b8a"
-
-
 object XMLWaveParser {
 
     fun getWaveDataAsJson(metOfficeApiKey: String): String {
