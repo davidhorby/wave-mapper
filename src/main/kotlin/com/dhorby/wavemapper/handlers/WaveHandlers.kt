@@ -3,23 +3,26 @@ package com.dhorby.wavemapper.handlers
 import com.dhorby.wavemapper.XMLWaveParser
 import com.dhorby.wavemapper.XMLWaveParser.getAllWaveData
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
-import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.model.Wave
+import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.secrets.AccessSecretVersion
-import org.http4k.core.Body
-import org.http4k.core.ContentType.Companion.TEXT_HTML
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
-import org.http4k.template.viewModel
 import java.util.*
 
 object WaveHandlers {
 
-    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
+    private const val devMode = false;
+
+    //    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
+    val renderer = when {
+        devMode -> HandlebarsTemplates().HotReload("src/main/resources")
+        else -> HandlebarsTemplates().CachingClasspath()
+    }
 
     fun getWavePage(): HttpHandler = {
         val mapsApiKeyMaybe: String? = AccessSecretVersion.accessSecretVersion("mapsApiKey")
@@ -33,8 +36,13 @@ object WaveHandlers {
             }
         }
 
+
         viewModel?.let {
-            Response(OK).body(renderer(viewModel))
+            try {
+                Response(OK).body(renderer(viewModel))
+            } catch (e: Exception) {
+                Response(OK).body(e.stackTraceToString())
+            }
         } ?: Response(OK).body("Missing Met Office API Key")
 
     }

@@ -1,11 +1,10 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.model.DatePeriod
 import com.dhorby.wavemapper.model.Location
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper.*
+import com.fasterxml.jackson.databind.json.JsonMapper.builder
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import java.net.URL
@@ -41,17 +40,12 @@ val siteList: List<String> = listOf(
 
 //<Period type="Day" value="2021-06-24Z">
 //<Rep D="N" H="72.3" P="1022" S="6" T="13.0" V="26" Dp="8.2" Wh="0.4" Wp="6.0" St="14.4">480</Rep>
-
-data class Rep(val waveHeight: Float)
+// waveUrl =  "http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=1e9e146a-63d3-4b42-b145-b581a45d4b8a"
 
 
 object XMLWaveParser {
 
-    var waveUrl =
-        "http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=1e9e146a-63d3-4b42-b145-b581a45d4b8a"
-
-
-    fun getWaveDataAsJson(metOfficeApiKey:String): String {
+    fun getWaveDataAsJson(metOfficeApiKey: String): String {
         val allData: List<Location> = getAllWaveData(metOfficeApiKey)
         val objectMapper: ObjectMapper = builder()
             .addModule(JavaTimeModule())
@@ -60,7 +54,7 @@ object XMLWaveParser {
         return waveDataAsJson
     }
 
-    internal fun getAllWaveData(metOfficeApiKey:String): List<Location> {
+    internal fun getAllWaveData(metOfficeApiKey: String): List<Location> {
 
         return siteList.map { site ->
             val url =
@@ -78,21 +72,8 @@ object XMLWaveParser {
         return getLocation(jsonNode)
     }
 
-    //    fun toGoogleMapFormat(data:List<Location>):String {
-//        val header = """
-//            ['Lat', 'Long', 'Name', 'Marker'],
-//        """.trimIndent()
-//        val map: List<String> = data.map { location ->
-//            val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
-//            val windSpeed = location.datePeriods.firstOrNull()?.windSpeed
-//            val windDirection = location.datePeriods.firstOrNull()?.windDirection
-//            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection} ', '${waveHeight?.mapWaveHeight()}']"
-//        }
-//        val joinToString = map.joinToString ( "," )
-//        return header + joinToString
-//    }
 
-    fun Float.mapWaveHeight():String {
+    fun Float.mapWaveHeight(): String {
         return when {
             this <= 0.4 -> "verysmall"
             this > 0.4 && this <= 0.8 -> "small"
@@ -108,10 +89,11 @@ object XMLWaveParser {
     private fun JsonNode.getLocation() = this.path("Location")
 
     private fun getLocation(jsonNode: JsonNode): Location {
-        val id: String = jsonNode.getDataValue().getLocation().path("i")?.toString()?.removeQuotes()?:"Unknown"
-        val name: String = jsonNode.getDataValue().getLocation().path("name")?.toString()?.removeQuotes()?:"Unknown name"
-        val lat: Float = jsonNode.getDataValue().getLocation().path("lat")?.toString()?.parseToFloat()?:0.0F
-        val lon: Float = jsonNode.getDataValue().getLocation().path("lon")?.toString()?.parseToFloat()?:0.0F
+        val id: String = jsonNode.getDataValue().getLocation().path("i")?.toString()?.removeQuotes() ?: "Unknown"
+        val name: String =
+            jsonNode.getDataValue().getLocation().path("name")?.toString()?.removeQuotes() ?: "Unknown name"
+        val lat: Float = jsonNode.getDataValue().getLocation().path("lat")?.toString()?.parseToFloat() ?: 0.0F
+        val lon: Float = jsonNode.getDataValue().getLocation().path("lon")?.toString()?.parseToFloat() ?: 0.0F
         val datePeriods: List<DatePeriod> = getDatePeriods(jsonNode)
         return Location(
             id = id,
@@ -128,8 +110,8 @@ object XMLWaveParser {
             periods.isArray -> {
                 periods.map { period ->
                     val waveHeight: Float = getWaveReps(period).maxOrNull() ?: 0.0F
-                    val windSpeed:Int = getWindSpeedInKm(period).maxOrNull() ?: 0
-                    val windDirection:String = getWindDirection(period).maxOrNull() ?: ""
+                    val windSpeed: Int = getWindSpeedInKm(period).maxOrNull() ?: 0
+                    val windDirection: String = getWindDirection(period).maxOrNull() ?: ""
                     val dateStr: String? = period.get("value").toString()
                     dateStr?.let {
                         val date = it.toString().removeQuotes().parseToDate()
@@ -158,7 +140,7 @@ object XMLWaveParser {
             val waveHeight = rep.get("S")?.toString()?.parseToInt()
             val waveHeightKph: Double = waveHeight?.let {
                 it * 1.85
-            }?: 0.0
+            } ?: 0.0
             waveHeightKph.roundToInt()
         }
     }
@@ -166,28 +148,28 @@ object XMLWaveParser {
     private fun getWindDirection(jsonNode: JsonNode): List<String> {
         val reps: JsonNode = jsonNode.path("Rep")
         return reps.map { rep ->
-            rep.get("D")?.toString()?.removeQuotes()?: ""
+            rep.get("D")?.toString()?.removeQuotes() ?: ""
         }
     }
 
 
-    private fun String.parseToFloat(): Float  {
+    private fun String.parseToFloat(): Float {
         if (this.isNullOrEmpty()) return 0.0F
         else
-        return try {
-            this.removeQuotes().toFloat()
-        } catch (e:Exception) {
-            println("Error parsing $this")
-            return 0.0F
-        }
+            return try {
+                this.removeQuotes().toFloat()
+            } catch (e: Exception) {
+                println("Error parsing $this")
+                return 0.0F
+            }
     }
 
-    private fun String.parseToInt(): Int  {
+    private fun String.parseToInt(): Int {
         if (this.isNullOrEmpty()) return 0
         else
             return try {
                 this.removeQuotes().toInt()
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 println("Error parsing $this")
                 return 0
             }
@@ -199,8 +181,6 @@ object XMLWaveParser {
         val dFormat = DateTimeFormatter.ofPattern("yyyy-MM-ddX")
         return LocalDate.parse(this, dFormat)
     }
-//    <Location i="162304" lat="51.15" lon="1.78" name="SANDETTIE">
-//  <Period type="Day" value="2021-06-24Z">
 
 
 }
