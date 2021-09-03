@@ -3,12 +3,10 @@ package com.dhorby.wavemapper
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters
-import org.http4k.routing.ResourceLoader
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
-import org.http4k.template.HandlebarsTemplates
 
 
 val app: HttpHandler = routes(
@@ -16,11 +14,10 @@ val app: HttpHandler = routes(
         Response(Status.OK).body("pong")
     },
 
-    "/" bind Method.GET to WaveHandlers.getWaveHandler(),
+    "/" bind Method.GET to WaveHandlers.getWavePage(),
     "/data" bind Method.GET to WaveHandlers.getWaveData(),
     "/properties" bind Method.GET to WaveHandlers.getProperties(),
-//    "/datasheet" bind Method.GET to WaveHandlers.getDataSheet()
-
+    "/datasheet" bind Method.GET to WaveHandlers.getDataSheet()
 )
 
 fun main() {

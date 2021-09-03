@@ -1,0 +1,84 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load("current", {
+            "packages":['map','geochart'],
+            // Note: you will need to get a mapsApiKey for your project.
+            // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+            "mapsApiKey": "{{mapsApiKey}}"
+        });
+        google.charts.setOnLoadCallback(drawMap);
+        google.charts.load('current', {'packages':['corechart']});
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([{{{waveData}}}]);
+
+            //Graph styling and legend
+            var options = {
+                title: 'sumVar2 (%)',
+                curveType: 'function',
+                legend: { position: 'bottom' },
+                vAxis: { title: 'someVar2 %'},
+                hAxis: { title: 'someVar1'}
+            };
+
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        };
+        function drawMap() {
+            var data = google.visualization.arrayToDataTable([{{{waveData}}}])
+
+            var waveurl = 'https://icons.iconarchive.com/icons/iconsmind/outline/'
+
+            var waveicon = 'Wave-icon.png'
+
+            var options = {
+                zoomLevel: 6,
+                showTooltip: true,
+                showInfoWindow: true,
+                useMapTypeControl: true,
+                icons: {
+                    verybig: {
+                        normal:   waveurl + '/72/' + waveicon,
+                        selected: waveurl + '/72/' + waveicon
+                    },
+                    big: {
+                        normal:   waveurl + '/64/' + waveicon,
+                        selected: waveurl + '/64/' + waveicon
+                    },
+                    medium: {
+                        normal:   waveurl + '/48/' + waveicon,
+                        selected: waveurl + '/48/' + waveicon
+                    },
+                    small: {
+                        normal:   waveurl + '/32/' + waveicon,
+                        selected: waveurl + '/32/' + waveicon
+                    },
+                    verysmall: {
+                        normal:   waveurl + '/24/' + waveicon,
+                        selected: waveurl + '/24/' + waveicon
+                    }
+                }
+            };
+
+            var map = new google.visualization.Map(document.getElementById('map_div'));
+            map.draw(data, options);
+
+
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+<div id="map_div" style="width: 100%; height: 100%"></div>
+</body>
+</html>

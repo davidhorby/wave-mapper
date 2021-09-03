@@ -1,5 +1,8 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.wavemapper.model.DatePeriod
+import com.dhorby.wavemapper.model.Location
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper.*
@@ -35,8 +38,6 @@ val siteList: List<String> = listOf(
     "162030"
 )
 
-data class Location(val id: String, val name: String, val lat: Float, val lon: Float, val datePeriods: List<DatePeriod>)
-data class DatePeriod(val date: LocalDate, val waveHeight: Float, val windSpeed:Int, val windDirection:String)
 
 //<Period type="Day" value="2021-06-24Z">
 //<Rep D="N" H="72.3" P="1022" S="6" T="13.0" V="26" Dp="8.2" Wh="0.4" Wp="6.0" St="14.4">480</Rep>
@@ -59,7 +60,7 @@ object XMLWaveParser {
         return waveDataAsJson
     }
 
-    private fun getAllWaveData(metOfficeApiKey:String): List<Location> {
+    internal fun getAllWaveData(metOfficeApiKey:String): List<Location> {
 
         return siteList.map { site ->
             val url =
@@ -77,24 +78,19 @@ object XMLWaveParser {
         return getLocation(jsonNode)
     }
 
-    fun getWaveDataAsGoogleMapFormat(metOfficeApiKey:String):String {
-        val allData: List<Location> = getAllWaveData(metOfficeApiKey)
-        return toGoogleMapFormat(allData)
-    }
-
-    fun toGoogleMapFormat(data:List<Location>):String {
-        val header = """
-            ['Lat', 'Long', 'Name', 'Marker'],
-        """.trimIndent()
-        val map: List<String> = data.map { location ->
-            val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
-            val windSpeed = location.datePeriods.firstOrNull()?.windSpeed
-            val windDirection = location.datePeriods.firstOrNull()?.windDirection
-            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection} ', '${waveHeight?.mapWaveHeight()}']"
-        }
-        val joinToString = map.joinToString ( "," )
-        return header + joinToString
-    }
+    //    fun toGoogleMapFormat(data:List<Location>):String {
+//        val header = """
+//            ['Lat', 'Long', 'Name', 'Marker'],
+//        """.trimIndent()
+//        val map: List<String> = data.map { location ->
+//            val waveHeight = location.datePeriods.firstOrNull()?.waveHeight
+//            val windSpeed = location.datePeriods.firstOrNull()?.windSpeed
+//            val windDirection = location.datePeriods.firstOrNull()?.windDirection
+//            "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection} ', '${waveHeight?.mapWaveHeight()}']"
+//        }
+//        val joinToString = map.joinToString ( "," )
+//        return header + joinToString
+//    }
 
     fun Float.mapWaveHeight():String {
         return when {
