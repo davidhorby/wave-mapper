@@ -68,6 +68,11 @@
             var map = new google.visualization.Map(document.getElementById('map_div'));
             map.draw(data, options);
 
+            map.data.addListener("mouseover", (event) => {
+                document.getElementById("info-box").textContent =
+                        event.feature.getProperty("letter");
+            });
+
         }
 
 

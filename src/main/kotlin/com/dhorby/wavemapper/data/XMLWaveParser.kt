@@ -7,40 +7,32 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper.builder
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
-val siteList: List<String> = listOf(
-    "162103",
-    "162305",
-    "162001",
-    "162029",
-    "162081",
-    "162105",
-    "162163",
-    "162304",
-    "164045",
-    "164046",
-    "162027",
-    "162090",
-    "162091",
-    "162092",
-    "162093",
-    "162094",
-    "162095",
-    "162107",
-    "162170",
-    "162442",
-    "162050",
-    "162030"
-)
 
-object XMLWaveParser {
 
-    fun getWaveDataAsJson(metOfficeApiKey: String): String {
-        val allData: List<Location> = getAllWaveData(metOfficeApiKey)
+fun Float.mapWaveHeight(): String {
+    return when {
+        this <= 0.4 -> "verysmall"
+        this > 0.4 && this <= 0.8 -> "small"
+        this > 0.8 && this <= 1.0 -> "medium"
+        this > 1.0 && this <= 3.0 -> "big"
+        this >= 3.0 -> "verybig"
+        else -> "unknown"
+    }
+}
+
+class XMLWaveParser {
+
+    private val LOG: Logger = LoggerFactory.getLogger(XMLWaveParser::class.java)
+
+    fun getWaveDataAsJson(metOfficeApiKey: String, siteList: List<String>): String {
+        val allData: List<Location> = getAllWaveData(metOfficeApiKey, siteList = siteList )
         val objectMapper: ObjectMapper = builder()
             .addModule(JavaTimeModule())
             .build()
@@ -48,35 +40,27 @@ object XMLWaveParser {
         return waveDataAsJson
     }
 
-    internal fun getAllWaveData(metOfficeApiKey: String): List<Location> {
-
-        return siteList.map { site ->
-            val url =
-                "http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/$site?res=3hourly&key=$metOfficeApiKey"
-            getWaveDataForSite(url)
-        }.filter { !it.id.isNullOrEmpty() }
-
+    fun getAllWaveData(metOfficeApiKey: String, siteList: List<String>): List<Location> = siteList.map { site ->
+        val url =
+            "http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/$site?res=3hourly&key=$metOfficeApiKey"
+        getWaveDataForSite(url)
+    }.filterNotNull().filter { location ->
+        location.id.isNotEmpty()
     }
 
-    private fun getWaveDataForSite(url: String): Location {
-        val urlReal: URL = URL(url)
-        val xmlText = urlReal.readText()
+    private fun getWaveDataForSite(url: String): Location? = try {
+        URL(url).readText()
+        val xmlText = URL(url).readText()
         val xmlMapper = XmlMapper()
         val jsonNode: JsonNode = xmlMapper.readTree(xmlText)
-        return getLocation(jsonNode)
+        getLocation(jsonNode)
+    } catch (ex: Exception) {
+        LOG.error("Failed to read url ${URL(url)} ${ex.message}")
+        println("Failed to read url ${URL(url)} ${ex.message}")
+        null
     }
 
 
-    fun Float.mapWaveHeight(): String {
-        return when {
-            this <= 0.4 -> "verysmall"
-            this > 0.4 && this <= 0.8 -> "small"
-            this > 0.8 && this <= 1.0 -> "medium"
-            this > 1.0 && this <= 3.0 -> "big"
-            this >= 3.0 -> "verybig"
-            else -> "unknown"
-        }
-    }
 
 
     private fun JsonNode.getDataValue() = this.path("DV")
@@ -102,18 +86,16 @@ object XMLWaveParser {
         val periods: JsonNode = jsonNode.getDataValue().getLocation().path("Period")
         return when {
             periods.isArray -> {
-                periods.map { period ->
+                periods.mapNotNull { period ->
                     val waveHeight: Float = getWaveReps(period).maxOrNull() ?: 0.0F
                     val windSpeed: Int = getWindSpeedInKm(period).maxOrNull() ?: 0
                     val windDirection: String = getWindDirection(period).maxOrNull() ?: ""
-                    val dateStr: String? = period.get("value").toString()
-                    dateStr?.let {
-                        val date = it.toString().removeQuotes().parseToDate()
-                        date?.let {
-                            DatePeriod(it, waveHeight, windSpeed, windDirection)
-                        }
+                    val dateStr: String = period.get("value").toString()
+
+                    dateStr.removeQuotes().parseToDate()?.let {
+                        DatePeriod(it, waveHeight, windSpeed, windDirection)
                     }
-                }.filterNotNull()
+                }
             }
             else -> emptyList()
         }

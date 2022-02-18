@@ -63,6 +63,8 @@ dependencies {
     implementation "org.http4k:http4k-template-handlebars:${http4kVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
 
+    implementation 'dev.forkhandles:result4k:1.8.2.0'
+
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")

@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.datautils
 
-import com.dhorby.wavemapper.XMLWaveParser.mapWaveHeight
+import com.dhorby.wavemapper.mapWaveHeight
 import com.dhorby.wavemapper.model.Location
 
 

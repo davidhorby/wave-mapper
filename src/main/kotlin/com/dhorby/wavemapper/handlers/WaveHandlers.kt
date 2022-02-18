@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.handlers
 
+import com.dhorby.wavemapper.SiteListFunction
 import com.dhorby.wavemapper.XMLWaveParser
-import com.dhorby.wavemapper.XMLWaveParser.getAllWaveData
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
@@ -14,9 +14,13 @@ import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
 import java.util.*
 
-object WaveHandlers {
+class WaveHandlers(
+    val siteListFunction: SiteListFunction,
+    val metOfficeApiKey: String,
+    val mapsApiKey: String
+) {
 
-    private const val devMode = false;
+    private val devMode = false;
 
     //    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
     val renderer = when {
@@ -24,20 +28,21 @@ object WaveHandlers {
         else -> HandlebarsTemplates().CachingClasspath()
     }
 
+
     fun getWavePage(): HttpHandler = {
-        val mapsApiKeyMaybe: String? = AccessSecretVersion.accessSecretVersion("mapsApiKey")
-        val metOfficeApiKeyMaybe: String? = AccessSecretVersion.accessSecretVersion("MetOfficeApiKey")
+        val xmlWaveParser = XMLWaveParser()
 
 
-        val viewModel: ViewModel? = metOfficeApiKeyMaybe?.let { metOfficeApiKey ->
-            mapsApiKeyMaybe?.let { mapsApiKey ->
-                val waveData: String = getAllWaveData(metOfficeApiKey).toGoogleMapFormat()
+        val viewModel: ViewModel = metOfficeApiKey.let { metOfficeApiKey ->
+            mapsApiKey.let { mapsApiKey ->
+                val waveData: String =
+                    xmlWaveParser.getAllWaveData(metOfficeApiKey, siteList = siteListFunction()).toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
         }
 
 
-        viewModel?.let {
+        viewModel.let {
             try {
                 Response(OK).body(renderer(viewModel))
             } catch (e: Exception) {
@@ -51,7 +56,7 @@ object WaveHandlers {
     fun getWaveData(): HttpHandler = {
         val metOfficeApiKey: String? = AccessSecretVersion.accessSecretVersion("MetOfficeApiKey")
         val waveXML: String = metOfficeApiKey?.let {
-            XMLWaveParser.getWaveDataAsJson(it)
+            XMLWaveParser().getWaveDataAsJson(it, siteListFunction())
         } ?: ("Missing Met Office API key")
         Response(OK).body(waveXML)
     }
