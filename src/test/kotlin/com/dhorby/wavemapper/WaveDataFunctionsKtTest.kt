@@ -7,8 +7,6 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThan
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 internal class WaveDataFunctionsKtTest {
 
     private val mapsApiKey: String =
@@ -28,5 +26,12 @@ internal class WaveDataFunctionsKtTest {
     fun `should be able to get wave data for site`() {
         val siteData = getWaveDataForSite("162163")
         assertThat(siteData?.name, equalTo("BRITTANY"))
+    }
+
+    @Test
+    fun `get list of sites`() {
+        println(Constants.siteListUrl)
+        val sites = siteListFunction()
+        println(sites)
     }
 }

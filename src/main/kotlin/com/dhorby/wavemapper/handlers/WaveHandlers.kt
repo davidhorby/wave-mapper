@@ -1,9 +1,9 @@
 package com.dhorby.wavemapper.handlers
 
-import com.dhorby.wavemapper.SiteListFunction
 import com.dhorby.wavemapper.asJson
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.getAllWaveData
+import com.dhorby.wavemapper.model.SiteLocation
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import org.http4k.core.HttpHandler
@@ -15,7 +15,7 @@ import org.http4k.template.ViewModel
 import java.util.*
 
 class WaveHandlers(
-    val siteListFunction: SiteListFunction,
+    val siteListFunction: () -> List<SiteLocation>,
     val metOfficeApiKey: String,
     val mapsApiKey: String
 ) {

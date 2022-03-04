@@ -2,8 +2,10 @@ package com.dhorby.wavemapper
 
 import com.dhorby.wavemapper.Constants.Companion.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.Companion.metOfficeUrl
+import com.dhorby.wavemapper.Constants.Companion.siteListUrl
 import com.dhorby.wavemapper.model.DatePeriod
 import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.SiteLocation
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
@@ -18,32 +20,14 @@ import kotlin.math.roundToInt
 typealias SiteListFunction  = () -> List<String>
 typealias Site = String
 
-val siteListFunction:SiteListFunction = {
-    listOf(
-        "162103",
-        "162305",
-        "162001",
-        "162029",
-        "162081",
-        "162105",
-        "162163",
-        "162304",
-        "164045",
-        "164046",
-        "162027",
-//    "162090",
-        "162091",
-        "162092",
-        "162093",
-        "162094",
-        "162095",
-        "162107",
-        "162170",
-        "162442",
-        "162050",
-        "162030"
-    )
+val siteListFunction: () -> List<SiteLocation> = {
+    val xmlText = URL(siteListUrl).readText()
+    val xmlMapper = XmlMapper()
+    val jsonNode: JsonNode = xmlMapper.readTree(xmlText)
+    getSiteLocations(jsonNode)
 }
+
+
 val objectMapper: ObjectMapper = JsonMapper.builder()
     .addModule(JavaTimeModule())
     .build()
@@ -55,15 +39,14 @@ fun getMetOfficeUrl(site:String):String {
     return "${metOfficeUrl}$site?res=3hourly&key=$metOfficeApiKey"
 }
 
-fun getAllWaveData(siteList: SiteListFunction): List<Location> = siteList().mapNotNull { site: String ->
-    getWaveDataForSite(site)
+fun getAllWaveData(siteList: () -> List<SiteLocation>): List<Location> = siteList().mapNotNull { site ->
+    getWaveDataForSite(site.id)
 }.filter { location ->
     location.id.isNotEmpty()
 }
 
 fun getWaveDataForSite(site:Site): Location? = try {
     val metOfficeUrl = getMetOfficeUrl(site)
-    URL(metOfficeUrl).readText()
     val xmlText = URL(metOfficeUrl).readText()
     val xmlMapper = XmlMapper()
     val jsonNode: JsonNode = xmlMapper.readTree(xmlText)
@@ -71,6 +54,24 @@ fun getWaveDataForSite(site:Site): Location? = try {
 } catch (ex: Exception) {
     println("Failed to read url ${URL(metOfficeUrl)} ${ex.message}")
     null
+}
+
+private fun getSiteIds(jsonNode: JsonNode): List<String> {
+    return jsonNode.findValues("id").map(JsonNode::textValue)
+}
+
+private fun getSiteLocations(jsonNode: JsonNode): List<SiteLocation> {
+    return jsonNode.getLocation().map {
+        SiteLocation(
+            id = it.path("id").textValue(),
+            latitude = it.path("latitude").floatValue(),
+            longitude = it.path("longitude").floatValue(),
+            name = it.path("name").textValue(),
+            obsLocationType = it.path("obsLocationType").textValue(),
+            obsRegion = it.path("obsRegion").textValue(),
+            obsSource = it.path("obsSource").textValue()
+        )
+    }
 }
 
 private fun getLocation(jsonNode: JsonNode): Location {
