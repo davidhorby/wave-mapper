@@ -17,10 +17,10 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 
-typealias SiteListFunction  = () -> List<String>
+typealias SiteListFunction  = () -> List<SiteLocation>
 typealias Site = String
 
-val siteListFunction: () -> List<SiteLocation> = {
+val siteListFunction:SiteListFunction = {
     val xmlText = URL(siteListUrl).readText()
     val xmlMapper = XmlMapper()
     val jsonNode: JsonNode = xmlMapper.readTree(xmlText)
@@ -32,14 +32,13 @@ val objectMapper: ObjectMapper = JsonMapper.builder()
     .addModule(JavaTimeModule())
     .build()
 
-
 fun List<Location>.asJson():String = objectMapper.writeValueAsString(this)
 
 fun getMetOfficeUrl(site:String):String {
     return "${metOfficeUrl}$site?res=3hourly&key=$metOfficeApiKey"
 }
 
-fun getAllWaveData(siteList: () -> List<SiteLocation>): List<Location> = siteList().mapNotNull { site ->
+fun getAllWaveData(siteList:SiteListFunction): List<Location> = siteList().mapNotNull { site ->
     getWaveDataForSite(site.id)
 }.filter { location ->
     location.id.isNotEmpty()
@@ -54,10 +53,6 @@ fun getWaveDataForSite(site:Site): Location? = try {
 } catch (ex: Exception) {
     println("Failed to read url ${URL(metOfficeUrl)} ${ex.message}")
     null
-}
-
-private fun getSiteIds(jsonNode: JsonNode): List<String> {
-    return jsonNode.findValues("id").map(JsonNode::textValue)
 }
 
 private fun getSiteLocations(jsonNode: JsonNode): List<SiteLocation> {

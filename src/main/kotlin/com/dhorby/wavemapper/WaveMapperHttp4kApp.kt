@@ -15,9 +15,7 @@ object WaveServiceRoutes {
 
 
     private val waveHandlers = WaveHandlers(
-        siteListFunction = siteListFunction,
-        metOfficeApiKey = metOfficeApiKey,
-        mapsApiKey = mapsApiKey
+        siteListFunction = siteListFunction
     )
 
     operator fun invoke(): HttpHandler =
@@ -28,7 +26,7 @@ object WaveServiceRoutes {
             },
 
             "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to waveHandlers.getWaveData(metOfficeApiKey),
+            "/data" bind Method.GET to waveHandlers.getWaveData(),
             "/properties" bind Method.GET to waveHandlers.getProperties(),
             "/datasheet" bind Method.GET to waveHandlers.getDataSheet()
         )

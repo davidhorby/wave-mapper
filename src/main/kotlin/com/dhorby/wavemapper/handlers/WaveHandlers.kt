@@ -1,9 +1,10 @@
 package com.dhorby.wavemapper.handlers
 
+import com.dhorby.wavemapper.Constants.Companion.mapsApiKey
+import com.dhorby.wavemapper.SiteListFunction
 import com.dhorby.wavemapper.asJson
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.getAllWaveData
-import com.dhorby.wavemapper.model.SiteLocation
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import org.http4k.core.HttpHandler
@@ -14,30 +15,23 @@ import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
 import java.util.*
 
-class WaveHandlers(
-    val siteListFunction: () -> List<SiteLocation>,
-    val metOfficeApiKey: String,
-    val mapsApiKey: String
-) {
+class WaveHandlers(val siteListFunction: SiteListFunction) {
 
     private val devMode = false;
 
-    //    val renderer = HandlebarsTemplates().HotReload("src/main/resources")
     val renderer = when {
         devMode -> HandlebarsTemplates().HotReload("src/main/resources")
         else -> HandlebarsTemplates().CachingClasspath()
     }
 
-
     fun getWavePage(): HttpHandler = {
 
-        val viewModel: ViewModel = metOfficeApiKey.let { metOfficeApiKey ->
+        val viewModel: ViewModel =
             mapsApiKey.let { mapsApiKey ->
                 val waveData: String =
                     getAllWaveData(siteList = siteListFunction).toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
-        }
 
 
         viewModel.let {
@@ -46,12 +40,12 @@ class WaveHandlers(
             } catch (e: Exception) {
                 Response(OK).body(e.stackTraceToString())
             }
-        } ?: Response(OK).body("Missing Met Office API Key")
+        }
 
     }
 
 
-    fun getWaveData(metOfficeApiKey:String): HttpHandler = {
+    fun getWaveData(): HttpHandler = {
         Response(OK).body(getAllWaveData(siteListFunction).asJson())
     }
 
@@ -64,7 +58,7 @@ class WaveHandlers(
     }
 
     fun getDataSheet(): HttpHandler = {
-        val (renderer, resourceLoader) = buildResourceLoaders(false)
+        val (renderer, _) = buildResourceLoaders(false)
         val viewModel = Wave("M5", 2.1.toLong())
         Response(OK).body(renderer(viewModel))
     }
