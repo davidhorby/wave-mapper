@@ -7,7 +7,6 @@ import com.google.cloud.secretmanager.v1.SecretVersionName
 object AccessSecretVersion {
 
     fun accessSecretVersion(secretId: String): String? {
-        // TODO(developer): Replace these variables before running the sample.
         val projectId = "analytics-springernature"
         val versionId = "1"
         return accessSecretVersion(projectId, secretId, versionId)

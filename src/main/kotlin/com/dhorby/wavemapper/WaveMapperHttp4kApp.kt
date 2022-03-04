@@ -1,7 +1,8 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.wavemapper.Constants.Companion.mapsApiKey
+import com.dhorby.wavemapper.Constants.Companion.metOfficeApiKey
 import com.dhorby.wavemapper.handlers.WaveHandlers
-import com.dhorby.wavemapper.secrets.AccessSecretVersion
 import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters
 import org.http4k.routing.bind
@@ -11,11 +12,6 @@ import org.http4k.server.asServer
 
 
 object WaveServiceRoutes {
-
-    private val mapsApiKey: String =
-        AccessSecretVersion.accessSecretVersion("mapsApiKey") ?: throw Exception("Invalid Maps API key")
-    private val metOfficeApiKey: String =
-        AccessSecretVersion.accessSecretVersion("MetOfficeApiKey") ?: throw Exception("Invalid Met Office API key")
 
 
     private val waveHandlers = WaveHandlers(
@@ -32,7 +28,7 @@ object WaveServiceRoutes {
             },
 
             "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to waveHandlers.getWaveData(),
+            "/data" bind Method.GET to waveHandlers.getWaveData(metOfficeApiKey),
             "/properties" bind Method.GET to waveHandlers.getProperties(),
             "/datasheet" bind Method.GET to waveHandlers.getDataSheet()
         )

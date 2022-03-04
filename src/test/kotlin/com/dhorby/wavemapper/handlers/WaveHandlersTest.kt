@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Assertions.*
 
 internal class WaveHandlersTest {
 
-    @Test
-    fun getWavePage() {
-        val wavePage: (Request) -> Response = WaveHandlers(siteListFunction = siteListFunction,  "", "").getWaveData()
-    }
+//    @Test
+//    fun getWavePage() {
+//        val wavePage: (Request) -> Response = WaveHandlers(siteListFunction = siteListFunction,  "", "").getWaveData()
+//    }
 
     @Test
     fun getWaveData() {

@@ -1,11 +1,11 @@
 package com.dhorby.wavemapper.handlers
 
 import com.dhorby.wavemapper.SiteListFunction
-import com.dhorby.wavemapper.XMLWaveParser
+import com.dhorby.wavemapper.asJson
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.wavemapper.getAllWaveData
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
-import com.dhorby.wavemapper.secrets.AccessSecretVersion
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
@@ -30,13 +30,11 @@ class WaveHandlers(
 
 
     fun getWavePage(): HttpHandler = {
-        val xmlWaveParser = XMLWaveParser()
-
 
         val viewModel: ViewModel = metOfficeApiKey.let { metOfficeApiKey ->
             mapsApiKey.let { mapsApiKey ->
                 val waveData: String =
-                    xmlWaveParser.getAllWaveData(metOfficeApiKey, siteList = siteListFunction()).toGoogleMapFormat()
+                    getAllWaveData(siteList = siteListFunction).toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
         }
@@ -53,12 +51,8 @@ class WaveHandlers(
     }
 
 
-    fun getWaveData(): HttpHandler = {
-        val metOfficeApiKey: String? = AccessSecretVersion.accessSecretVersion("MetOfficeApiKey")
-        val waveXML: String = metOfficeApiKey?.let {
-            XMLWaveParser().getWaveDataAsJson(it, siteListFunction())
-        } ?: ("Missing Met Office API key")
-        Response(OK).body(waveXML)
+    fun getWaveData(metOfficeApiKey:String): HttpHandler = {
+        Response(OK).body(getAllWaveData(siteListFunction).asJson())
     }
 
     fun getProperties(): HttpHandler = {
