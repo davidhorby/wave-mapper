@@ -5,7 +5,7 @@ import com.dhorby.wavemapper.Constants.Companion.metOfficeUrl
 import com.dhorby.wavemapper.Constants.Companion.siteListUrl
 import com.dhorby.wavemapper.model.DatePeriod
 import com.dhorby.wavemapper.model.Location
-import com.dhorby.wavemapper.model.SiteLocation
+import com.dhorby.wavemapper.model.Site
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
@@ -17,7 +17,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 
-typealias SiteListFunction  = () -> List<SiteLocation>
+typealias SiteListFunction  = () -> List<Site>
+typealias DataForSiteFunction = (site:String) -> Location?
 typealias Site = String
 
 val siteListFunction:SiteListFunction = {
@@ -38,26 +39,16 @@ fun getMetOfficeUrl(site:String):String {
     return "${metOfficeUrl}$site?res=3hourly&key=$metOfficeApiKey"
 }
 
-fun getAllWaveData(siteList:SiteListFunction): List<Location> = siteList().mapNotNull { site ->
-    getWaveDataForSite(site.id)
+fun getAllWaveData(siteListFunction:SiteListFunction, dataForSiteFunction:DataForSiteFunction): List<Location> = siteListFunction().mapNotNull { site ->
+    dataForSiteFunction(site.id)
 }.filter { location ->
     location.id.isNotEmpty()
 }
 
-fun getWaveDataForSite(site:Site): Location? = try {
-    val metOfficeUrl = getMetOfficeUrl(site)
-    val xmlText = URL(metOfficeUrl).readText()
-    val xmlMapper = XmlMapper()
-    val jsonNode: JsonNode = xmlMapper.readTree(xmlText)
-    getLocation(jsonNode)
-} catch (ex: Exception) {
-    println("Failed to read url ${URL(metOfficeUrl)} ${ex.message}")
-    null
-}
 
-private fun getSiteLocations(jsonNode: JsonNode): List<SiteLocation> {
-    return jsonNode.getLocation().map {
-        SiteLocation(
+private fun getSiteLocations(jsonNode: JsonNode): List<Site> {
+    return jsonNode.getLocationPath().map {
+        Site(
             id = it.path("id").textValue(),
             latitude = it.path("latitude").floatValue(),
             longitude = it.path("longitude").floatValue(),
@@ -69,13 +60,13 @@ private fun getSiteLocations(jsonNode: JsonNode): List<SiteLocation> {
     }
 }
 
-private fun getLocation(jsonNode: JsonNode): Location {
-    val id: String = jsonNode.getDataValue().getLocation().path("i")?.toString()?.removeQuotes() ?: "Unknown"
+fun JsonNode.getLocation(): Location {
+    val id: String = this.getDataValue().getLocationPath().path("i")?.toString()?.removeQuotes() ?: "Unknown"
     val name: String =
-        jsonNode.getDataValue().getLocation().path("name")?.toString()?.removeQuotes() ?: "Unknown name"
-    val lat: Float = jsonNode.getDataValue().getLocation().path("lat")?.toString()?.parseToFloat() ?: 0.0F
-    val lon: Float = jsonNode.getDataValue().getLocation().path("lon")?.toString()?.parseToFloat() ?: 0.0F
-    val datePeriods: List<DatePeriod> = getDatePeriods(jsonNode)
+        this.getDataValue().getLocationPath().path("name")?.toString()?.removeQuotes() ?: "Unknown name"
+    val lat: Float = this.getDataValue().getLocationPath().path("lat")?.toString()?.parseToFloat() ?: 0.0F
+    val lon: Float = this.getDataValue().getLocationPath().path("lon")?.toString()?.parseToFloat() ?: 0.0F
+    val datePeriods: List<DatePeriod> = getDatePeriods(this)
     return Location(
         id = id,
         name = name,
@@ -86,7 +77,7 @@ private fun getLocation(jsonNode: JsonNode): Location {
 }
 
 private fun getDatePeriods(jsonNode: JsonNode): List<DatePeriod> {
-    val periods: JsonNode = jsonNode.getDataValue().getLocation().path("Period")
+    val periods: JsonNode = jsonNode.getDataValue().getLocationPath().path("Period")
     return when {
         periods.isArray -> {
             periods.mapNotNull { period ->
@@ -172,7 +163,7 @@ fun Float.mapWaveHeight(): String {
 }
 
 private fun JsonNode.getDataValue() = this.path("DV")
-private fun JsonNode.getLocation() = this.path("Location")
+private fun JsonNode.getLocationPath() = this.path("Location")
 
 
 

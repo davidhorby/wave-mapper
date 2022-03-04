@@ -1,21 +1,20 @@
 package com.dhorby.wavemapper.handlers
 
+import com.dhorby.wavemapper.*
 import com.dhorby.wavemapper.Constants.Companion.mapsApiKey
-import com.dhorby.wavemapper.SiteListFunction
-import com.dhorby.wavemapper.asJson
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
-import com.dhorby.wavemapper.getAllWaveData
-import com.dhorby.wavemapper.model.Wave
-import com.dhorby.wavemapper.model.WavePage
+import com.dhorby.wavemapper.model.*
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
+import org.http4k.core.Status
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.with
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
 import java.util.*
 
-class WaveHandlers(val siteListFunction: SiteListFunction) {
+class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction:DataForSiteFunction) {
 
     private val devMode = false;
 
@@ -29,7 +28,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction) {
         val viewModel: ViewModel =
             mapsApiKey.let { mapsApiKey ->
                 val waveData: String =
-                    getAllWaveData(siteList = siteListFunction).toGoogleMapFormat()
+                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction).toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
 
@@ -44,9 +43,9 @@ class WaveHandlers(val siteListFunction: SiteListFunction) {
 
     }
 
-
     fun getWaveData(): HttpHandler = {
-        Response(OK).body(getAllWaveData(siteListFunction).asJson())
+        val allWaveData: List<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
+        Response(Status.OK).with(locationListBodyLens of allWaveData)
     }
 
     fun getProperties(): HttpHandler = {

@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.model
 
-data class SiteLocation(
+data class Site (
     val id:String,
     val latitude:Float,
     val longitude:Float,
