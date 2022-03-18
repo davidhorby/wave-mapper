@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.functional.handlers
 
-import com.dhorby.wavemapper.TestData.testLocation
 import com.dhorby.wavemapper.env.FunctionalTestEnv
+import com.dhorby.wavemapper.env.TestData.testLocation
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.model.Location
 import com.dhorby.wavemapper.model.Site

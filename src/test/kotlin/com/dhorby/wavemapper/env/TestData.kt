@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper
+package com.dhorby.wavemapper.env
 
 import com.dhorby.wavemapper.model.Location
 import com.dhorby.wavemapper.model.Site
@@ -6,7 +6,7 @@ import com.dhorby.wavemapper.model.Site
 val siteId = "12345"
 val siteName = "TestSite"
 
-object TestData {
+internal object TestData {
 
     val testSiteLocation = Site(
         id = siteId,
