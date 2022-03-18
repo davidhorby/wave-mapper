@@ -62,6 +62,7 @@ dependencies {
     implementation "org.http4k:http4k-format-xml:${http4kVersion}"
     implementation "org.http4k:http4k-template-handlebars:${http4kVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     implementation 'dev.forkhandles:result4k:1.8.2.0'
 
