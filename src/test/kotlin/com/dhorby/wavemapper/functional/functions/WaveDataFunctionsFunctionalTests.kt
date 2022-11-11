@@ -28,8 +28,8 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
 
     @Test
     internal fun `verify google format wave data`() {
-        val exptectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  nullm nullkm null ', 'null']"
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  0.0m 0.0km 0.0 ', 'verysmall']"
         val allWaveData: String = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake).toGoogleMapFormat()
-        assertThat(allWaveData, equalTo(exptectedResult))
+        assertThat(allWaveData, equalTo(expectedResult))
     }
 }
