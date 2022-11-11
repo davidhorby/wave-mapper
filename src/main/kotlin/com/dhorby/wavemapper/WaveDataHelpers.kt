@@ -131,9 +131,9 @@ fun String.parseToDate(): LocalDate? {
     return LocalDate.parse(this, dFormat)
 }
 
-fun Float.mapWaveHeight(): String {
+fun Float.mapWaveHeightToIcon(): String {
     return when {
-        this <= 0.4 -> "verysmall"
+        this > 0.0 && this <= 0.4 -> "verysmall"
         this > 0.4 && this <= 0.8 -> "small"
         this > 0.8 && this <= 1.0 -> "medium"
         this > 1.0 && this <= 3.0 -> "big"

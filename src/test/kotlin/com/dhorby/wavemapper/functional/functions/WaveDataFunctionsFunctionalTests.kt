@@ -27,9 +27,16 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
     }
 
     @Test
-    internal fun `verify google format wave data`() {
-        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  0.0m 0.0km 0.0 ', 'verysmall']"
+    fun `verify google format wave data`() {
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  2.1m 23km SSW ', 'big']"
         val allWaveData: String = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake).toGoogleMapFormat()
+        assertThat(allWaveData, equalTo(expectedResult))
+    }
+
+    @Test
+    fun `verify google format wave data with missing wave data`() {
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  0.0m 0.0km 0.0 ', 'notavailable']"
+        val allWaveData: String = getAllWaveData(siteListFunctionFake, dataForSiteWithNoDataFunctionFake).toGoogleMapFormat()
         assertThat(allWaveData, equalTo(expectedResult))
     }
 }

@@ -1,7 +1,9 @@
 package com.dhorby.wavemapper.env
 
+import com.dhorby.wavemapper.model.DatePeriod
 import com.dhorby.wavemapper.model.Location
 import com.dhorby.wavemapper.model.Site
+import java.time.LocalDate
 
 val siteId = "12345"
 val siteName = "TestSite"
@@ -18,5 +20,9 @@ internal object TestData {
         obsLocationType = "Buoy"
     )
 
-    val testLocation = Location(id= siteId, name=siteName, lat = -13.34F, lon = 45.00F, datePeriods = emptyList())
+    val validWaveData = DatePeriod(LocalDate.now(), 2.1F, 23, "SSW")
+
+
+    val testLocation = Location(id= siteId, name=siteName, lat = -13.34F, lon = 45.00F, datePeriods = listOf(validWaveData))
+    val testLocationWithNoData = Location(id= siteId, name=siteName, lat = -13.34F, lon = 45.00F, datePeriods = emptyList())
 }

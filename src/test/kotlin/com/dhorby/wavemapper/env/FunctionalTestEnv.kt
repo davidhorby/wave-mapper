@@ -16,4 +16,8 @@ open class FunctionalTestEnv:AppFunctions {
         TestData.testLocation
     }
 
+    internal val dataForSiteWithNoDataFunctionFake:DataForSiteFunction = {
+        TestData.testLocationWithNoData
+    }
+
 }
