@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.functional.functions
 
+import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.dhorby.wavemapper.env.siteId
 import com.dhorby.wavemapper.env.siteName
@@ -7,9 +8,9 @@ import com.dhorby.wavemapper.getAllWaveData
 import com.dhorby.wavemapper.model.Location
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-internal class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
+class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
 
     @Test
     fun `should be able to get all wave data`() {
@@ -23,5 +24,12 @@ internal class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
     fun `should be able to get wave data for site`() {
         val siteData = dataForSiteFunctionFake(siteId)
         assertThat(siteData?.name, equalTo(siteName))
+    }
+
+    @Test
+    internal fun `verify google format wave data`() {
+        val exptectedResult = "['Lat', 'Long', 'Name', 'Marker'],[-13.34,45.0,'TestSite  nullm nullkm null ', 'null']"
+        val allWaveData: String = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake).toGoogleMapFormat()
+        assertThat(allWaveData, equalTo(exptectedResult))
     }
 }
