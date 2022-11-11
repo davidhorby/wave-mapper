@@ -14,12 +14,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.20'
 }
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+apply plugin: 'kotlin'
 
 compileKotlin.kotlinOptions.jvmTarget = "11"
 compileTestKotlin.kotlinOptions.jvmTarget = "11"
-
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
 
 
 jar {

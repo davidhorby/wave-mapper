@@ -7,7 +7,7 @@ import com.dhorby.wavemapper.getAllWaveData
 import com.dhorby.wavemapper.model.Location
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 internal class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
 
