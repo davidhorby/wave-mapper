@@ -33,12 +33,12 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     this.add(
         SharkLocation(
             id = "1234",
-            name = "Geoffrey",
+            name = "Susan",
             date = LocalDate.now(),
             lat = 53.506397F,
             lon = 0.928163F,
             size = 2.1F,
-            species = SharkType.BASKING
+            species = SharkType.GREAT_WHITE
         )
     )
     this.add(
@@ -55,6 +55,31 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     return this
 }
 
+fun MutableList<Location>.withBoat(): MutableList<Location> {
+    this.add(
+        BoatLocation(
+            id = "1234",
+            name = "Geoffrey",
+            date = LocalDate.now(),
+            lat = 50.500370F,
+            lon = -7.421526F,
+            size = 2.1F,
+            boattype = BoatType.SAIL
+        )
+    )
+    this.add(
+        BoatLocation(
+            id = "1234",
+            name = "Kate",
+            date = LocalDate.now(),
+            lat = 55.169322F,
+            lon = -11.394872F,
+            size = 2.1F,
+            boattype = BoatType.SAIL
+        )
+    )
+    return this
+}
 
 fun JsonNode.getSiteLocations(): List<Site> {
     return this.getLocationPath().map {

@@ -31,6 +31,16 @@ internal object TestData {
         species = SharkType.BASKING
     )
 
+    val testBoatLocation = BoatLocation(
+        id = "1234",
+        name = "Albert",
+        date = LocalDate.now(),
+        lat = 39.45F,
+        lon = -5.01F,
+        size = 2.1F,
+        boattype = BoatType.SAIL
+    )
+
     val validWaveData = WaveDataReading(LocalDate.now(), 2.1F, 23, "SSW")
 
     val testWaveLocation = WaveLocation(

@@ -2,12 +2,12 @@ package com.dhorby.wavemapper.functional.functions
 
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.env.FunctionalTestEnv
+import com.dhorby.wavemapper.env.TestData.testBoatLocation
 import com.dhorby.wavemapper.env.TestData.testSharkLocation
 import com.dhorby.wavemapper.env.siteId
 import com.dhorby.wavemapper.env.siteName
 import com.dhorby.wavemapper.getAllWaveData
 import com.dhorby.wavemapper.model.Location
-import com.dhorby.wavemapper.model.WaveLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
@@ -44,8 +44,15 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
 
     @Test
     fun `verify google format wave data with added shark`() {
-        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[34.45,49.01,'BASKING ', 'shark']"
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[34.45,49.01,'BASKING [Sue]', 'shark']"
         val sharkData: String = listOf(testSharkLocation).toGoogleMapFormat()
+        assertThat(sharkData, equalTo(expectedResult))
+    }
+
+    @Test
+    fun `verify google format wave data with boat`() {
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[39.45,-5.01,'SAIL [Albert]', 'boat']"
+        val sharkData: String = listOf(testBoatLocation).toGoogleMapFormat()
         assertThat(sharkData, equalTo(expectedResult))
     }
 }

@@ -30,6 +30,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                 val waveData: String =
                     getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
                         .withAddedShark()
+                        .withBoat()
                         .toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
