@@ -1,12 +1,13 @@
 package com.dhorby.wavemapper.env
 
-import com.dhorby.wavemapper.model.DatePeriod
-import com.dhorby.wavemapper.model.Location
-import com.dhorby.wavemapper.model.Site
+import com.dhorby.wavemapper.model.*
 import java.time.LocalDate
 
 val siteId = "12345"
 val siteName = "TestSite"
+
+val sharkId = "Monty"
+val sharkSite = "Eastern Atlantic"
 
 internal object TestData {
 
@@ -20,9 +21,25 @@ internal object TestData {
         obsLocationType = "Buoy"
     )
 
-    val validWaveData = DatePeriod(LocalDate.now(), 2.1F, 23, "SSW")
+    val testSharkLocation = SharkLocation(
+        id = "1234",
+        name = "Sue",
+        date = LocalDate.now(),
+        lat = 34.45F,
+        lon = 49.01F,
+        size = 2.1F,
+        species = SharkType.BASKING
+    )
 
+    val validWaveData = WaveDataReading(LocalDate.now(), 2.1F, 23, "SSW")
 
-    val testLocation = Location(id= siteId, name=siteName, lat = -13.34F, lon = 45.00F, datePeriods = listOf(validWaveData))
-    val testLocationWithNoData = Location(id= siteId, name=siteName, lat = -13.34F, lon = 45.00F, datePeriods = emptyList())
+    val testWaveLocation = WaveLocation(
+        id = siteId,
+        name = siteName,
+        lat = -13.34F,
+        lon = 45.00F,
+        waveDataReadings = listOf(validWaveData)
+    )
+    val testWaveLocationWithNoData =
+        WaveLocation(id = siteId, name = siteName, lat = -13.34F, lon = 45.00F, waveDataReadings = emptyList())
 }

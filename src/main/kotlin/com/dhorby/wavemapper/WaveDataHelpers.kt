@@ -2,27 +2,57 @@ package com.dhorby.wavemapper
 
 import com.dhorby.wavemapper.Constants.Companion.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.Companion.metOfficeUrl
-import com.dhorby.wavemapper.model.DatePeriod
-import com.dhorby.wavemapper.model.Location
-import com.dhorby.wavemapper.model.Site
+import com.dhorby.wavemapper.model.*
 import com.fasterxml.jackson.databind.JsonNode
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 
-typealias SiteListFunction  = () -> List<Site>
-typealias DataForSiteFunction = (site:String) -> Location?
+typealias SiteListFunction = () -> MutableList<Site>
+typealias DataForSiteFunction = (site: String) -> Location?
 
 
-fun getMetOfficeUrl(site:String):String {
+fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=$metOfficeApiKey"
 }
 
-fun getAllWaveData(siteListFunction:SiteListFunction, dataForSiteFunction:DataForSiteFunction): List<Location> = siteListFunction().mapNotNull { site ->
-    dataForSiteFunction(site.id)
-}.filter { location ->
-    location.id.isNotEmpty()
+fun getAllWaveData(
+    siteListFunction: SiteListFunction,
+    dataForSiteFunction: DataForSiteFunction
+): MutableList<Location> {
+    val mapNotNull = siteListFunction().mapNotNull { site ->
+        dataForSiteFunction(site.id)
+    }
+    return mapNotNull.filter { location ->
+        location.id.isNotEmpty()
+    }.toMutableList()
+}
+
+fun MutableList<Location>.withAddedShark(): MutableList<Location> {
+    this.add(
+        SharkLocation(
+            id = "1234",
+            name = "Geoffrey",
+            date = LocalDate.now(),
+            lat = 53.506397F,
+            lon = 0.928163F,
+            size = 2.1F,
+            species = SharkType.BASKING
+        )
+    )
+    this.add(
+        SharkLocation(
+            id = "12345",
+            name = "Alan",
+            date = LocalDate.now(),
+            lat = 51.108184F,
+            lon = -5.016133F,
+            size = 1.1F,
+            species = SharkType.HAMMERHEAD
+        )
+    )
+    return this
 }
 
 
@@ -40,23 +70,23 @@ fun JsonNode.getSiteLocations(): List<Site> {
     }
 }
 
-fun JsonNode.getLocation(): Location {
+fun JsonNode.getLocation(): WaveLocation {
     val id: String = this.getDataValue().getLocationPath().path("i")?.toString()?.removeQuotes() ?: "Unknown"
     val name: String =
         this.getDataValue().getLocationPath().path("name")?.toString()?.removeQuotes() ?: "Unknown name"
     val lat: Float = this.getDataValue().getLocationPath().path("lat")?.toString()?.parseToFloat() ?: 0.0F
     val lon: Float = this.getDataValue().getLocationPath().path("lon")?.toString()?.parseToFloat() ?: 0.0F
-    val datePeriods: List<DatePeriod> = getDatePeriods(this)
-    return Location(
+    val waveDataReadings: List<WaveDataReading> = getDatePeriods(this)
+    return WaveLocation(
         id = id,
         name = name,
         lat = lat,
         lon = lon,
-        datePeriods = datePeriods
+        waveDataReadings = waveDataReadings
     )
 }
 
-private fun getDatePeriods(jsonNode: JsonNode): List<DatePeriod> {
+private fun getDatePeriods(jsonNode: JsonNode): List<WaveDataReading> {
     val periods: JsonNode = jsonNode.getDataValue().getLocationPath().path("Period")
     return when {
         periods.isArray -> {
@@ -67,7 +97,7 @@ private fun getDatePeriods(jsonNode: JsonNode): List<DatePeriod> {
                 val dateStr: String = period.get("value").toString()
 
                 dateStr.removeQuotes().parseToDate()?.let {
-                    DatePeriod(it, waveHeight, windSpeed, windDirection)
+                    WaveDataReading(it, waveHeight, windSpeed, windDirection)
                 }
             }
         }

@@ -28,7 +28,9 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         val viewModel: ViewModel =
             mapsApiKey.let { mapsApiKey ->
                 val waveData: String =
-                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction).toGoogleMapFormat()
+                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+                        .withAddedShark()
+                        .toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }
 
@@ -44,8 +46,8 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
     fun getWaveData(): HttpHandler = {
-        val allWaveData: List<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
-        Response(Status.OK).with(locationListBodyLens of allWaveData)
+        val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
+        Response(Status.OK).with(waveLocationListBodyLens() of allWaveData)
     }
 
     fun getProperties(): HttpHandler = {

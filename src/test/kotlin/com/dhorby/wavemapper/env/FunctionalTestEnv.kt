@@ -5,19 +5,19 @@ import com.dhorby.wavemapper.DataForSiteFunction
 import com.dhorby.wavemapper.SiteListFunction
 
 open class FunctionalTestEnv:AppFunctions {
-    override val siteListFunction: SiteListFunction = { listOf(TestData.testSiteLocation) }
-    override val dataForSiteFunction: DataForSiteFunction = { TestData.testLocation }
+    override val siteListFunction: SiteListFunction = { mutableListOf(TestData.testSiteLocation) }
+    override val dataForSiteFunction: DataForSiteFunction = { TestData.testWaveLocation }
 
     internal val siteListFunctionFake:SiteListFunction = {
-        listOf(TestData.testSiteLocation)
+        mutableListOf(TestData.testSiteLocation)
     }
 
     internal val dataForSiteFunctionFake:DataForSiteFunction = {
-        TestData.testLocation
+        TestData.testWaveLocation
     }
 
     internal val dataForSiteWithNoDataFunctionFake:DataForSiteFunction = {
-        TestData.testLocationWithNoData
+        TestData.testWaveLocationWithNoData
     }
 
 }

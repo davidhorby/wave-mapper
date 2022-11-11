@@ -9,7 +9,7 @@ class WaveServiceFunctions:AppFunctions {
 
     override val siteListFunction: SiteListFunction = {
         val xmlText = URL(Constants.siteListUrl).readText()
-        xmlMapper.readTree(xmlText).getSiteLocations()
+        xmlMapper.readTree(xmlText).getSiteLocations().toMutableList()
     }
 
     override val dataForSiteFunction: DataForSiteFunction = { site ->
