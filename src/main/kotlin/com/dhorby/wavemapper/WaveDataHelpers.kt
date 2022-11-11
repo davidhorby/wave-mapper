@@ -138,7 +138,7 @@ fun Float.mapWaveHeight(): String {
         this > 0.8 && this <= 1.0 -> "medium"
         this > 1.0 && this <= 3.0 -> "big"
         this >= 3.0 -> "verybig"
-        else -> "unknown"
+        else -> "notavailable"
     }
 }
 

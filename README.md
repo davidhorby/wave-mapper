@@ -19,6 +19,9 @@ gcloud config set project analytics-springernature
 # Set the region
 gcloud config set functions/region europe-west1
 
+# Build the deplyable jar
+./gradlew clean shadowJar
+
 # Deploy the app
 gcloud app deploy ./build/libs/wave-mapper-1.0-SNAPSHOT.jar
 
