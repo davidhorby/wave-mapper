@@ -81,8 +81,10 @@ fun JsonNode.getSiteLocations(): List<Site> {
     return this.getLocationPath().map {
         Site(
             id = it.path("id").textValue(),
-            latitude = it.path("latitude").floatValue(),
-            longitude = it.path("longitude").floatValue(),
+            geoLocation = GeoLocation(
+                lat = it.path("latitude").floatValue(),
+                lon = it.path("longitude").floatValue()
+            ),
             name = it.path("name").textValue(),
             obsLocationType = it.path("obsLocationType").textValue(),
             obsRegion = it.path("obsRegion").textValue(),

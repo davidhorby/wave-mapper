@@ -14,8 +14,7 @@ internal object TestData {
     val testSiteLocation = Site(
         id = siteId,
         name = siteName,
-        latitude = 12.34F,
-        longitude = 45.45F,
+        geoLocation = GeoLocation(lat = 12.34F, lon = 45.45F),
         obsSource = "FM-13 SHIP",
         obsRegion = "West Coast",
         obsLocationType = "Buoy"
