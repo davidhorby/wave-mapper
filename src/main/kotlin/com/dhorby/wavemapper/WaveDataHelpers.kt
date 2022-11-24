@@ -35,8 +35,7 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
             id = "1234",
             name = "Susan",
             date = LocalDate.now(),
-            lat = 53.506397F,
-            lon = 0.928163F,
+            geoLocation = GeoLocation(lat = 53.506397F, lon = 0.928163F),
             size = 2.1F,
             species = SharkType.GREAT_WHITE
         )
@@ -46,8 +45,7 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
             id = "12345",
             name = "Alan",
             date = LocalDate.now(),
-            lat = 51.108184F,
-            lon = -5.016133F,
+            geoLocation = GeoLocation(lat = 51.108184F, lon = -5.016133F),
             size = 1.1F,
             species = SharkType.HAMMERHEAD
         )
@@ -61,8 +59,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
             id = "1234",
             name = "Geoffrey",
             date = LocalDate.now(),
-            lat = 50.500370F,
-            lon = -7.421526F,
+            geoLocation = GeoLocation(lat = 50.500370F, lon = -7.421526F),
             size = 2.1F,
             boattype = BoatType.SAIL
         )
@@ -72,8 +69,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
             id = "1234",
             name = "Kate",
             date = LocalDate.now(),
-            lat = 55.169322F,
-            lon = -11.394872F,
+            geoLocation = GeoLocation(lat = 55.169322F, lon = -11.394872F),
             size = 2.1F,
             boattype = BoatType.SAIL
         )
@@ -105,8 +101,7 @@ fun JsonNode.getLocation(): WaveLocation {
     return WaveLocation(
         id = id,
         name = name,
-        lat = lat,
-        lon = lon,
+        geoLocation = GeoLocation(lat = lat, lon = lon),
         waveDataReadings = waveDataReadings
     )
 }

@@ -9,9 +9,8 @@ enum class BoatType {
 data class BoatLocation(
     override val id: String,
     override val name:String,
+    override val geoLocation: GeoLocation,
     val date: LocalDate,
-    val lat: Float,
-    val lon: Float,
     val size: Float,
     val boattype: BoatType
 ):Location

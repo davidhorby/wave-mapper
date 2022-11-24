@@ -25,8 +25,7 @@ internal object TestData {
         id = "1234",
         name = "Sue",
         date = LocalDate.now(),
-        lat = 34.45F,
-        lon = 49.01F,
+        geoLocation = GeoLocation(lat = 34.45F, lon = 49.01F),
         size = 2.1F,
         species = SharkType.BASKING
     )
@@ -35,8 +34,7 @@ internal object TestData {
         id = "1234",
         name = "Albert",
         date = LocalDate.now(),
-        lat = 39.45F,
-        lon = -5.01F,
+        geoLocation = GeoLocation(lat = 39.45F, lon = -5.01F),
         size = 2.1F,
         boattype = BoatType.SAIL
     )
@@ -46,10 +44,14 @@ internal object TestData {
     val testWaveLocation = WaveLocation(
         id = siteId,
         name = siteName,
-        lat = -13.34F,
-        lon = 45.00F,
+        geoLocation = GeoLocation(lat = -13.34F, lon = 45.00F),
         waveDataReadings = listOf(validWaveData)
     )
     val testWaveLocationWithNoData =
-        WaveLocation(id = siteId, name = siteName, lat = -13.34F, lon = 45.00F, waveDataReadings = emptyList())
+        WaveLocation(
+            id = siteId,
+            name = siteName,
+            geoLocation = GeoLocation(lat = -13.34F, lon = 45.00F),
+            waveDataReadings = emptyList()
+        )
 }

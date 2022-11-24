@@ -7,8 +7,7 @@ import org.http4k.format.Jackson.auto
 data class WaveLocation(
     override val id: String,
     override val name: String,
-    val lat: Float,
-    val lon: Float,
+    override val geoLocation: GeoLocation,
     val waveDataReadings: List<WaveDataReading>
 ):Location
 

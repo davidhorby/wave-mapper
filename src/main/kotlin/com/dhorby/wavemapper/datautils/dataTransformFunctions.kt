@@ -18,13 +18,13 @@ fun List<Location>.toGoogleMapFormat():String {
                 val waveHeight: Float = location.waveDataReadings.firstOrNull()?.waveHeight?:0F
                 val windSpeed = location.waveDataReadings.firstOrNull()?.windSpeed?:0F
                 val windDirection = location.waveDataReadings.firstOrNull()?.windDirection?:0F
-                "[${location.lat},${location.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}', '${waveHeight.mapWaveHeightToIcon()}']"
+                "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}', '${waveHeight.mapWaveHeightToIcon()}']"
             }
             is SharkLocation -> {
-                "[${location.lat},${location.lon},'${location.species} [${location.name}]', 'shark']"
+                "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.species} [${location.name}]', 'shark']"
             }
             is BoatLocation -> {
-                "[${location.lat},${location.lon},'${location.boattype} [${location.name}]', 'boat']"
+                "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.boattype} [${location.name}]', 'boat']"
             }
         }
 
