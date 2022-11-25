@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.wavemapper.Constants.Companion.metOfficeApiKey
-import com.dhorby.wavemapper.Constants.Companion.metOfficeUrl
+import com.dhorby.wavemapper.Constants.metOfficeApiKey
+import com.dhorby.wavemapper.Constants.metOfficeUrl
 import com.dhorby.wavemapper.model.*
 import com.fasterxml.jackson.databind.JsonNode
 import java.time.LocalDate
@@ -11,18 +11,18 @@ import kotlin.math.roundToInt
 
 
 typealias SiteListFunction = () -> MutableList<Site>
-typealias DataForSiteFunction = (site: String) -> Location?
+typealias DataForSiteFunction = (site: String) -> WaveLocation?
 
 
 fun getMetOfficeUrl(site: String): String {
-    return "${metOfficeUrl}$site?res=3hourly&key=$metOfficeApiKey"
+    return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
 }
 
 fun getAllWaveData(
     siteListFunction: SiteListFunction,
     dataForSiteFunction: DataForSiteFunction
-): MutableList<Location> {
-    val mapNotNull = siteListFunction().mapNotNull { site ->
+): MutableList<WaveLocation> {
+    val mapNotNull: List<WaveLocation> = siteListFunction().mapNotNull { site ->
         dataForSiteFunction(site.id)
     }
     return mapNotNull.filter { location ->

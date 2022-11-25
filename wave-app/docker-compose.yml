@@ -10,6 +10,6 @@ services:
     environment:
       - MAPS_API_KEY
       - MET_OFFICE_API_KEY
-      - RUN_WITH_LOCAL_KEYS
+      - RUN_WITH_LOCAL_KEYS=true
     ports:
       - "8080:8080"

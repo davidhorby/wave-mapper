@@ -1,5 +1,7 @@
 package com.dhorby.wavemapper.model
 
+import com.dhorby.gcloud.model.Piece
+import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import java.time.LocalDate
 
@@ -13,5 +15,6 @@ data class SharkLocation(
     override val geoLocation: GeoLocation,
     val date: LocalDate,
     val size: Float,
-    val species: SharkType
-):Location
+    val species: SharkType,
+    override val pieceType: PieceType = PieceType.SHARK
+): Piece, Location
