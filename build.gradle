@@ -29,6 +29,7 @@ subprojects {
     apply plugin: 'java'
 
     test {
+        useJUnitPlatform()
         testLogging {
             events TestLogEvent.STANDARD_ERROR, TestLogEvent.FAILED//, TestLogEvent.SKIPPED, TestLogEvent.PASSED
             exceptionFormat = "full"

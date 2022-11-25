@@ -29,6 +29,7 @@ dependencies {
 
     testImplementation kotlinTest
     testImplementation junit5
+    testRuntimeOnly junit5RuntimeOnly
 
 }
 

@@ -37,7 +37,6 @@ shadowJar {
 }
 
 
-
 repositories {
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
@@ -53,53 +52,21 @@ ext {
 
 dependencies {
 
-    implementation group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.89'
-
-    implementation "org.http4k:http4k-core:${http4kVersion}"
-    implementation "org.http4k:http4k-format-jackson:${http4kVersion}"
-    implementation "org.http4k:http4k-format-xml:${http4kVersion}"
-    implementation "org.http4k:http4k-template-handlebars:${http4kVersion}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-
-    implementation 'dev.forkhandles:result4k:1.8.2.0'
-
+    implementation kotlinDeps
+    implementation result4k
+    implementation http4k
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    implementation jackson
+    implementation googleCloud
+
+    testImplementation junit5
+    testImplementation kotlinTest
 
     implementation platform("com.google.cloud:libraries-bom:20.6.0");
-    implementation("com.google.cloud:google-cloud-secretmanager");
 
-
-    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testImplementation group: 'com.google.appengine', name: 'appengine-testing', version: '1.9.89'
-    testImplementation group: 'com.google.appengine', name: 'appengine-api-stubs', version: '1.9.89'
-    testImplementation group: 'com.google.appengine', name: 'appengine-tools-sdk', version: '1.9.89'
-
-//    testImplementation("org.jetbrains.kotlin:kotlin-test")
-//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    testImplementation("org.mockito:mockito-core:3.5.10")
-    testImplementation("com.google.truth:truth:1.0.1")
-    testImplementation("com.google.guava:guava-testlib:29.0-jre")
-    testImplementation("org.apiguardian:apiguardian-api:1.1.0")
-    testImplementation("org.opentest4j:opentest4j:1.2.0")
-    testImplementation("org.junit.platform:junit-platform-commons:$junitPlatformVersion")
-    testImplementation("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    testImplementation("com.natpryce:hamkrest:1.8.0.1")
-    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
-
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation googleCloudAppEngineTest
+    testRuntimeOnly junit5RuntimeOnly
 }
 
 // Always run unit tests
