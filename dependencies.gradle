@@ -1,0 +1,52 @@
+ext {
+
+    kotlinJvmTarget = "11"
+    kotlinVersion = "1.7.20"
+
+    result4kVersion = '2.2.0.0'
+
+    junitPlatformVersion = "1.9.1"
+    junitJupiterVersion = "5.9.1"
+
+    http4kTestHamkrestVersion = '4.32.2.0'
+
+    kotlinDeps = [
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
+            "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+            "org.jetbrains:annotations:23.0.0" // force this version to avoid OWASP dependency check violation #CVE-2017-8316
+    ]
+
+    result4k = [
+            "dev.forkhandles:result4k:$result4kVersion"
+    ]
+
+    /////////////////////////// TEST DEPENDENCIES ///////////////////////////
+
+    junit5 = [
+            "org.junit.platform:junit-platform-commons:$junitPlatformVersion",
+            "org.junit.platform:junit-platform-launcher:$junitPlatformVersion",
+            "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
+            "org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion",
+            "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+    ]
+
+    junit5RuntimeOnly = [
+            "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+    ]
+
+    kotlinTest = [
+            "org.http4k:http4k-testing-hamkrest:$http4kTestHamkrestVersion",
+    ]
+
+    googleCloud = [
+            'com.google.cloud.functions:functions-framework-api:1.0.4',
+            'com.google.cloud:google-cloud-storage:2.12.0',
+            'com.google.cloud:google-cloud-datastore:2.11.4'
+    ]
+
+    jackson = [
+            'com.fasterxml.jackson.core:jackson-core:2.13.4',
+            'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4'
+    ]
+
+}

@@ -1,12 +1,8 @@
 package com.dhorby.wavemapper.functional.handlers
 
 import com.dhorby.wavemapper.env.FunctionalTestEnv
-import com.dhorby.wavemapper.env.TestData.testWaveLocation
 import com.dhorby.wavemapper.handlers.WaveHandlers
-import com.dhorby.wavemapper.model.Location
-import com.dhorby.wavemapper.model.WaveLocation
 import com.dhorby.wavemapper.model.Site
-import com.dhorby.wavemapper.model.waveLocationListBodyLens
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.Method
