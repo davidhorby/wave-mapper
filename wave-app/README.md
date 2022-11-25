@@ -8,8 +8,15 @@ http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res
 
 # The Wave Mapper App
 
+## Pre-requisites
+gcloud
+
 #### Run locally
+
 ./gradlew wave-app:run
+
+### Run in docker
+./run-in-docker.sh
 
 # Deploying the application in the cloud
 

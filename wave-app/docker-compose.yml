@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    image: eu.gcr.io/halfpipe-io/build-openjdk11
+    working_dir: /root/code/wave-app
+    command: './bin/run-wave-app.sh'
+    volumes:
+      - ..:/root/code/wave-app
+      - $HOME/.gradle:/root/.gradle:delegated
+    environment:
+      - MAPS_API_KEY
+      - MET_OFFICE_API_KEY
+      - RUN_WITH_LOCAL_KEYS
+    ports:
+      - "8080:8080"
