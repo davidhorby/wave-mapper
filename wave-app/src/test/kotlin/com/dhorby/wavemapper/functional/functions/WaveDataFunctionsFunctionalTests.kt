@@ -7,7 +7,6 @@ import com.dhorby.wavemapper.env.TestData.testSharkLocation
 import com.dhorby.wavemapper.env.siteId
 import com.dhorby.wavemapper.env.siteName
 import com.dhorby.wavemapper.getAllWaveData
-import com.dhorby.wavemapper.model.Location
 import com.dhorby.wavemapper.model.WaveLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo

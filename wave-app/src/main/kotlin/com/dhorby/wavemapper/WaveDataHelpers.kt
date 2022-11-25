@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.metOfficeUrl
@@ -62,7 +63,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
             date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 50.500370F, lon = -7.421526F),
             size = 2.1F,
-            boattype = BoatType.SAIL
+            boatType = BoatType.SAIL
         )
     )
     this.add(
@@ -72,7 +73,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
             date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 55.169322F, lon = -11.394872F),
             size = 2.1F,
-            boattype = BoatType.SAIL
+            boatType = BoatType.SAIL
         )
     )
     return this

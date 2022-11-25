@@ -1,7 +1,7 @@
-package com.dhorby.wavemapper.model
+package com.dhorby.gcloud.model
 
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 
-sealed interface Location {
+interface Location {
     val geoLocation: GeoLocation
 }

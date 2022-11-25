@@ -2,7 +2,7 @@ package com.dhorby.wavemapper.datautils
 
 import com.dhorby.wavemapper.mapWaveHeightToIcon
 import com.dhorby.wavemapper.model.BoatLocation
-import com.dhorby.wavemapper.model.Location
+import com.dhorby.gcloud.model.Location
 import com.dhorby.wavemapper.model.SharkLocation
 import com.dhorby.wavemapper.model.WaveLocation
 
@@ -24,8 +24,9 @@ fun List<Location>.toGoogleMapFormat():String {
                 "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.species} [${location.name}]', 'shark']"
             }
             is BoatLocation -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.boattype} [${location.name}]', 'boat']"
+                "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.boatType} [${location.name}]', 'boat']"
             }
+            else -> throw Exception("Bad location ${location.toString()}")
         }
 
     }

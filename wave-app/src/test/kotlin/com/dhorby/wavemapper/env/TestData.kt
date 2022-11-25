@@ -36,7 +36,7 @@ internal object TestData {
         date = LocalDate.now(),
         geoLocation = GeoLocation(lat = 39.45F, lon = -5.01F),
         size = 2.1F,
-        boattype = BoatType.SAIL
+        boatType = BoatType.SAIL
     )
 
     val validWaveData = WaveDataReading(LocalDate.now(), 2.1F, 23, "SSW")
