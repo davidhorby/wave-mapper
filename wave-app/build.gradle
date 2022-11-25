@@ -40,6 +40,8 @@ dependencies {
     implementation result4k
     implementation http4k
 
+    implementation project(":domain")
+
     implementation jackson
     implementation googleCloud
 
@@ -48,8 +50,10 @@ dependencies {
 
     implementation platform("com.google.cloud:libraries-bom:20.6.0");
 
-    testImplementation googleCloudAppEngineTest
     testRuntimeOnly junit5RuntimeOnly
+
+    testImplementation googleCloudAppEngineTest
+
 }
 
 // Always run unit tests

@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.model
 
+import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import org.http4k.core.Body
 import org.http4k.format.Jackson.auto
 

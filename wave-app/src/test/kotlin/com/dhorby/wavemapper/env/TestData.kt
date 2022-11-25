@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.env
 
+import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.wavemapper.model.*
 import java.time.LocalDate
 

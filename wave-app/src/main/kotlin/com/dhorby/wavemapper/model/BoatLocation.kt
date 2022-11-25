@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.model
 
+import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import java.time.LocalDate
 
 enum class BoatType {

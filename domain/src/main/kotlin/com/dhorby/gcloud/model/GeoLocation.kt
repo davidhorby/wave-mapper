@@ -1,7 +1,6 @@
-package com.dhorby.wavemapper.model
+package com.dhorby.gcloud.model.com.dhorby.gcloud.model
 
 data class GeoLocation(
     val lat: Float,
     val lon: Float
 )
-

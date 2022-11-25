@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.wavemapper.Constants.Companion.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.Companion.metOfficeUrl
 import com.dhorby.wavemapper.model.*
