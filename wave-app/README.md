@@ -12,7 +12,6 @@ http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res
 gcloud
 
 #### Run locally
-
 ./gradlew wave-app:run
 
 ### Run in docker
