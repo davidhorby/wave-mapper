@@ -6,28 +6,34 @@ Wave URL
 
 http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=<metofficekey>
 
-### Setup Application Default Credentials (ADC)
+# The Wave Mapper App
+
+#### Run locally
+./gradlew wave-app:run
+
+# Deploying the application in the cloud
+
+#### Setup Application Default Credentials (ADC)
 gcloud auth login --update-adc
 
-# Check it is the correct project
+#### Check it is the correct project
 gcloud config get-value project
 
-# Set the project of not correct
+#### Set the project of not correct
 gcloud config set project analytics-springernature
 
-
-# Set the region
+#### Set the region
 gcloud config set functions/region europe-west1
 
-# Build the deplyable jar
-./gradlew clean shadowJar
+#### Build the deployable jar (from top of repo)
+./gradlew wave-app:shadowJar
 
-# Deploy the app
-gcloud app deploy ./build/libs/wave-mapper-1.0-SNAPSHOT.jar
+#### Deploy the app
+gcloud app deploy ./build/libs/wave-app.jar
 
-# Stream logs from the command line by running
+#### Stream logs from the command line by running
 gcloud app logs tail -s default
 
-# View application in the web browser run
+#### View application in the web browser run
 gcloud app browse
 

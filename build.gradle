@@ -14,10 +14,8 @@ plugins {
 allprojects {
     apply from: rootProject.file("dependencies.gradle")
 
-    project.version = (version == "unspecified") ? "SNAPSHOT" : version
+//    project.version = (version == "unspecified") ? "SNAPSHOT" : version
     project.group = "com.dhorby"
-
-    buildDir = "target"
 
     repositories {
         mavenCentral()
@@ -28,6 +26,7 @@ allprojects {
 subprojects {
 
     apply plugin: 'java'
+    apply plugin: 'kotlin'
 
     test {
         useJUnitPlatform()

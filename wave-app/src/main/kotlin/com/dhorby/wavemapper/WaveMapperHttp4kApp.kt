@@ -1,44 +1,23 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.wavemapper.handlers.WaveHandlers
-import org.http4k.core.*
+import org.http4k.core.HttpHandler
+import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters
-import org.http4k.routing.bind
-import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
 
-object WaveServiceRoutes {
+object WaveMapperHttp4kApp {
 
-    private val waveServiceFunctions = WaveServiceFunctions()
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val printingApp: HttpHandler = DebuggingFilters.PrintRequest().then(WaveServiceRoutes())
 
-    private val waveHandlers = WaveHandlers(
-        siteListFunction = waveServiceFunctions.siteListFunction,
-        dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
-    )
+        val server = printingApp.asServer(SunHttp(8080)).start()
 
-    operator fun invoke(): HttpHandler =
-        routes(
+        println("Server started on http://localhost:" + server.port())
+    }
 
-            "/ping" bind Method.GET to {
-                Response(Status.OK).body("pong")
-            },
-
-            "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to waveHandlers.getWaveData(),
-            "/properties" bind Method.GET to waveHandlers.getProperties(),
-            "/datasheet" bind Method.GET to waveHandlers.getDataSheet()
-        )
-
-}
-
-fun main() {
-    val printingApp: HttpHandler = DebuggingFilters.PrintRequest().then(WaveServiceRoutes())
-
-    val server = printingApp.asServer(SunHttp(8080)).start()
-
-    println("Server started on http://localhost:" + server.port())
 }
 
 
