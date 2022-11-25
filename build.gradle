@@ -8,8 +8,8 @@ plugins {
     id "idea"
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
-
 
 allprojects {
     apply from: rootProject.file("dependencies.gradle")
@@ -26,6 +26,7 @@ allprojects {
 }
 
 subprojects {
+
     apply plugin: 'java'
 
     test {

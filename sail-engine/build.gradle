@@ -1,10 +1,6 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0'
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
 }
-
-apply plugin: 'kotlin'
 
 shadowJar {
     archiveBaseName.set(project.name)
@@ -12,7 +8,6 @@ shadowJar {
     archiveVersion.set(null)
     mergeServiceFiles()
 }
-
 
 
 jar {
@@ -31,8 +26,4 @@ dependencies {
     testImplementation junit5
     testRuntimeOnly junit5RuntimeOnly
 
-}
-
-test {
-    useJUnitPlatform()
 }

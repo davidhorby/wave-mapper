@@ -1,8 +1,4 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-
     dependencies {
         classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.1'
     }
@@ -10,15 +6,9 @@ buildscript {
 
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0'
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
 }
+
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
-apply plugin: 'kotlin'
-
-compileKotlin.kotlinOptions.jvmTarget = "11"
-compileTestKotlin.kotlinOptions.jvmTarget = "11"
-
 
 jar {
     manifest {
@@ -26,29 +16,12 @@ jar {
     }
 }
 
-group 'com.dhorby'
-version '1.0-SNAPSHOT'
-
 shadowJar {
     archiveBaseName.set(project.name)
     archiveClassifier.set(null)
     archiveVersion.set(null)
     mergeServiceFiles()
 }
-
-
-repositories {
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
-    }
-    mavenCentral()
-}
-
-ext {
-    junitPlatformVersion = "1.7.0"
-    junitJupiterVersion = "5.7.0"
-}
-
 
 dependencies {
 
@@ -78,9 +51,4 @@ appengine {  // App Engine tasks configuration
         projectId = 'analytics-springernature'
         version = '1'
     }
-}
-
-
-test {
-    useJUnitPlatform()
 }
