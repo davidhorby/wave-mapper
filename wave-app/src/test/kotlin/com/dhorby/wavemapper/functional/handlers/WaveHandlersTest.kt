@@ -2,7 +2,7 @@ package com.dhorby.wavemapper.functional.handlers
 
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.dhorby.wavemapper.handlers.WaveHandlers
-import com.dhorby.wavemapper.model.Site
+import com.dhorby.gcloud.model.Site
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.core.Method

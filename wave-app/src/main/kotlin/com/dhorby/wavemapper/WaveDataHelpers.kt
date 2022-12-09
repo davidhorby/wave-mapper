@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.gcloud.model.Location
+import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.metOfficeUrl
@@ -33,23 +33,19 @@ fun getAllWaveData(
 
 fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     this.add(
-        SharkLocation(
+        PieceLocation(
             id = "1234",
             name = "Susan",
-            date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 53.506397F, lon = 0.928163F),
-            size = 2.1F,
-            species = SharkType.GREAT_WHITE
+            pieceType = PieceType.SHARK
         )
     )
     this.add(
-        SharkLocation(
+        PieceLocation(
             id = "12345",
             name = "Alan",
-            date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 51.108184F, lon = -5.016133F),
-            size = 1.1F,
-            species = SharkType.HAMMERHEAD
+            pieceType = PieceType.SHARK
         )
     )
     return this
@@ -57,23 +53,19 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
 
 fun MutableList<Location>.withBoat(): MutableList<Location> {
     this.add(
-        BoatLocation(
+        PieceLocation(
             id = "1234",
             name = "Geoffrey",
-            date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 50.500370F, lon = -7.421526F),
-            size = 2.1F,
-            boatType = BoatType.SAIL
+            pieceType = PieceType.BOAT
         )
     )
     this.add(
-        BoatLocation(
+        PieceLocation(
             id = "1234",
             name = "Kate",
-            date = LocalDate.now(),
             geoLocation = GeoLocation(lat = 55.169322F, lon = -11.394872F),
-            size = 2.1F,
-            boatType = BoatType.SAIL
+            pieceType = PieceType.BOAT
         )
     )
     return this

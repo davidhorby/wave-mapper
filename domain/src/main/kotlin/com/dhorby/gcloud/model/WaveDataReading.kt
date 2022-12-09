@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.model
+package com.dhorby.gcloud.model
 
 import java.time.LocalDate
 

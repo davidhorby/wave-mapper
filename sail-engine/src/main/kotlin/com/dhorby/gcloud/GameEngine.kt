@@ -6,7 +6,7 @@ import com.google.cloud.functions.HttpResponse
 import java.io.BufferedWriter
 import java.io.IOException
 
-class HelloWorld : HttpFunction {
+class GameEngine : HttpFunction {
     @Throws(IOException::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
         val writer: BufferedWriter = response.getWriter()

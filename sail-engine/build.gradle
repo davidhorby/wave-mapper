@@ -12,15 +12,20 @@ shadowJar {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.dhorby.gcloud.HelloWorld'
+        attributes 'Main-Class': 'com.dhorby.gcloud.GameEngine'
     }
 }
 
 
 dependencies {
+
+    implementation project(":domain")
+
     implementation kotlinDeps
     implementation googleCloud
     implementation jackson
+
+    testImplementation project( path: ":domain", configuration: "testArtifact")
 
     testImplementation kotlinTest
     testImplementation junit5

@@ -1,5 +1,6 @@
- gcloud functions deploy dhorby-test2-gcp-tmp --entry-point com.dhorby.gcloud.CanvasFunc \
+ gcloud functions deploy sg-bucket-to-ds  \
  --runtime java17 \
- --trigger-bucket gs://dhorby-function-test \
+ --trigger-bucket gs://sail-game-data \
  --allow-unauthenticated \
- --memory 512MB
+ --memory 512MB \
+ --source=build/libs

@@ -44,11 +44,12 @@ dependencies {
 
     implementation jackson
     implementation googleCloud
+    implementation platform("com.google.cloud:libraries-bom:20.6.0");
 
     testImplementation junit5
     testImplementation kotlinTest
 
-    implementation platform("com.google.cloud:libraries-bom:20.6.0");
+    testImplementation project( path: ":domain", configuration: "testArtifact")
 
     testRuntimeOnly junit5RuntimeOnly
 

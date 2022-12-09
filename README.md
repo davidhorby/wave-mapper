@@ -17,17 +17,26 @@ gcloud config set project analytics-springernature
 
 
 # Set the region
-gcloud config set functions/region europe-west1
+gcloud config set functions/region europe-west2
 
-# Build the deplyable jar
-./gradlew clean shadowJar
+## Build an deploy the wave application
 
-# Deploy the app
-gcloud app deploy ./build/libs/wave-mapper-1.0-SNAPSHOT.jar
+### Build the deployable jar
+./gradlew wave-app:clean wave-app:shadowJar
 
-# Stream logs from the command line by running
+### Deploy the app
+gcloud app deploy ./wave-app/build/libs/wave-app.jar
+
+### Stream logs from the command line by running
 gcloud app logs tail -s default
 
-# View application in the web browser run
+### View application in the web browser run
 gcloud app browse
+
+### Build the cloud function jar
+./gradlew wave-app:clean wave-app:shadowJar
+
+### Deploy the cloud function jar
+gcloud app deploy ./wave-app/build/libs/wave-app.jar
+
 

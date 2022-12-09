@@ -1,0 +1,11 @@
+{
+  "id": "1234",
+  "name": "Albert",
+  "date": "09/12/2022",
+  "geoLocation": {
+    "lat": 39.45,
+    "lon": -5.01
+  },
+  "size": 2.1,
+  "boatType": "SAIL"
+}
