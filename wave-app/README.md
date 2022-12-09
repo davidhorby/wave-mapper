@@ -35,7 +35,7 @@ gcloud config set functions/region europe-west1
 ./gradlew wave-app:shadowJar
 
 #### Deploy the app
-gcloud app deploy ./build/libs/wave-app.jar
+gcloud app deploy ./wave-app/build/libs/wave-app.jar --appyaml=./wave-app/app.yaml
 
 #### Stream logs from the command line by running
 gcloud app logs tail -s default
