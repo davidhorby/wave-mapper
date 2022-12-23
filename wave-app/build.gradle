@@ -8,8 +8,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'java'
+    id 'com.github.johnrengelman.shadow' version "$johnRengelmanVersion"
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -28,6 +28,7 @@ jar {
 }
 
 shadowJar {
+    dependsOn(jar)
     archiveBaseName.set(project.name)
     archiveClassifier.set(null)
     archiveVersion.set(null)

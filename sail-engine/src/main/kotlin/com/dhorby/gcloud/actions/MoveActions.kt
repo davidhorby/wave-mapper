@@ -6,5 +6,5 @@ import kotlinx.serialization.json.Json
 
 
 fun loadPieceLocation(json: String): PieceLocation {
-    return Json.decodeFromString<PieceLocation>(json)
+    return Json.decodeFromString(json)
 }
