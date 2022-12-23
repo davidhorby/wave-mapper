@@ -35,6 +35,10 @@ shadowJar {
     mergeServiceFiles()
 }
 
+distTar.dependsOn(shadowJar)
+startScripts.dependsOn(shadowJar)
+distZip.dependsOn(shadowJar)
+
 dependencies {
 
     implementation kotlinDeps
