@@ -21,9 +21,9 @@ object DataStoreClient {
         // Get the pieceLocation as Json
         val pieceLocationAsString = Json.encodeToString(pieceLocation)
         // Prepares the new entity
-        val pieceLocation: Entity = Entity.newBuilder(taskKey).set(pieceLocation.name, pieceLocationAsString).build()
+        val pieceLocationEntity: Entity = Entity.newBuilder(taskKey).set(pieceLocation.name, pieceLocationAsString).build()
 
         // Saves the entity
-        datastore.put(pieceLocation)
+        datastore.put(pieceLocationEntity)
     }
 }
