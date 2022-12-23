@@ -1,6 +1,7 @@
 package com.dhorby.gcloud.actions
 
 import com.dhorby.gcloud.data.TestData.testSharkLocation
+import com.dhorby.gcloud.model.PieceLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import kotlinx.serialization.encodeToString
@@ -14,7 +15,7 @@ class MoveActionsKtTest {
     fun loadPieceLocation() {
 
         val sharkLocationAsJson = Json.encodeToString(testSharkLocation)
-        val pieceLocation = loadPieceLocation(sharkLocationAsJson)
+        val pieceLocation = sharkLocationAsJson.jsonToObject<PieceLocation>()
         assertThat(pieceLocation, equalTo(testSharkLocation))
 
     }
