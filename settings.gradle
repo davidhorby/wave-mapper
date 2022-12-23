@@ -1,4 +1,4 @@
 rootProject.name = 'wave-mapper'
 
-include 'domain', 'wave-app', 'sail-engine'
+include 'domain', 'infrastructure', 'wave-app', 'sail-engine'
 

@@ -21,6 +21,7 @@ jar {
 dependencies {
 
     implementation project(":domain")
+    implementation project(":infrastructure")
 
     implementation kotlinDeps
     implementation googleCloud

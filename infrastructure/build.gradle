@@ -1,0 +1,22 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
+}
+
+configurations {
+    testArtifact
+}
+
+dependencies {
+    implementation kotlinDeps
+    implementation googleCloud
+
+    implementation project(":domain")
+
+    testImplementation kotlinTest
+    testImplementation junit5
+    testRuntimeOnly junit5RuntimeOnly
+
+    testArtifact sourceSets.test.output
+
+}
