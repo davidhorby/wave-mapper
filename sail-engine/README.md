@@ -8,3 +8,6 @@ gcloud projects list
 
 gcloud config set project analytics-springernature
 
+## Build shadowJar and deploy
+./deploy.sh
+
