@@ -19,7 +19,7 @@ gcloud config set project analytics-springernature
 # Set the region
 gcloud config set functions/region europe-west2
 
-## Build an deploy the wave application
+## Build and deploy the wave application
 
 ### Build the deployable jar
 ./gradlew wave-app:clean wave-app:shadowJar

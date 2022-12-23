@@ -1,12 +1,10 @@
 package com.dhorby.gcloud.actions
 
-import com.dhorby.gcloud.Command
-import com.dhorby.gcloud.extractCommand
-import com.google.api.gax.paging.Page
-import com.google.cloud.storage.Blob
-import com.google.cloud.storage.Storage
-import java.nio.charset.StandardCharsets
-import java.util.zip.GZIPInputStream
+import com.dhorby.gcloud.model.PieceLocation
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 
-
+fun loadPieceLocation(json: String): PieceLocation {
+    return Json.decodeFromString<PieceLocation>(json)
+}

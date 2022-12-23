@@ -11,6 +11,8 @@ http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res
 ## Pre-requisites
 gcloud
 
+gcloud auth configure-docker
+
 #### Run locally
 ./gradlew wave-app:run
 

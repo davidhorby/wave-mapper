@@ -26,7 +26,8 @@ ext {
     kotlinDeps = [
             "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-            "org.jetbrains:annotations:23.0.0" // force this version to avoid OWASP dependency check violation #CVE-2017-8316
+            "org.jetbrains:annotations:23.0.0", // force this version to avoid OWASP dependency check violation #CVE-2017-8316
+            "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
     ]
 
     result4k = [
