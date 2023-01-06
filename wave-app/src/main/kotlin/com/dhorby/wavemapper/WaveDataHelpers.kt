@@ -24,7 +24,7 @@ fun getMetOfficeUrl(site: String): String {
 fun getAllWaveData(
     siteListFunction: SiteListFunction,
     dataForSiteFunction: DataForSiteFunction
-): MutableList<WaveLocation> {
+): MutableList<Location> {
     val mapNotNull: List<WaveLocation> = siteListFunction().mapNotNull { site ->
         dataForSiteFunction(site.id)
     }
@@ -58,7 +58,7 @@ fun getSharkLocationsFromDatastore(): PieceLocation? {
 }
 
 fun getAllSharkLocationsFromDatastore(): List<PieceLocation> {
-    val entitiesOfKindShark = DataStoreClient.getKeysOfKind("SHARK")
+    val entitiesOfKindShark = DataStoreClient.getKeysOfKind("PieceLocation", "SHARK")
     val sharkLocations = entitiesOfKindShark.map {
         it.toSharkLocation()
     }
@@ -74,6 +74,14 @@ fun Entity.toSharkLocation(): PieceLocation {
         pieceType = PieceType.valueOf(this.properties["type"]?.get().toString()),
         geoLocation = GeoLocation(lat, lng)
     )
+}
+
+fun MutableList<Location>.withStoredSharks(): MutableList<Location> {
+    val allSharkLocationsFromDatastore = getAllSharkLocationsFromDatastore()
+    allSharkLocationsFromDatastore.forEach {
+        this.add(it)
+    }
+    return this
 }
 
 fun MutableList<Location>.withBoat(): MutableList<Location> {

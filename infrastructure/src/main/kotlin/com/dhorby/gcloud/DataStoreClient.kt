@@ -28,12 +28,12 @@ object DataStoreClient {
         datastore.put(pieceLocationEntity)
     }
 
-    fun getKeysOfKind(kind:String): MutableList<Entity> {
+    fun getKeysOfKind(kind:String, type:String): MutableList<Entity> {
         val query: Query<Entity> = Query.newEntityQueryBuilder()
-            .setKind("Task")
+            .setKind(kind)
             .setFilter(
                 StructuredQuery.CompositeFilter.and(
-                    StructuredQuery.PropertyFilter.eq("type", "SHARK")
+                    StructuredQuery.PropertyFilter.eq("type", type)
                 )
             )
             .build()

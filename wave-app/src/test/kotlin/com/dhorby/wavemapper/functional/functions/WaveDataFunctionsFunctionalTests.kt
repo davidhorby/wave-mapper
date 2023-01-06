@@ -4,10 +4,10 @@ import com.dhorby.gcloud.data.TestData.testBoatLocation
 import com.dhorby.gcloud.data.TestData.testSharkLocation
 import com.dhorby.gcloud.data.siteId
 import com.dhorby.gcloud.data.siteName
+import com.dhorby.gcloud.model.Location
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.dhorby.wavemapper.getAllWaveData
-import com.dhorby.gcloud.model.WaveLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
 
     @Test
     fun `should be able to get all wave data`() {
-        val allWaveData: MutableList<WaveLocation> = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake)
+        val allWaveData: MutableList<Location> = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake)
         assertThat(allWaveData.size, equalTo(1))
         val brittanyLightShip = allWaveData.first { it.id == siteId }
         assertThat(brittanyLightShip.name, equalTo(siteName))

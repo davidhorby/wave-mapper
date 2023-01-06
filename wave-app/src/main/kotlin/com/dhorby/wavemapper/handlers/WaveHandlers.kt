@@ -1,12 +1,11 @@
 package com.dhorby.wavemapper.handlers
 
-import com.dhorby.wavemapper.model.Wave
-import com.dhorby.gcloud.model.WaveLocation
-import com.dhorby.wavemapper.model.WavePage
+import com.dhorby.gcloud.model.Location
 import com.dhorby.wavemapper.*
 import com.dhorby.wavemapper.Constants.mapsApiKey
 import com.dhorby.wavemapper.datautils.toGoogleMapFormat
-import com.dhorby.wavemapper.model.*
+import com.dhorby.wavemapper.model.Wave
+import com.dhorby.wavemapper.model.WavePage
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status
@@ -30,9 +29,11 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
         val viewModel: ViewModel =
             mapsApiKey.let { mapsApiKey ->
+                val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+                val withStoredSharks = allWaveData
+                    .withStoredSharks()
                 val waveData: String =
-                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-//                        .withAddedShark()
+                    withStoredSharks
 //                        .withBoat()
                         .toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
@@ -50,7 +51,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
     fun getWaveData(): HttpHandler = {
-        val allWaveData: MutableList<WaveLocation> = getAllWaveData(siteListFunction, dataForSiteFunction)
+        val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
         Response(Status.OK).with(waveLocationListBodyLens() of allWaveData)
     }
 
