@@ -2,7 +2,6 @@ package com.dhorby.gcloud.data
 
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.wavemapper.model.*
 import java.time.LocalDate
 
 val siteId = "12345"
@@ -16,7 +15,7 @@ object TestData {
     val testSiteLocation = Site(
         id = siteId,
         name = siteName,
-        geoLocation = GeoLocation(lat = 12.34F, lon = 45.45F),
+        geoLocation = GeoLocation(lat = 12.34, lon = 45.45),
         obsSource = "FM-13 SHIP",
         obsRegion = "West Coast",
         obsLocationType = "Buoy"
@@ -25,14 +24,14 @@ object TestData {
     val testSharkLocation = PieceLocation(
         id = "1234",
         name = "Sue",
-        geoLocation = GeoLocation(lat = 34.45F, lon = 49.01F),
+        geoLocation = GeoLocation(lat = 34.45, lon = 49.01),
         pieceType = PieceType.SHARK
     )
 
     val testBoatLocation = PieceLocation(
         id = "234ea",
         name = "Albert",
-        geoLocation = GeoLocation(lat = 39.45F, lon = -5.01F),
+        geoLocation = GeoLocation(lat = 39.45, lon = -5.01),
         pieceType = PieceType.BOAT
     )
 
@@ -41,14 +40,14 @@ object TestData {
     val testWaveLocation = WaveLocation(
         id = siteId,
         name = siteName,
-        geoLocation = GeoLocation(lat = -13.34F, lon = 45.00F),
+        geoLocation = GeoLocation(lat = -13.34, lon = 45.00),
         waveDataReadings = listOf(validWaveData)
     )
     val testWaveLocationWithNoData =
         WaveLocation(
             id = siteId,
             name = siteName,
-            geoLocation = GeoLocation(lat = -13.34F, lon = 45.00F),
+            geoLocation = GeoLocation(lat = -13.34, lon = 45.00),
             waveDataReadings = emptyList()
         )
 }

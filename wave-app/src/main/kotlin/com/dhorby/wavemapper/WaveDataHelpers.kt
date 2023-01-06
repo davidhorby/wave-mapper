@@ -1,11 +1,13 @@
 package com.dhorby.wavemapper
 
+import DataStoreClient
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.wavemapper.Constants.metOfficeUrl
-import com.dhorby.wavemapper.model.*
 import com.fasterxml.jackson.databind.JsonNode
+import com.google.cloud.datastore.Entity
+import com.google.cloud.datastore.LatLng
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -36,7 +38,7 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
         PieceLocation(
             id = "1234",
             name = "Susan",
-            geoLocation = GeoLocation(lat = 53.506397F, lon = 0.928163F),
+            geoLocation = GeoLocation(lat = 53.506397, lon = 0.928163),
             pieceType = PieceType.SHARK
         )
     )
@@ -44,11 +46,34 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
         PieceLocation(
             id = "12345",
             name = "Alan",
-            geoLocation = GeoLocation(lat = 51.108184F, lon = -5.016133F),
+            geoLocation = GeoLocation(lat = 51.108184, lon = -5.016133),
             pieceType = PieceType.SHARK
         )
     )
     return this
+}
+
+fun getSharkLocationsFromDatastore(): PieceLocation? {
+    return DataStoreClient.readFromDatastore()?.toSharkLocation()
+}
+
+fun getAllSharkLocationsFromDatastore(): List<PieceLocation> {
+    val entitiesOfKindShark = DataStoreClient.getKeysOfKind("SHARK")
+    val sharkLocations = entitiesOfKindShark.map {
+        it.toSharkLocation()
+    }
+    return sharkLocations
+}
+fun Entity.toSharkLocation(): PieceLocation {
+    val location: LatLng = this.getLatLng("location")
+    val lat = location.latitude
+    val lng = location.longitude
+    return PieceLocation(
+        id = this.properties["id"]?.get().toString(),
+        name = this.properties["name"]?.get().toString(),
+        pieceType = PieceType.valueOf(this.properties["type"]?.get().toString()),
+        geoLocation = GeoLocation(lat, lng)
+    )
 }
 
 fun MutableList<Location>.withBoat(): MutableList<Location> {
@@ -56,7 +81,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
         PieceLocation(
             id = "1234",
             name = "Geoffrey",
-            geoLocation = GeoLocation(lat = 50.500370F, lon = -7.421526F),
+            geoLocation = GeoLocation(lat = 50.500370, lon = -7.421526),
             pieceType = PieceType.BOAT
         )
     )
@@ -64,7 +89,7 @@ fun MutableList<Location>.withBoat(): MutableList<Location> {
         PieceLocation(
             id = "1234",
             name = "Kate",
-            geoLocation = GeoLocation(lat = 55.169322F, lon = -11.394872F),
+            geoLocation = GeoLocation(lat = 55.169322, lon = -11.394872),
             pieceType = PieceType.BOAT
         )
     )
@@ -76,8 +101,8 @@ fun JsonNode.getSiteLocations(): List<Site> {
         Site(
             id = it.path("id").textValue(),
             geoLocation = GeoLocation(
-                lat = it.path("latitude").floatValue(),
-                lon = it.path("longitude").floatValue()
+                lat = it.path("latitude").doubleValue(),
+                lon = it.path("longitude").doubleValue()
             ),
             name = it.path("name").textValue(),
             obsLocationType = it.path("obsLocationType").textValue(),
@@ -91,8 +116,8 @@ fun JsonNode.getLocation(): WaveLocation {
     val id: String = this.getDataValue().getLocationPath().path("i")?.toString()?.removeQuotes() ?: "Unknown"
     val name: String =
         this.getDataValue().getLocationPath().path("name")?.toString()?.removeQuotes() ?: "Unknown name"
-    val lat: Float = this.getDataValue().getLocationPath().path("lat")?.toString()?.parseToFloat() ?: 0.0F
-    val lon: Float = this.getDataValue().getLocationPath().path("lon")?.toString()?.parseToFloat() ?: 0.0F
+    val lat: Double = this.getDataValue().getLocationPath().path("lat")?.toString()?.parseToDouble() ?: 0.0
+    val lon: Double = this.getDataValue().getLocationPath().path("lon")?.toString()?.parseToDouble() ?: 0.0
     val waveDataReadings: List<WaveDataReading> = getDatePeriods(this)
     return WaveLocation(
         id = id,
@@ -156,6 +181,17 @@ private fun String.parseToFloat(): Float {
         } catch (e: Exception) {
             println("Error parsing $this")
             return 0.0F
+        }
+}
+
+private fun String.parseToDouble(): Double {
+    if (this.isEmpty()) return 0.0
+    else
+        return try {
+            this.removeQuotes().toDouble()
+        } catch (e: Exception) {
+            println("Error parsing $this")
+            return 0.0
         }
 }
 

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GeoLocation(
-    val lat: Float,
-    val lon: Float
+    val lat: Double,
+    val lon: Double
 )

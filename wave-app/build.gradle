@@ -46,6 +46,7 @@ dependencies {
     implementation http4k
 
     implementation project(":domain")
+    implementation project(":infrastructure")
 
     implementation jackson
     implementation googleCloud

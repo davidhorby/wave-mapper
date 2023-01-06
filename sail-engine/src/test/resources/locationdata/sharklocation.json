@@ -1,0 +1,9 @@
+{
+  "id": "1234",
+  "name": "Sue",
+  "geoLocation": {
+    "lat": 34.45,
+    "lon": 49.01
+  },
+  "pieceType": "SHARK"
+}

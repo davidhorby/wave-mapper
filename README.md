@@ -12,7 +12,7 @@ gcloud auth login --update-adc
 # Check it is the correct project
 gcloud config get-value project
 
-# Set the project of not correct
+# Set the project
 gcloud config set project analytics-springernature
 
 
