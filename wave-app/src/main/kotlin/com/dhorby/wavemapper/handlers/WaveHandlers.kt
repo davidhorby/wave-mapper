@@ -29,12 +29,10 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
         val viewModel: ViewModel =
             mapsApiKey.let { mapsApiKey ->
-                val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                val withStoredSharks = allWaveData
-                    .withStoredSharks()
                 val waveData: String =
-                    withStoredSharks
-//                        .withBoat()
+                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+                        .withStoredSharks()
+                        .withStoredBoats()
                         .toGoogleMapFormat()
                 WavePage(waveData, mapsApiKey)
             }

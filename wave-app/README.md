@@ -31,7 +31,7 @@ gcloud config get-value project
 gcloud config set project analytics-springernature
 
 #### Set the region
-gcloud config set functions/region europe-west1
+gcloud config set functions/region europe-west2
 
 #### Build the deployable jar (from top of repo)
 ./gradlew wave-app:shadowJar

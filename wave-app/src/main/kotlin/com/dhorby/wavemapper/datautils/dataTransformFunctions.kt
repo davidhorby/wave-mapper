@@ -22,6 +22,10 @@ fun List<Location>.toGoogleMapFormat(): String {
                 "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'shark']"
             }
 
+            PieceType.BOAT -> {
+                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'boat']"
+            }
+
             else -> throw Exception("Bad location ${location.toString()}")
         }
 
