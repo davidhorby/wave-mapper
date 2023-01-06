@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method

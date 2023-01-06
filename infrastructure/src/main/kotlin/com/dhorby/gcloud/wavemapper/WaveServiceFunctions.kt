@@ -1,15 +1,16 @@
-package com.dhorby.wavemapper
+package com.dhorby.gcloud.wavemapper
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import java.net.URL
 
-class WaveServiceFunctions:AppFunctions {
+class WaveServiceFunctions: AppFunctions {
 
     private val xmlMapper = XmlMapper()
 
     override val siteListFunction: SiteListFunction = {
         val xmlText = URL(Constants.siteListUrl).readText()
-        xmlMapper.readTree(xmlText).getSiteLocations().toMutableList()
+        val readTree = xmlMapper.readTree(xmlText)
+        readTree.getSiteLocations().toMutableList()
     }
 
     override val dataForSiteFunction: DataForSiteFunction = { site ->

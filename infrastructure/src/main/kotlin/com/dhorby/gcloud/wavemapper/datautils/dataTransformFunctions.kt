@@ -1,8 +1,8 @@
-package com.dhorby.wavemapper.datautils
+package com.dhorby.gcloud.wavemapper.datautils
 
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.wavemapper.mapWaveHeightToIcon
+import com.dhorby.gcloud.wavemapper.mapWaveHeightToIcon
 
 
 fun List<Location>.toGoogleMapFormat(): String {

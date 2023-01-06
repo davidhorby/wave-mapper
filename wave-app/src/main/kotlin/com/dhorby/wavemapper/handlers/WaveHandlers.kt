@@ -1,11 +1,12 @@
 package com.dhorby.wavemapper.handlers
 
 import com.dhorby.gcloud.model.Location
-import com.dhorby.wavemapper.*
-import com.dhorby.wavemapper.Constants.mapsApiKey
-import com.dhorby.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.gcloud.wavemapper.*
+import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
+import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
+import com.dhorby.wavemapper.waveLocationListBodyLens
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status

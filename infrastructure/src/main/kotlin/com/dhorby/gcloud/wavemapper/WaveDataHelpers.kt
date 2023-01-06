@@ -1,10 +1,10 @@
-package com.dhorby.wavemapper
+package com.dhorby.gcloud.wavemapper
 
 import DataStoreClient
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.wavemapper.Constants.metOfficeApiKey
-import com.dhorby.wavemapper.Constants.metOfficeUrl
+import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
+import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.LatLng

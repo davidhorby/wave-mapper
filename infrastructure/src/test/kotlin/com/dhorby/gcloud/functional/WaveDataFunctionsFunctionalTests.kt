@@ -1,13 +1,15 @@
-package com.dhorby.wavemapper.functional.functions
+package com.dhorby.gcloud.functional
 
+
+import com.dhorby.gcloud.data.TestData
+import com.dhorby.gcloud.data.TestData.siteId
+import com.dhorby.gcloud.data.TestData.siteName
 import com.dhorby.gcloud.data.TestData.testBoatLocation
 import com.dhorby.gcloud.data.TestData.testSharkLocation
-import com.dhorby.gcloud.data.siteId
-import com.dhorby.gcloud.data.siteName
+import com.dhorby.gcloud.env.FunctionalTestEnv
 import com.dhorby.gcloud.model.Location
-import com.dhorby.wavemapper.datautils.toGoogleMapFormat
-import com.dhorby.wavemapper.env.FunctionalTestEnv
-import com.dhorby.wavemapper.getAllWaveData
+import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
@@ -19,7 +21,7 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
         val allWaveData: MutableList<Location> = getAllWaveData(siteListFunctionFake, dataForSiteFunctionFake)
         assertThat(allWaveData.size, equalTo(1))
         val brittanyLightShip = allWaveData.first { it.id == siteId }
-        assertThat(brittanyLightShip.name, equalTo(siteName))
+        assertThat(brittanyLightShip.name, equalTo(TestData.siteName))
     }
 
     @Test

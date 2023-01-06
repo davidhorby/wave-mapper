@@ -10,12 +10,17 @@ configurations {
 dependencies {
     implementation kotlinDeps
     implementation googleCloud
+    implementation jackson
+    implementation http4k
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
 
     implementation project(":domain")
 
     testImplementation kotlinTest
     testImplementation junit5
     testRuntimeOnly junit5RuntimeOnly
+
+    testImplementation project( path: ":domain", configuration: "testArtifact")
 
     testArtifact sourceSets.test.output
 

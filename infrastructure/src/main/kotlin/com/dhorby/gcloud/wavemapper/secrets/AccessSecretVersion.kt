@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.secrets
+package com.dhorby.gcloud.wavemapper.secrets
 
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient
 import com.google.cloud.secretmanager.v1.SecretVersionName

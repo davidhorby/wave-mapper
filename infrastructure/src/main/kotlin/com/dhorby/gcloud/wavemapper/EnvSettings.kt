@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper
+package com.dhorby.gcloud.wavemapper
 
 object EnvSettings {
     val MAPS_API_KEY: String = System.getenv("MAPS_API_KEY")?:""

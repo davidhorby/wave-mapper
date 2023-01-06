@@ -1,8 +1,8 @@
-package com.dhorby.wavemapper.functional.functions
+package com.dhorby.gcloud.functional.functions
 
 import com.dhorby.gcloud.data.TestData.testSharkLocation
-import com.dhorby.wavemapper.getAllSharkLocationsFromDatastore
-import com.dhorby.wavemapper.getSharkLocationsFromDatastore
+import com.dhorby.gcloud.wavemapper.getAllSharkLocationsFromDatastore
+import com.dhorby.gcloud.wavemapper.getSharkLocationsFromDatastore
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThan
