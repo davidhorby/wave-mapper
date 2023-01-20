@@ -4,6 +4,7 @@ import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.waveLocationListBodyLens
@@ -42,6 +43,18 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         viewModel.let {
             try {
                 Response(OK).body(renderer(viewModel))
+            } catch (e: Exception) {
+                Response(OK).body(e.stackTraceToString())
+            }
+        }
+
+    }
+
+    fun getMap(): HttpHandler = {
+
+        GMap(mapsApiKey).let {
+            try {
+                Response(OK).body(renderer(it))
             } catch (e: Exception) {
                 Response(OK).body(e.stackTraceToString())
             }

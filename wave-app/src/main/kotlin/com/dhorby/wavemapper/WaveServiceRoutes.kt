@@ -6,8 +6,10 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import org.http4k.routing.static
 
 object WaveServiceRoutes {
 
@@ -28,7 +30,9 @@ object WaveServiceRoutes {
             "/" bind Method.GET to waveHandlers.getWavePage(),
             "/data" bind Method.GET to waveHandlers.getWaveData(),
             "/properties" bind Method.GET to waveHandlers.getProperties(),
-            "/datasheet" bind Method.GET to waveHandlers.getDataSheet()
+            "/datasheet" bind Method.GET to waveHandlers.getDataSheet(),
+            "/map" bind Method.GET to waveHandlers.getMap(),
+            "/css" bind static(Classpath("/css"))
         )
 
 }
