@@ -15,7 +15,6 @@ gcloud config get-value project
 # Set the project
 gcloud config set project analytics-springernature
 
-
 # Set the region
 gcloud config set functions/region europe-west2
 
