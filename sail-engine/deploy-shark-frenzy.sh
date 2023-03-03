@@ -4,9 +4,9 @@
 
  gcloud config set functions/region europe-west2
 
- gcloud functions deploy sg-http-to-bucket \
+ gcloud functions deploy sharkfrenzy \
  --env-vars-file ./env-live.yaml \
- --entry-point com.dhorby.gcloud.HttpToFirestoreFunc \
+ --entry-point com.dhorby.gcloud.SharkFrenzyFunc \
  --runtime java17 \
  --trigger-http \
  --allow-unauthenticated \

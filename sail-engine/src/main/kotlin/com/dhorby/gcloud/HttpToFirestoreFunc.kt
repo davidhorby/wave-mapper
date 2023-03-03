@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class HttpToBucketFunc : HttpFunction {
+class HttpToFirestoreFunc : HttpFunction {
 
     // Use GSON (https://github.com/google/gson) to parse JSON content.
     private val gson = Gson()
@@ -23,7 +23,7 @@ class HttpToBucketFunc : HttpFunction {
     @Throws(Exception::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
 
-        val LOG: Logger = LoggerFactory.getLogger(HttpToBucketFunc::class.java)
+        val LOG: Logger = LoggerFactory.getLogger(HttpToFirestoreFunc::class.java)
 
         LOG.info("env=" + Settings.ENV + "host=" + Settings.HOST + ":" + Settings.PROJECT_ID)
 
