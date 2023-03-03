@@ -1,0 +1,1 @@
+../gradlew runFunction -Prun.functionTarget=com.dhorby.gcloud.HttpToBucketFunc -Prun.port=8080

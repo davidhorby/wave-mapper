@@ -3,6 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
 }
 
+configurations {
+    invoker
+}
+
+
 shadowJar {
     archiveBaseName.set(project.name)
     archiveClassifier.set(null)
@@ -26,6 +31,10 @@ dependencies {
     implementation kotlinDeps
     implementation googleCloud
     implementation jackson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.cloud.functions:functions-framework-api:1.0.4'
+
+    invoker 'com.google.cloud.functions.invoker:java-function-invoker:1.1.1'
 
     testImplementation project( path: ":domain", configuration: "testArtifact")
 
@@ -33,4 +42,17 @@ dependencies {
     testImplementation junit5
     testRuntimeOnly junit5RuntimeOnly
 
+}
+
+tasks.register("runFunction", JavaExec) {
+    main = 'com.google.cloud.functions.invoker.runner.Invoker'
+    classpath(configurations.invoker)
+    inputs.files(configurations.runtimeClasspath, sourceSets.main.output)
+    args(
+            '--target', project.findProperty('run.functionTarget'),
+            '--port', project.findProperty('run.port') ?: 8080
+    )
+    doFirst {
+        args('--classpath', files(configurations.runtimeClasspath, sourceSets.main.output).asPath)
+    }
 }
