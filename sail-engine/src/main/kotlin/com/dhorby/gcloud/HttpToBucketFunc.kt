@@ -2,6 +2,7 @@ package com.dhorby.gcloud
 
 import DataStoreClient.getKeysOfKind
 import DataStoreClient.writeToDatastore
+import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.google.cloud.datastore.Entity
 import com.google.cloud.functions.HttpFunction
@@ -22,9 +23,12 @@ class HttpToBucketFunc : HttpFunction {
     @Throws(Exception::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
 
-        val MyLOG: Logger = LoggerFactory.getLogger(HttpToBucketFunc::class.java)
+        val LOG: Logger = LoggerFactory.getLogger(HttpToBucketFunc::class.java)
+
+        LOG.info("env=" + Settings.ENV + "host=" + Settings.HOST + ":" + Settings.PROJECT_ID)
+
         val contentType = request.contentType.orElse("")
-        MyLOG.info("Context type --->>>" + contentType)
+        LOG.info("Context type --->>>" + contentType)
         val jsonObject: JsonObject = gson.fromJson(request.reader, JsonObject::class.java)
         val jsonString = jsonObject.toString()
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)

@@ -4,7 +4,9 @@
 
  gcloud config set functions/region europe-west2
 
- gcloud functions deploy sg-http-to-bucket  --entry-point com.dhorby.gcloud.HttpToBucketFunc \
+ gcloud functions deploy sg-http-to-bucket \
+ --env-vars-file ./env-live.yaml \
+ --entry-point com.dhorby.gcloud.HttpToBucketFunc \
  --runtime java17 \
  --trigger-http \
  --allow-unauthenticated \

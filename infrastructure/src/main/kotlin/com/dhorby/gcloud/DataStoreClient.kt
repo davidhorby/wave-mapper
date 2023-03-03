@@ -1,25 +1,24 @@
+import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.google.cloud.datastore.*
-import com.google.cloud.datastore.Query.newGqlQueryBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object DataStoreClient {
 
-    //        private val datastore: Datastore = DatastoreOptions.getDefaultInstance().service
-    private val datastore: Datastore = DatastoreOptions.newBuilder()
-        .setHost("http://localhost:8081")
-        .setProjectId("analytics-springernature").build().service
+    private val datastore: Datastore  by lazy {
+        if (Settings.ENV == "local") {
+            DatastoreOptions.newBuilder()
+                .setHost(Settings.HOST)
+                .setProjectId(Settings.PROJECT_ID)
+                .build()
+                .service
+        } else {
+            DatastoreOptions.getDefaultInstance().service
+        }
+    }
 
-//    private val localHelper:LocalDatastoreHelper = LocalDatastoreHelper.create(1.0);
-
-//    init {
-//        localHelper.start();
-//    }
-
-//    private val datastore: Datastore = localHelper.options.service
-
-    val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
 
     fun writeToDatastore(pieceLocation: PieceLocation) {
 
@@ -56,15 +55,13 @@ object DataStoreClient {
         LOG.info("Reading from datastore" + DatastoreOptions.getDefaultInstance().projectId)
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind(kind)
-//            .setFilter(
-//                StructuredQuery.CompositeFilter.and(
-//                    StructuredQuery.PropertyFilter.eq("type", type)
-//                )
-//            )
+            .setFilter(
+                StructuredQuery.CompositeFilter.and(
+                    StructuredQuery.PropertyFilter.eq("type", type)
+                )
+            )
             .build()
         val queryResults: QueryResults<Entity> = datastore.run(query)
-
-        val queryResults1 = datastore.run(newGqlQueryBuilder("select * from __kind__").build())
 
 
         val results = mutableListOf<Entity>()
