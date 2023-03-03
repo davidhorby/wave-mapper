@@ -13,7 +13,7 @@ object WaveMapperHttp4kApp {
     fun main(args: Array<String>) {
         val printingApp: HttpHandler = DebuggingFilters.PrintRequest().then(WaveServiceRoutes())
 
-        val server = printingApp.asServer(SunHttp(8080)).start()
+        val server = printingApp.asServer(SunHttp(80)).start()
 
         println("Server started on http://localhost:" + server.port())
     }

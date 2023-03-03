@@ -18,6 +18,31 @@ gcloud config set project analytics-springernature
 # Set the region
 gcloud config set functions/region europe-west2
 
+## Install cloud datastore emulator
+gcloud components install cloud-datastore-emulator
+
+gcloud beta emulators datastore start
+
+export DATASTORE_EMULATOR_HOST=localhost:8081
+
+Now running on http://localhost:8081
+
+
+
+### Automatically set the environment variable
+gcloud beta emulators datastore env-init
+
+will result in 
+
+export DATASTORE_DATASET=analytics-springernature
+export DATASTORE_EMULATOR_HOST=localhost:8081
+export DATASTORE_EMULATOR_HOST_PATH=localhost:8081/datastore
+export DATASTORE_HOST=http://localhost:8081
+export DATASTORE_PROJECT_ID=analytics-springernature
+
+
+[//]: # ($&#40;gcloud beta emulators datastore env-init&#41;)
+
 ## Build and deploy the wave application
 
 ### Build the deployable jar

@@ -1,11 +1,18 @@
 package com.dhorby.gcloud
 
+import DataStoreClient.getKeysOfKind
+import DataStoreClient.writeToDatastore
+import com.dhorby.gcloud.model.PieceLocation
+import com.google.cloud.datastore.Entity
 import com.google.cloud.functions.HttpFunction
 import com.google.cloud.functions.HttpRequest
 import com.google.cloud.functions.HttpResponse
 import com.google.gson.Gson
 import com.google.gson.JsonObject;
-import java.util.logging.Logger
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class HttpToBucketFunc : HttpFunction {
 
@@ -14,21 +21,21 @@ class HttpToBucketFunc : HttpFunction {
 
     @Throws(Exception::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
+
+        val MyLOG: Logger = LoggerFactory.getLogger(HttpToBucketFunc::class.java)
         val contentType = request.contentType.orElse("")
-        println(contentType)
-//        response.getWriter().write("Hello, World\n");
+        MyLOG.info("Context type --->>>" + contentType)
         val jsonObject: JsonObject = gson.fromJson(request.reader, JsonObject::class.java)
-//        if (body.has("name")) {
-//            name = body["name"].asString
-//        }
+        val jsonString = jsonObject.toString()
+        val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
+        writeToDatastore(pieceLocation)
 
-//        response.writer.write(jsonObject.get("test").asString)
-        response.writer.write("Message received\n" + jsonObject.toString())
+        val sharks: MutableList<Entity> = getKeysOfKind("PieceLocation", "SHARK")
+        val allSharks = sharks.first().toString()
+        response.writer.write("Size:" + sharks.size)
     }
 
-    companion object {
-        private val logger = Logger.getLogger(HttpToBucketFunc::class.java.name)
-    }
+
 
 }
 

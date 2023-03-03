@@ -18,6 +18,8 @@ ext {
 
     johnRengelmanVersion = '7.1.0'
 
+    slf4jVersion = '1.7.26'
+
     http4k = [
             "org.http4k:http4k-core:${http4kVersion}",
             "org.http4k:http4k-format-jackson:${http4kVersion}",
