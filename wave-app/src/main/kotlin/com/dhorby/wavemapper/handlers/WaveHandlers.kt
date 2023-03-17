@@ -3,22 +3,22 @@ package com.dhorby.wavemapper.handlers
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
+import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.wavemapper.WaveServiceRoutes
 import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.waveLocationListBodyLens
-import org.http4k.core.HttpHandler
-import org.http4k.core.Response
-import org.http4k.core.Status
+import org.http4k.client.ApacheClient
+import org.http4k.core.*
 import org.http4k.core.Status.Companion.OK
-import org.http4k.core.with
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
 import java.util.*
 
-class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction:DataForSiteFunction) {
+class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction) {
 
     private val devMode = false;
 
@@ -86,7 +86,16 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         else -> HandlebarsTemplates().CachingClasspath() to ResourceLoader.Classpath("public")
     }
 
-    fun getLocationData(): HttpHandler  = {
-        Response(OK)
+    //    https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+    fun getLocationData(): HttpHandler = {
+        val lat = WaveServiceRoutes.latQuery(it)
+        val lon = WaveServiceRoutes.lonQuery(it)
+        val client = ApacheClient()
+        val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
+            .query("latlng", "$lat,$lon")
+            .query("key", mapsApiKeyServer)
+        val response = client(request)
+        val bodyString = response.bodyString()
+        Response(OK).body(bodyString)
     }
 }

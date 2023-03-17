@@ -8,7 +8,7 @@ object AccessSecretVersion {
 
     fun accessSecretVersion(secretId: String): String? {
         val projectId = "analytics-springernature"
-        val versionId = "1"
+        val versionId = "latest"
         return accessSecretVersion(projectId, secretId, versionId)
     }
 

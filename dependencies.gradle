@@ -26,7 +26,8 @@ ext {
             "org.http4k:http4k-format-xml:${http4kVersion}",
             "org.http4k:http4k-template-handlebars:${http4kVersion}",
             "org.http4k:http4k-contract:${http4kVersion}",
-            "org.http4k:http4k-format-argo:${http4kVersion}"
+            "org.http4k:http4k-format-argo:${http4kVersion}",
+            "org.http4k:http4k-client-apache:${http4kVersion}"
     ]
 
     kotlinDeps = [
