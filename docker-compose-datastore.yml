@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  datastore:
+    image: google/cloud-sdk
+    working_dir: /root/code/wave-mapper
+    command: './bin/start-datastore-local.sh'
+    volumes:
+      - .:/root/code/wave-mapper
+    ports:
+      - "8081:8081"

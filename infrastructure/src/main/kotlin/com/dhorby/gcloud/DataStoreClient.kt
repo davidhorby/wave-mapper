@@ -1,6 +1,7 @@
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.google.cloud.datastore.*
+import com.google.cloud.datastore.testing.LocalDatastoreHelper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -14,6 +15,7 @@ object DataStoreClient {
                 .build()
                 .service
         } else {
+            LocalDatastoreHelper.newBuilder()
             DatastoreOptions.getDefaultInstance().service
         }
     }
