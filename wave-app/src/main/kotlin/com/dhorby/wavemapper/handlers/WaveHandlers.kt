@@ -85,4 +85,8 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         hotReload -> HandlebarsTemplates().HotReload("./src/main/resources") to ResourceLoader.Classpath("public")
         else -> HandlebarsTemplates().CachingClasspath() to ResourceLoader.Classpath("public")
     }
+
+    fun getLocationData(): HttpHandler  = {
+        Response(OK)
+    }
 }

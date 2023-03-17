@@ -96,24 +96,25 @@
             function selectHandler(e) {
                 var selection = map.getSelection()
                 var message = '';
+                var dataTable = data;
                 for (var i = 0; i < selection.length; i++) {
                     var item = selection[i];
-                    if (item.row != null && item.column != null) {
-                        var str = data.getFormattedValue(item.row, item.column);
-                        message += '{row:' + item.row + ',column:' + item.column + '} = ' + str + '\n';
-                    } else if (item.row != null) {
-                        var str = data.getFormattedValue(item.row, 1); // 0,1,2,3
-                        message += '{row:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
-                    } else if (item.column != null) {
-                        var str = data.getFormattedValue(0, item.column);
-                        message += '{row:none, column:' + item.column + '}; value (row 0) = ' + str + '\n';
+                    if (item.row != null) {
+                        var lon = data.getFormattedValue(item.row, 0); // 0,1,2,3
+                        var lat = data.getFormattedValue(item.row, 1); // 0,1,2,3
+                        message += '{lat:' + lat + ',lon:' + lon + '}';
+                        // message += '{lat:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
                     }
                 }
                 if (message == '') {
                     message = 'nothing';
                 }
+                fetch('/properties')
+                        .then(response=>response.text())
+                        .then(data=>console.log(data));
                 alert('You selected ' + message);
             }
+
 
 
 

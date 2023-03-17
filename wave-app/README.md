@@ -45,3 +45,5 @@ gcloud app logs tail -s default
 #### View application in the web browser run
 gcloud app browse
 
+## Swagger
+http://localhost/openapi/index.html
