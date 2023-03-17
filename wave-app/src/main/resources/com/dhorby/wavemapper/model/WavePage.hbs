@@ -109,10 +109,10 @@
                 if (message == '') {
                     message = 'nothing';
                 }
-                fetch('/properties')
+                fetch('/api/location?lat=' + lat + '&lon=' + lon)
                         .then(response=>response.text())
-                        .then(data=>console.log(data));
-                alert('You selected ' + message);
+                        .then(data=> alert('You selected ' + data));
+
             }
 
 

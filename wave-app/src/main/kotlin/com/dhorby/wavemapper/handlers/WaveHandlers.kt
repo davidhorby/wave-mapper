@@ -86,7 +86,6 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         else -> HandlebarsTemplates().CachingClasspath() to ResourceLoader.Classpath("public")
     }
 
-    //    https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
     fun getLocationData(): HttpHandler = {
         val lat = WaveServiceRoutes.latQuery(it)
         val lon = WaveServiceRoutes.lonQuery(it)
