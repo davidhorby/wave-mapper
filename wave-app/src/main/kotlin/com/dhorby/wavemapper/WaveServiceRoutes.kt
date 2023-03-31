@@ -42,6 +42,7 @@ object WaveServiceRoutes {
             "/properties" bind Method.GET to waveHandlers.getProperties(),
             "/datasheet" bind Method.GET to waveHandlers.getDataSheet(),
             "/map" bind Method.GET to waveHandlers.getMap(),
+            "/" bind Method.POST to waveHandlers.addPiece(),
             "/css" bind static(Classpath("/css")),
             "/api" bind contract {
                 renderer = OpenApi3(ApiInfo("Wave Mapper API", "v1.0"), Jackson)

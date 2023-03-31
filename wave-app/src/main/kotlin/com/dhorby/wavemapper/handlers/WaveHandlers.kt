@@ -1,6 +1,9 @@
 package com.dhorby.wavemapper.handlers
 
 import com.dhorby.gcloud.model.Location
+import com.dhorby.gcloud.model.PieceLocation
+import com.dhorby.gcloud.model.PieceType
+import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
@@ -12,7 +15,10 @@ import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.waveLocationListBodyLens
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
+import org.http4k.core.Status.Companion.FOUND
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.body.form
+import org.http4k.format.Jackson.asJsonObject
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
@@ -96,5 +102,24 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         val response = client(request)
         val bodyString = response.bodyString()
         Response(OK).body(bodyString)
+    }
+
+    fun addPiece(): HttpHandler = { request ->
+        val parametersMap = request.form().toParametersMap()
+        val lat = parametersMap["lat"]?.first()?.toDouble()?:0.0
+        val lon = parametersMap["lon"]?.first()?.toDouble()?:0.0
+        val client = ApacheClient()
+        val pieceLocation = PieceLocation(
+            id = "121234",
+            name = "Kurt",
+            pieceType = PieceType.SHARK,
+            geoLocation = GeoLocation(lat = lat, lon = lon)
+        )
+        pieceLocation.asJsonObject().textValue()
+        val request = Request(Method.POST, "http://localhost:8080/sg-http-to-bucket")
+            .body(pieceLocation.asJsonObject().toString())
+        val response = client(request)
+        val bodyString = response.bodyString()
+        Response(FOUND).header("Location", "/")
     }
 }

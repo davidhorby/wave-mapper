@@ -91,7 +91,7 @@
             var map = new google.visualization.Map(document.getElementById('map_div'));
             map.draw(data, options);
 
-            google.visualization.events.addListener(map, 'select', selectHandler)
+            // google.visualization.events.addListener(map, 'select', selectHandler)
 
             function selectHandler(e) {
                 var selection = map.getSelection()
@@ -123,6 +123,11 @@
                     new google.visualization.Table(document.getElementById('table_div'));
             table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
 
+            google.visualization.events.addListener(map, 'select',
+                    function() {
+                        table.setSelection(map.getSelection());
+                    });
+
         }
 
 
@@ -131,18 +136,43 @@
 </head>
 
 <body>
-<table align="center" width="100%">
+<table align="center" width="100%" height="100%">
     <tr valign="top">
         <td style="width: 50%;">
             <div id="map_div" style="width: 100%; height: 100%;"></div>
         </td>
         <td style="width: 50%;">
-            <div id="table_div"></div>
+            <table align="center" width="100%" height="100%">
+                <tr valign="top">
+                    <td style="width: 100%;height: 50%">
+                        <div id="table_div"></div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td style="width: 100%;height: 50%">
+                        <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
+                            <form action="/" method="post" class="form-example">
+                                <div class="form-example">
+                                    <label for="latitude">Latitude: </label>
+                                    <input type="text" name="lat" id="lat_ip" required>
+                                </div>
+                                <div class="form-example">
+                                    <label for="longitude">Longitude: </label>
+                                    <input type="test" name="lon" id="long_ip" required>
+                                </div>
+                                <div class="form-example">
+                                    <input type="submit" value="Submit">
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <tr>
-        <td colSpan=2>
-            <div id="chart_div" style="align: center; width: 100%; height: 100%;"></div>
+        <td colSpan=1>
+            <div id="chart_div" style="align: center; width: 100%; height: 50%;"></div>
         </td>
     </tr>
 </table>
