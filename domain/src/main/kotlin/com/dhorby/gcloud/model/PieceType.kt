@@ -1,5 +1,5 @@
 package com.dhorby.gcloud.model
 
 enum class PieceType {
-    BOAT, SHARK, WAVE
+    BOAT, SHARK, WAVE, UNKNOWN
 }

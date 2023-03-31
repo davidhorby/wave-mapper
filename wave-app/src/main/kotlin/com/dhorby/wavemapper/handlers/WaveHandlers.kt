@@ -106,13 +106,15 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun addPiece(): HttpHandler = { request ->
         val parametersMap = request.form().toParametersMap()
+        val name = parametersMap["name"]?.first()?:"Unknown"
+        val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first()?:"UNKNOWN")
         val lat = parametersMap["lat"]?.first()?.toDouble()?:0.0
         val lon = parametersMap["lon"]?.first()?.toDouble()?:0.0
         val client = ApacheClient()
         val pieceLocation = PieceLocation(
-            id = "121234",
-            name = "Kurt",
-            pieceType = PieceType.SHARK,
+            id = name,
+            name = name,
+            pieceType = pieceType,
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
         pieceLocation.asJsonObject().textValue()
