@@ -62,3 +62,8 @@ gcloud app browse
 
 ## Swagger
 http://localhost/openapi/index.html
+
+### Debugging
+````bash
+gcloud app --project analytics-springernature instances disable-debug
+````

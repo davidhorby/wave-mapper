@@ -37,6 +37,13 @@ object TestData {
         pieceType = PieceType.BOAT
     )
 
+    val testPirateLocation = PieceLocation(
+        id = "pir123",
+        name = "Captain Morgan",
+        geoLocation = GeoLocation(lat = 60.45, lon = -15.01),
+        pieceType = PieceType.PIRATE
+    )
+
     val validWaveData = WaveDataReading(LocalDate.now(), 2.1F, 23, "SSW")
 
     val testWaveLocation = WaveLocation(

@@ -5,6 +5,7 @@ import com.dhorby.gcloud.data.TestData
 import com.dhorby.gcloud.data.TestData.siteId
 import com.dhorby.gcloud.data.TestData.siteName
 import com.dhorby.gcloud.data.TestData.testBoatLocation
+import com.dhorby.gcloud.data.TestData.testPirateLocation
 import com.dhorby.gcloud.data.TestData.testSharkLocation
 import com.dhorby.gcloud.env.FunctionalTestEnv
 import com.dhorby.gcloud.model.Location
@@ -55,6 +56,13 @@ class WaveDataFunctionsFunctionalTests: FunctionalTestEnv() {
     fun `verify google format wave data with boat`() {
         val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[39.45,-5.01,'[Albert]', 'boat']"
         val sharkData: String = listOf(testBoatLocation).toGoogleMapFormat()
+        assertThat(sharkData, equalTo(expectedResult))
+    }
+
+    @Test
+    fun `verify google format wave data with pirate`() {
+        val expectedResult = "['Lat', 'Long', 'Name', 'Marker'],[60.45,-15.01,'[Captain Morgan]', 'pirate']"
+        val sharkData: String = listOf(testPirateLocation).toGoogleMapFormat()
         assertThat(sharkData, equalTo(expectedResult))
     }
 }

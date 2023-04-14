@@ -1,5 +1,6 @@
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
+import com.dhorby.gcloud.model.PieceType
 import com.google.cloud.datastore.*
 import com.google.cloud.datastore.testing.LocalDatastoreHelper
 import org.slf4j.Logger
@@ -52,7 +53,7 @@ object DataStoreClient {
         entity.properties.forEach { t, u -> LOG.info(t.toString() + ":" + u.toString()) }
     }
 
-    fun getKeysOfKind(kind: String, type: String): MutableList<Entity> {
+    fun getKeysOfKind(kind: String, type: PieceType): MutableList<Entity> {
 
 
         LOG.info("Reading from datastore" + DatastoreOptions.getDefaultInstance().projectId)
@@ -60,7 +61,7 @@ object DataStoreClient {
             .setKind(kind)
             .setFilter(
                 StructuredQuery.CompositeFilter.and(
-                    StructuredQuery.PropertyFilter.eq("type", type)
+                    StructuredQuery.PropertyFilter.eq("type", type.name)
                 )
             )
             .build()

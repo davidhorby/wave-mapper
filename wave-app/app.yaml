@@ -1,2 +1,3 @@
-runtime: java11
+runtime: java17
 env: standard
+instance_class: F4

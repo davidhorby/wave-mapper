@@ -1,15 +1,13 @@
 package com.dhorby.gcloud
 
-import DataStoreClient.getKeysOfKind
 import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
-import com.google.cloud.datastore.Entity
 import com.google.cloud.functions.HttpFunction
 import com.google.cloud.functions.HttpRequest
 import com.google.cloud.functions.HttpResponse
 import com.google.gson.Gson
-import com.google.gson.JsonObject;
+import com.google.gson.JsonObject
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
@@ -34,10 +32,6 @@ class HttpToFirestoreFunc : HttpFunction {
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
         writeToDatastore(pieceLocation)
 
-        val sharks: MutableList<Entity> = getKeysOfKind("PieceLocation", "SHARK")
-        sharks.forEach {
-            LOG.info(it.toString())
-        }
     }
 
 

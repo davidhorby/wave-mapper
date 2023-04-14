@@ -39,6 +39,8 @@
 
             var sailboaticon = "https://icons.iconarchive.com/icons/aha-soft/transport/32/sailing-ship-icon.png"
 
+            var pirateshipico = "https://icons.iconarchive.com/icons/pixelpress/pirates/48/Pirate-Ship-icon.png"
+
             var notavailable = "https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png"
 
             var waveicon = 'Wave-icon.png'
@@ -80,6 +82,10 @@
                         normal:   sailboaticon,
                         selected: sailboaticon,
                     },
+                    pirate: {
+                        normal:   pirateshipico,
+                        selected: pirateshipico,
+                    },
                     notavailable: {
                         normal:   notavailable,
                         selected: notavailable,
@@ -91,7 +97,7 @@
             var map = new google.visualization.Map(document.getElementById('map_div'));
             map.draw(data, options);
 
-            // google.visualization.events.addListener(map, 'select', selectHandler)
+            google.visualization.events.addListener(map, 'select', selectHandler)
 
             function selectHandler(e) {
                 var selection = map.getSelection()
@@ -164,6 +170,7 @@
                                                 <select id="pieceType" name="pieceType">
                                                     <option value="BOAT">Boat</option>
                                                     <option value="SHARK">Shark</option>
+                                                    <option value="PIRATE">Pirate</option>
                                                 </select>
                                             </td>
                                         </tr>

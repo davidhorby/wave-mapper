@@ -58,14 +58,30 @@ fun getSharkLocationsFromDatastore(): PieceLocation? {
 }
 
 fun getAllSharkLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", "SHARK").map {
+    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.SHARK).map {
+        it.toPieceLocation()
+    }
+
+fun getAllPirateLocationsFromDatastore(): List<PieceLocation> =
+    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
         it.toPieceLocation()
     }
 
 fun getAllBoatLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", "BOAT").map {
+    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
         it.toPieceLocation()
     }
+
+fun getDistances(boat: PieceLocation): Player {
+    val sharks = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.SHARK).map {
+        it.toPieceLocation()
+    }
+    val pirates = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
+        it.toPieceLocation()
+    }
+    return Player(boat, sharks, pirates)
+}
+
 fun Entity.toPieceLocation(): PieceLocation {
     val location: LatLng = this.getLatLng("location")
     val lat = location.latitude
@@ -87,6 +103,13 @@ fun MutableList<Location>.withStoredSharks(): MutableList<Location> {
 
 fun MutableList<Location>.withStoredBoats(): MutableList<Location> {
     getAllBoatLocationsFromDatastore().forEach {
+        this.add(it)
+    }
+    return this
+}
+
+fun MutableList<Location>.withStoredPirates(): MutableList<Location> {
+    getAllPirateLocationsFromDatastore().forEach {
         this.add(it)
     }
     return this
@@ -158,6 +181,7 @@ private fun getDatePeriods(jsonNode: JsonNode): List<WaveDataReading> {
                 }
             }
         }
+
         else -> emptyList()
     }
 }
