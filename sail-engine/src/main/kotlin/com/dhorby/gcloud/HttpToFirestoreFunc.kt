@@ -22,21 +22,22 @@ class HttpToFirestoreFunc : HttpFunction {
 
     @Throws(Exception::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
-
         val LOG: Logger = LoggerFactory.getLogger(HttpToFirestoreFunc::class.java)
 
         LOG.info("env=" + Settings.ENV + "host=" + Settings.HOST + ":" + Settings.PROJECT_ID)
 
         val contentType = request.contentType.orElse("")
         LOG.info("Context type --->>>" + contentType)
+        LOG.info("Request --->>>" + request.toString())
         val jsonObject: JsonObject = gson.fromJson(request.reader, JsonObject::class.java)
         val jsonString = jsonObject.toString()
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
         writeToDatastore(pieceLocation)
 
         val sharks: MutableList<Entity> = getKeysOfKind("PieceLocation", "SHARK")
-        val allSharks = sharks.first().toString()
-        response.writer.write("Size:" + sharks.size)
+        sharks.forEach {
+            LOG.info(it.toString())
+        }
     }
 
 

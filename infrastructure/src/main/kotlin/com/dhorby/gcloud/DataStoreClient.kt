@@ -8,16 +8,17 @@ import org.slf4j.LoggerFactory
 object DataStoreClient {
 
     private val datastore: Datastore  by lazy {
-        if (Settings.ENV == "local") {
-            DatastoreOptions.newBuilder()
-                .setHost(Settings.HOST)
-                .setProjectId(Settings.PROJECT_ID)
-                .build()
-                .service
-        } else {
+        LOG.info("Environment -->> ${Settings.ENV}" )
+//        if (Settings.ENV == "local") {
+//            DatastoreOptions.newBuilder()
+//                .setHost(Settings.HOST)
+//                .setProjectId(Settings.PROJECT_ID)
+//                .build()
+//                .service
+//        } else {
             LocalDatastoreHelper.newBuilder()
             DatastoreOptions.getDefaultInstance().service
-        }
+//        }
     }
 
     private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
@@ -76,6 +77,25 @@ object DataStoreClient {
     fun readFromDatastore(kind: String = "PieceLocation", name: String = "create"): Entity? {
         val key = datastore.newKeyFactory().setKind(kind).newKey(name)
         return datastore.get(key)
+    }
+
+    fun clearDatastore(kind: String = "PieceLocation") {
+        val allEntitiesByKind = getAllEntitiesByKind(datastore, kind)
+        val iterator = allEntitiesByKind.iterator()
+        while (iterator.hasNext()) {
+            val entity = iterator.next()
+            datastore.delete(entity.key)
+        }
+    }
+
+    private fun getAllEntitiesByKind(datastore: Datastore, kind: String): Sequence<Entity> {
+        val query: Query<Entity> = Query.newEntityQueryBuilder()
+            .setKind(kind)
+            .build()
+
+        val results = datastore.run(query)
+
+        return results.asSequence()
     }
 }
 

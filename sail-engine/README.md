@@ -15,4 +15,21 @@ gcloud config set project analytics-springernature
 ```bash
 ./run-http-function-local.sh
 ```
+```bash
+./run-clear-firestore-local.sh
+```
+
+## Deploy http to firestore functions
+```bash
+./deploy-http-to-firestore.sh
+```
+## Deploy shark frenzy
+```bash
+./deploy-shark-frenzy.sh
+```
+
+## Reset firestore
+```bash
+./deploy-clear-firestore.sh
+```
 

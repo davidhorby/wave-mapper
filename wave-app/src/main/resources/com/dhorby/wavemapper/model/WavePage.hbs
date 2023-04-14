@@ -151,31 +151,55 @@
                 <tr valign="top">
                     <td style="width: 100%;height: 50%">
                         <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
-                            <form action="/" method="post" class="form-example">
+                            <form action="/" method="POST" class="form-example">
                                 <div class="form-example">
-                                    <label for="name">Name: </label>
-                                    <input type="test" name="name" id="name_ip" required>
-                                </div>
-                                <div class="form-example">
-                                <label for="pieceType">Type:</label>
-                                    <select id="pieceType" name="pieceType">
-                                        <option value="BOAT">Boat</option>
-                                        <option value="SHARK">Shark</option>
-                                    </select>
-                                </div>
-                                <div class="form-example">
-                                    <label for="latitude">Lat: </label>
-                                    <input type="text" name="lat" id="lat_ip" required>
-                                </div>
-                                <div class="form-example">
-                                    <label for="longitude">Lon: </label>
-                                    <input type="text" name="lon" id="long_ip" required>
+                                    <table>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td><input type="test" name="name" id="name_ip" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Type</td>
+                                            <td>
+                                                <select id="pieceType" name="pieceType">
+                                                    <option value="BOAT">Boat</option>
+                                                    <option value="SHARK">Shark</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lat</td>
+                                            <td><input type="text" name="lat" id="lat_ip" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lon</td>
+                                            <td><input type="text" name="lon" id="long_ip" required></td>
+                                        </tr>
+                                    </table>
                                 </div>
                                 <div class="form-example">
                                     <input type="submit" value="Submit">
                                 </div>
                             </form>
                         </div>
+                    </td>
+                    <td style="width: 100%;height: 50%">
+                        <table>
+                            <tr>
+                                <td>Admin</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
+                                        <form action="/clear" method="GET" class="form-clear">
+                                            <div class="form-clear">
+                                                <input type="submit" value="Clear">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>

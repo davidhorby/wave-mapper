@@ -28,6 +28,8 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     private val devMode = false;
 
+    private val client = ApacheClient()
+
     val renderer = when {
         devMode -> HandlebarsTemplates().HotReload("src/main/resources")
         else -> HandlebarsTemplates().CachingClasspath()
@@ -70,7 +72,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun getWaveData(): HttpHandler = {
         val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
-        Response(Status.OK).with(waveLocationListBodyLens() of allWaveData)
+        Response(OK).with(waveLocationListBodyLens() of allWaveData)
     }
 
     fun getProperties(): HttpHandler = {
@@ -95,7 +97,6 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     fun getLocationData(): HttpHandler = {
         val lat = WaveServiceRoutes.latQuery(it)
         val lon = WaveServiceRoutes.lonQuery(it)
-        val client = ApacheClient()
         val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
             .query("latlng", "$lat,$lon")
             .query("key", mapsApiKeyServer)
@@ -106,11 +107,11 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun addPiece(): HttpHandler = { request ->
         val parametersMap = request.form().toParametersMap()
-        val name = parametersMap["name"]?.first()?:"Unknown"
-        val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first()?:"UNKNOWN")
-        val lat = parametersMap["lat"]?.first()?.toDouble()?:0.0
-        val lon = parametersMap["lon"]?.first()?.toDouble()?:0.0
-        val client = ApacheClient()
+        val name = parametersMap["name"]?.first() ?: "Unknown"
+        val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first() ?: "UNKNOWN")
+        val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
+        val lon = parametersMap["lon"]?.first()?.toDouble() ?: 0.0
+
         val pieceLocation = PieceLocation(
             id = name,
             name = name,
@@ -118,10 +119,19 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
         pieceLocation.asJsonObject().textValue()
-        val request = Request(Method.POST, "http://localhost:8080/sg-http-to-bucket")
+        val addRequest = Request(Method.POST, "http://localhost:8080/sg-http-to-bucket")
             .body(pieceLocation.asJsonObject().toString())
-        val response = client(request)
-        val bodyString = response.bodyString()
-        Response(FOUND).header("Location", "/")
+        when (client(addRequest).status) {
+            OK -> Response(FOUND).header("Location", "/")
+            else -> client(addRequest)
+        }
+    }
+
+    fun clear(): HttpHandler =  {
+        val deleteRequest = Request(Method.DELETE, "http://localhost:8082/clear-firestore")
+        when (client(deleteRequest).status) {
+            OK -> Response(FOUND).header("Location", "/")
+            else -> client(deleteRequest)
+        }
     }
 }

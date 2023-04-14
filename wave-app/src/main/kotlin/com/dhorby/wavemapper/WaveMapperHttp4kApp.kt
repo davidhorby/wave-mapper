@@ -1,21 +1,23 @@
 package com.dhorby.wavemapper
 
-import org.http4k.core.HttpHandler
-import org.http4k.core.then
-import org.http4k.filter.DebuggingFilters
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 object WaveMapperHttp4kApp {
 
+    private val LOG: Logger = LoggerFactory.getLogger(WaveMapperHttp4kApp::class.java)
+
     @JvmStatic
     fun main(args: Array<String>) {
-        val printingApp: HttpHandler = DebuggingFilters.PrintRequest().then(WaveServiceRoutes())
 
-        val server = printingApp.asServer(SunHttp(80)).start()
+        LOG.info("Starting the Wave Mapper App")
 
-        println("Server started on http://localhost:" + server.port())
+        val server = WaveServiceRoutes().asServer(SunHttp(80)).start()
+
+        println("Server started on " + server.port())
     }
 
 }

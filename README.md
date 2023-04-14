@@ -63,7 +63,7 @@ export DATASTORE_PROJECT_ID=analytics-springernature
 
 ### Deploy the app
 ```bash
-gcloud app deploy ./wave-app/build/libs/wave-app.jar
+gcloud app deploy ./wave-app/build/libs/wave-app.jar --appyaml=./wave-app/app.yaml
 ```
 
 ### Stream logs from the command line by running

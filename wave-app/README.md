@@ -22,28 +22,43 @@ gcloud auth configure-docker
 # Deploying the application in the cloud
 
 #### Setup Application Default Credentials (ADC)
+```bash
 gcloud auth login --update-adc
+```
 
 #### Check it is the correct project
+```bash
 gcloud config get-value project
-
+```
 #### Set the project of not correct
+```bash
 gcloud config set project analytics-springernature
+```
 
 #### Set the region
+```bash
 gcloud config set functions/region europe-west2
+```
 
 #### Build the deployable jar (from top of repo)
-./gradlew wave-app:shadowJar
+```bash
+../gradlew shadowJar
+```
 
 #### Deploy the app
-gcloud app deploy ./wave-app/build/libs/wave-app.jar --appyaml=./wave-app/app.yaml
+```bash
+gcloud app deploy ./build/libs/wave-app.jar --appyaml=./app.yaml
+```
 
 #### Stream logs from the command line by running
+```bash
 gcloud app logs tail -s default
+```
 
 #### View application in the web browser run
+```bash
 gcloud app browse
+```
 
 ## Swagger
 http://localhost/openapi/index.html
