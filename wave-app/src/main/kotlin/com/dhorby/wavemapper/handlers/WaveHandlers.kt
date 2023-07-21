@@ -45,7 +45,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                         .withStoredBoats()
                         .withStoredPirates()
                         .toGoogleMapFormat()
-                WavePage(waveData, mapsApiKey)
+                WavePage(waveData, mapsApiKey, getDistances())
             }
 
 

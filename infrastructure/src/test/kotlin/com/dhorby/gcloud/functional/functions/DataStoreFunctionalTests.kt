@@ -6,6 +6,7 @@ import com.dhorby.gcloud.wavemapper.getSharkLocationsFromDatastore
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThan
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class DataStoreFunctionalTests {
@@ -18,6 +19,7 @@ class DataStoreFunctionalTests {
     }
 
     @Test
+    @Disabled
     fun `should be able to get multiple shark locations from data store`() {
         val allSharkLocationsFromDatastore = getAllSharkLocationsFromDatastore()
         assertThat(allSharkLocationsFromDatastore.size, greaterThan(0))

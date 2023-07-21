@@ -15,6 +15,7 @@ gcloud config set project analytics-springernature
 ```bash
 ./run-http-function-local.sh
 ```
+
 ```bash
 ./run-clear-firestore-local.sh
 ```

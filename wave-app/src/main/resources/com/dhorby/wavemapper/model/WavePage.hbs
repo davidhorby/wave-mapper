@@ -97,7 +97,7 @@
             var map = new google.visualization.Map(document.getElementById('map_div'));
             map.draw(data, options);
 
-            google.visualization.events.addListener(map, 'select', selectHandler)
+            // google.visualization.events.addListener(map, 'select', selectHandler)
 
             function selectHandler(e) {
                 var selection = map.getSelection()
