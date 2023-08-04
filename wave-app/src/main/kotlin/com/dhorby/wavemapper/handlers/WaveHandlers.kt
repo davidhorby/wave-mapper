@@ -44,13 +44,15 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         val viewModel: ViewModel? =
             mapsApiKey.let { mapsApiKey ->
                 try {
-                    val allWaveData = getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                    allWaveData += pieceList.flatMap(allWaveData::withStored) // Load the pieces
                     val waveData: String =
-                        allWaveData
+                        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+                            .withStored(PieceType.SHARK)
+                            .withStored(PieceType.BOAT)
+                            .withStored(PieceType.PIRATE)
+                            .withStored(PieceType.START)
                             .toGoogleMapFormat()
                     WavePage(waveData, mapsApiKey, getDistances())
-                } catch (e: Exception) {
+                } catch (e:Exception) {
                     LOG.error("Failed to get wave data", e)
                     null
                 }
