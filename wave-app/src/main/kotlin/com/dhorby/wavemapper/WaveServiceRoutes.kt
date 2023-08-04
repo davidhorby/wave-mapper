@@ -37,9 +37,6 @@ object WaveServiceRoutes {
                 Response(Status.OK).body("pong")
             },
 
-//            "/" bind Method.GET to {
-//                Response(Status.OK).body("pong")
-//            },
             "/" bind Method.GET to waveHandlers.getWavePage(),
             "/data" bind Method.GET to waveHandlers.getWaveData(),
             "/properties" bind Method.GET to waveHandlers.getProperties(),

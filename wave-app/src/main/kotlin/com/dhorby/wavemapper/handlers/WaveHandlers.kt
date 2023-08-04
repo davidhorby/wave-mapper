@@ -22,12 +22,15 @@ import org.http4k.format.Jackson.asJsonObject
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 
 class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction) {
 
-    private val devMode = false;
+    val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
+    private val devMode = false;
     private val client = ApacheClient()
 
     val renderer = when {
@@ -37,25 +40,29 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun getWavePage(): HttpHandler = {
 
-        val viewModel: ViewModel =
+        val viewModel: ViewModel? =
             mapsApiKey.let { mapsApiKey ->
-                val waveData: String =
-                    getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                        .withStoredSharks()
-                        .withStoredBoats()
-                        .withStoredPirates()
-                        .toGoogleMapFormat()
-                WavePage(waveData, mapsApiKey, getDistances())
+                try {
+                    val waveData: String =
+                        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+                            .withStoredSharks()
+                            .withStoredBoats()
+                            .withStoredPirates()
+                            .withStoredStarts()
+                            .toGoogleMapFormat()
+                    WavePage(waveData, mapsApiKey, getDistances())
+                } catch (e:Exception) {
+                    LOG.error("Failed to get wave data", e)
+                    null
+                }
             }
-
-
-        viewModel.let {
+        viewModel?.let {
             try {
                 Response(OK).body(renderer(viewModel))
             } catch (e: Exception) {
                 Response(OK).body(e.stackTraceToString())
             }
-        }
+        }?:Response(Status.INTERNAL_SERVER_ERROR)
 
     }
 
