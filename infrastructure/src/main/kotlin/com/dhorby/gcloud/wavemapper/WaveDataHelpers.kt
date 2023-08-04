@@ -1,6 +1,7 @@
 package com.dhorby.gcloud.wavemapper
 
 import DataStoreClient
+import com.dhorby.gcloud.algorithms.GeoDistance.distanceKm
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
@@ -66,13 +67,14 @@ fun getDistances(): List<Player> {
     val boats = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
         it.toPieceLocation()
     }
-    val pirates = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
+    val finish = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.FINISH).map {
         it.toPieceLocation()
-    }
-    val map = boats.map { boat ->
-        Player(boat, pirates)
-    }
-    return map
+    }.firstOrNull()
+    return finish?.let {
+        boats.map { boat ->
+            Player(boat, distanceKm(boat.geoLocation, finish.geoLocation))
+        }
+    } ?: emptyList()
 }
 fun Entity.toPieceLocation(): PieceLocation {
     val location: LatLng = this.getLatLng("location")
