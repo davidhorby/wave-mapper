@@ -1,6 +1,7 @@
 package com.dhorby.wavemapper.handlers
 
 import DataStoreClient.clearDatastore
+import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -19,7 +20,6 @@ import org.http4k.core.*
 import org.http4k.core.Status.Companion.FOUND
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.body.form
-import org.http4k.format.Jackson.asJsonObject
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
@@ -54,7 +54,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                             .withStored(PieceType.FINISH)
                             .toGoogleMapFormat()
                     WavePage(waveData, mapsApiKey, getDistances())
-                } catch (e:Exception) {
+                } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)
                     null
                 }
@@ -65,7 +65,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             } catch (e: Exception) {
                 Response(OK).body(e.stackTraceToString())
             }
-        }?:Response(Status.INTERNAL_SERVER_ERROR)
+        } ?: Response(Status.INTERNAL_SERVER_ERROR)
 
     }
 
@@ -129,17 +129,13 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             pieceType = pieceType,
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
-        pieceLocation.asJsonObject().textValue()
-        val addRequest = Request(Method.POST, "http://localhost:8080/sg-http-to-bucket")
-            .body(pieceLocation.asJsonObject().toString())
-        when (client(addRequest).status) {
-            OK -> Response(FOUND).header("Location", "/")
-            else -> client(addRequest)
-        }
-    }
-
-    fun clear(): HttpHandler =  {
-        clearDatastore("PieceLocation")
+        writeToDatastore(pieceLocation)
         Response(FOUND).header("Location", "/")
     }
+}
+
+fun clear(): HttpHandler = {
+    clearDatastore("PieceLocation")
+    Response(FOUND).header("Location", "/")
+}
 }
