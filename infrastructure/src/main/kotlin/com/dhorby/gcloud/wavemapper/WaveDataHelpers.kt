@@ -57,23 +57,8 @@ fun getSharkLocationsFromDatastore(): PieceLocation? {
     return DataStoreClient.readFromDatastore()?.toPieceLocation()
 }
 
-fun getAllSharkLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.SHARK).map {
-        it.toPieceLocation()
-    }
-
-fun getAllPirateLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
-        it.toPieceLocation()
-    }
-
-fun getAllStartLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.START).map {
-        it.toPieceLocation()
-    }
-
-fun getAllBoatLocationsFromDatastore(): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
+fun getAllLocationsFromDatastore(pieceType: PieceType): List<PieceLocation> =
+    DataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
         it.toPieceLocation()
     }
 
@@ -101,36 +86,11 @@ fun Entity.toPieceLocation(): PieceLocation {
     )
 }
 
-fun MutableList<Location>.withStoredSharks(): MutableList<Location> {
-    getAllSharkLocationsFromDatastore().forEach {
+fun MutableList<Location>.withStored(pieceType: PieceType): MutableList<Location> {
+    getAllLocationsFromDatastore(pieceType).forEach {
         this.add(it)
     }
     return this
-}
-
-fun MutableList<Location>.withStoredBoats(): MutableList<Location> {
-    getAllBoatLocationsFromDatastore().forEach {
-        this.add(it)
-    }
-    return this
-}
-
-fun MutableList<Location>.withStoredPirates(): MutableList<Location> {
-    getAllPirateLocationsFromDatastore().forEach {
-        this.add(it)
-    }
-    return this
-}
-
-fun MutableList<Location>.withStoredStarts(): MutableList<Location> {
-    getAllStartLocationsFromDatastore().forEach {
-        this.add(it)
-    }
-    return this
-}
-
-fun withLocationData() {
-
 }
 
 fun MutableList<Location>.withBoat(): MutableList<Location> {

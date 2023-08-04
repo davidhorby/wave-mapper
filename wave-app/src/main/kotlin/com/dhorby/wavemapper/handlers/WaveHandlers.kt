@@ -45,10 +45,10 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                 try {
                     val waveData: String =
                         getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                            .withStoredSharks()
-                            .withStoredBoats()
-                            .withStoredPirates()
-                            .withStoredStarts()
+                            .withStored(PieceType.SHARK)
+                            .withStored(PieceType.BOAT)
+                            .withStored(PieceType.PIRATE)
+                            .withStored(PieceType.START)
                             .toGoogleMapFormat()
                     WavePage(waveData, mapsApiKey, getDistances())
                 } catch (e:Exception) {
