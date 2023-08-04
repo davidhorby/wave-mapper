@@ -31,11 +31,7 @@ class HttpToFirestoreFunc : HttpFunction {
         val jsonString = jsonObject.toString()
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
         writeToDatastore(pieceLocation)
-
     }
-
-
-
 }
 
 

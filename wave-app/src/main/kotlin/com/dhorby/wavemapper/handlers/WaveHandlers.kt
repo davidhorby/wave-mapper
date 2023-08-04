@@ -41,7 +41,6 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun getWavePage(): HttpHandler = {
 
-        val pieceList = PieceType.entries.toList()
         val viewModel: ViewModel? =
             mapsApiKey.let { mapsApiKey ->
                 try {
@@ -117,7 +116,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
     fun addPiece(): HttpHandler = { request ->
-        val parametersMap = request.form().toParametersMap()
+        val parametersMap: Map<String, List<String?>> = request.form().toParametersMap()
         val name = parametersMap["name"]?.first() ?: "Unknown"
         val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first() ?: "UNKNOWN")
         val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
@@ -138,4 +137,4 @@ fun clear(): HttpHandler = {
     clearDatastore("PieceLocation")
     Response(FOUND).header("Location", "/")
 }
-}
+
