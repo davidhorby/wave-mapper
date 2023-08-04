@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.handlers
 
+import DataStoreClient.clearDatastore
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -138,10 +139,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
     fun clear(): HttpHandler =  {
-        val deleteRequest = Request(Method.DELETE, "http://localhost:8082/clear-firestore")
-        when (client(deleteRequest).status) {
-            OK -> Response(FOUND).header("Location", "/")
-            else -> client(deleteRequest)
-        }
+        clearDatastore("PieceLocation")
+        Response(FOUND).header("Location", "/")
     }
 }
