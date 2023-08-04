@@ -49,8 +49,7 @@ object DataStoreClient {
 
         LOG.info("Writing to datastore" + DatastoreOptions.getDefaultInstance().projectId)
 
-        val entity = datastore.get(key)
-        entity.properties.forEach { t, u -> LOG.info(t.toString() + ":" + u.toString()) }
+        datastore.get(key).properties.forEach { (t, u) -> LOG.info("$t:$u") }
     }
 
     fun getKeysOfKind(kind: String, type: PieceType): MutableList<Entity> {
