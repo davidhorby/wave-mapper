@@ -87,31 +87,10 @@ fun Entity.toPieceLocation(): PieceLocation {
 }
 
 fun MutableList<Location>.withStored(pieceType: PieceType): MutableList<Location> {
-    getAllLocationsFromDatastore(pieceType).forEach {
-        this.add(it)
-    }
+    getAllLocationsFromDatastore(pieceType).forEach(this::add)
     return this
 }
 
-fun MutableList<Location>.withBoat(): MutableList<Location> {
-    this.add(
-        PieceLocation(
-            id = "1234",
-            name = "Geoffrey",
-            geoLocation = GeoLocation(lat = 50.500370, lon = -7.421526),
-            pieceType = PieceType.BOAT
-        )
-    )
-    this.add(
-        PieceLocation(
-            id = "1234",
-            name = "Kate",
-            geoLocation = GeoLocation(lat = 55.169322, lon = -11.394872),
-            pieceType = PieceType.BOAT
-        )
-    )
-    return this
-}
 
 fun JsonNode.getSiteLocations(): List<Site> {
     return this.getLocationPath().map {
