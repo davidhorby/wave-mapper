@@ -17,29 +17,7 @@ fun List<Location>.toGoogleMapFormat(): String {
                 val windDirection = location.waveDataReadings?.firstOrNull()?.windDirection ?: 0F
                 "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}', '${waveHeight.mapWaveHeightToIcon()}']"
             }
-
-            PieceType.SHARK -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'shark']"
-            }
-
-            PieceType.BOAT -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'boat']"
-            }
-
-            PieceType.PIRATE -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'pirate']"
-            }
-
-            PieceType.START -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'start']"
-            }
-
-            PieceType.FINISH -> {
-                "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', 'finish']"
-            }
-
-
-            else -> throw Exception("Bad location ${location.toString()}")
+            else -> "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', '${location.pieceType.name.toLowerCase()}']"
         }
 
     }
