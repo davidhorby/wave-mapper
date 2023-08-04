@@ -50,6 +50,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                             .withStored(PieceType.BOAT)
                             .withStored(PieceType.PIRATE)
                             .withStored(PieceType.START)
+                            .withStored(PieceType.FINISH)
                             .toGoogleMapFormat()
                     WavePage(waveData, mapsApiKey, getDistances())
                 } catch (e:Exception) {
