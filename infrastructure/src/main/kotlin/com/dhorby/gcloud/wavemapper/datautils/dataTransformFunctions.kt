@@ -3,6 +3,7 @@ package com.dhorby.gcloud.wavemapper.datautils
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.mapWaveHeightToIcon
+import java.util.*
 
 
 fun List<Location>.toGoogleMapFormat(): String {
@@ -17,7 +18,9 @@ fun List<Location>.toGoogleMapFormat(): String {
                 val windDirection = location.waveDataReadings?.firstOrNull()?.windDirection ?: 0F
                 "[${location.geoLocation.lat},${location.geoLocation.lon},'${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}', '${waveHeight.mapWaveHeightToIcon()}']"
             }
-            else -> "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', '${location.pieceType.name.toLowerCase()}']"
+            else -> "[${location.geoLocation.lat},${location.geoLocation.lon},'[${location.name}]', '${location.pieceType.name.lowercase(
+                Locale.getDefault()
+            )}']"
         }
 
     }
