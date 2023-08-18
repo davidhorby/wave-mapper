@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.handlers
 
+import DataStoreClient
 import DataStoreClient.clearDatastore
 import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.model.Location
@@ -15,6 +16,7 @@ import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.waveLocationListBodyLens
+import com.google.cloud.datastore.Entity
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.FOUND
@@ -28,6 +30,21 @@ import org.slf4j.LoggerFactory
 import java.util.*
 
 class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction) {
+
+    companion object {
+        val start = PieceLocation(
+            id = "NewportR",
+            name = "Newport, Rhode Island",
+            pieceType = PieceType.START,
+            geoLocation = GeoLocation(lat = 41.49, lon = -71.31)
+        )
+        val finish = PieceLocation(
+            id = "Newport",
+            name = "Newport, Wales",
+            pieceType = PieceType.FINISH,
+            geoLocation = GeoLocation(lat = 51.35, lon = -2.59)
+        )
+    }
 
     val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
@@ -132,11 +149,36 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         Response(FOUND).header("Location", "/")
     }
 
+
+    fun startRace() {
+        writeToDatastore(start)
+        writeToDatastore(finish)
+        DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map(Entity::toPieceLocation)
+            .map { it.copy(geoLocation = start.geoLocation) }
+            .forEach(::writeToDatastore)
+    }
+
+    fun start(): HttpHandler = {
+        startRace()
+        Response(FOUND).header("Location", "/")
+    }
+
+    fun move():HttpHandler  = {
+        DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map(Entity::toPieceLocation)
+            .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
+            .forEach(::writeToDatastore)
+        Response(FOUND).header("Location", "/")
+    }
+
+    fun sailMove(geoLocation:GeoLocation):GeoLocation {
+        return GeoLocation(geoLocation.lat  + (0..5).random().toDouble(),
+            geoLocation.lon  + (0..10).random().toDouble())
+    }
+
     fun clear(): HttpHandler = {
         clearDatastore("PieceLocation")
         Response(FOUND).header("Location", "/")
     }
-
 }
 
 

@@ -13,9 +13,11 @@
         });
         // google.charts.setOnLoadCallback(drawMap);
 
+
+
         function drawChart() {
 
-            var data = google.visualization.arrayToDataTable([{{{waveData}}}]);
+             var data = google.visualization.arrayToDataTable([{{{waveData}}}]);
 
             //Graph styling and legend
             var options = {
@@ -153,7 +155,10 @@
             const conn = new WebSocket(
                   "ws://localhost/message/david"
             );
-            conn.onmessage = function(e){ console.log(e.data); };
+            conn.onmessage = function(e){
+                console.log(e.data);
+                drawMap();
+            };
             conn.onopen = () => conn.send('hello');
         }
     </script>
