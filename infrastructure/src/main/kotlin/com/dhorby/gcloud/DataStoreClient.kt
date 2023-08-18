@@ -55,7 +55,7 @@ object DataStoreClient {
     fun getKeysOfKind(kind: String, type: PieceType): MutableList<Entity> {
 
 
-        LOG.info("Reading from datastore" + DatastoreOptions.getDefaultInstance().projectId)
+//        LOG.info("Reading from datastore" + DatastoreOptions.getDefaultInstance().projectId)
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind(kind)
             .setFilter(

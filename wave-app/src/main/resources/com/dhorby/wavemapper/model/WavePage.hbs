@@ -148,6 +148,15 @@
 
 
     </script>
+    <script type="text/javascript">
+        function sendMessage(data)  {
+            const conn = new WebSocket(
+                  "ws://localhost/message/david"
+            );
+            conn.onmessage = function(e){ console.log(e.data); };
+            conn.onopen = () => conn.send('hello');
+        }
+    </script>
     <style>
         table, th, td {
             border: 1px solid black;
@@ -228,6 +237,11 @@
                                                 <input type="submit" value="Move">
                                             </div>
                                         </form>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
+                                        <button onclick="sendMessage()">Click me</button>
                                     </div>
                                 </td>
                             </tr>
