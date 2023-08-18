@@ -138,8 +138,13 @@
                   "ws://localhost/message/david"
             );
             conn.onmessage = function(e){
-                console.log(e.data);
-                redoMap();
+<!--                console.log(e.data);-->
+                if (typeof e.data === 'string'){
+                    var parsedData = e.data.replace(/\\"/g, '"')
+                    var obj = JSON.parse(parsedData);
+                    console.log(obj);
+                    reDrawMap(obj);
+                }
             };
             conn.onopen = () => conn.send('hello');
         }

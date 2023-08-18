@@ -10,7 +10,6 @@ import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
-import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.WaveServiceRoutes
 import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
@@ -62,13 +61,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             mapsApiKey.let { mapsApiKey ->
                 try {
                     val waveData: String =
-                        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                            .withStored(PieceType.SHARK)
-                            .withStored(PieceType.BOAT)
-                            .withStored(PieceType.PIRATE)
-                            .withStored(PieceType.START)
-                            .withStored(PieceType.FINISH)
-                            .toGoogleMapFormat()
+                        getWaveDataOnly(siteListFunction, dataForSiteFunction)
                     WavePage(waveData, mapsApiKey, getDistances())
                 } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)
@@ -85,6 +78,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     }
 
+
     fun getMap(): HttpHandler = {
 
         GMap(mapsApiKey).let {
@@ -99,7 +93,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
 
     fun getWaveData(): HttpHandler = {
         val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
-        Response(OK).with(waveLocationListBodyLens() of allWaveData)
+        Response(OK).with(waveLocationListBodyLens of allWaveData)
     }
 
     fun getProperties(): HttpHandler = {

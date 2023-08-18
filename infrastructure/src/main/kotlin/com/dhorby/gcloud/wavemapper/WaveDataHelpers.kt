@@ -6,6 +6,7 @@ import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
+import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.LatLng
@@ -20,6 +21,18 @@ typealias DataForSiteFunction = (site: String) -> WaveLocation?
 
 fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
+}
+
+fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String {
+    val waveData: String =
+        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+            .withStored(PieceType.SHARK)
+            .withStored(PieceType.BOAT)
+            .withStored(PieceType.PIRATE)
+            .withStored(PieceType.START)
+            .withStored(PieceType.FINISH)
+            .toGoogleMapFormat()
+    return waveData
 }
 
 fun getAllWaveData(

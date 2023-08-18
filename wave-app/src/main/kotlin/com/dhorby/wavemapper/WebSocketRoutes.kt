@@ -1,6 +1,11 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.gcloud.wavemapper.DataForSiteFunction
+import com.dhorby.gcloud.wavemapper.SiteListFunction
+import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
+import com.dhorby.gcloud.wavemapper.getAllWaveData
 import org.http4k.core.Request
+import org.http4k.format.Gson.asJsonObject
 import org.http4k.lens.Path
 import org.http4k.routing.RoutingWsHandler
 import org.http4k.routing.websockets
@@ -10,7 +15,7 @@ import org.http4k.websocket.WsMessage
 import org.http4k.websocket.WsResponse
 
 
-object WebSocketRoutes {
+class WebSocketRoutes(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction) {
 
     val namePath = Path.of("name")
 
@@ -19,7 +24,9 @@ object WebSocketRoutes {
             WsResponse { ws: Websocket ->
                 val name = namePath(req)
                 println("Got message from $name")
-                ws.send(WsMessage("hello $name"))
+                val waveDataOnly = getAllWaveData(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
+                val message =  WsMessage(waveDataOnly.asJsonObject().toString())
+                ws.send(message)
                 ws.close()
             }
         }

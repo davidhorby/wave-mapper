@@ -14,7 +14,6 @@ import org.http4k.format.Jackson
 import org.http4k.lens.Query
 import org.http4k.lens.float
 import org.http4k.routing.ResourceLoader.Companion.Classpath
-import org.http4k.routing.RoutingWsHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
@@ -32,9 +31,6 @@ object WaveServiceRoutes {
 
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
-
-    val tt: RoutingWsHandler =  WebSocketRoutes.ws
-
 
     operator fun invoke(): PolyHandler {
         val httpHandler: HttpHandler = routes(
@@ -60,7 +56,10 @@ object WaveServiceRoutes {
                 } bindContract Method.GET to waveHandlers.getLocationData()
             }, static(Classpath("public"))
         )
-        return PolyHandler(httpHandler, WebSocketRoutes.ws)
+        return PolyHandler(httpHandler, WebSocketRoutes(
+            siteListFunction = waveServiceFunctions.siteListFunction,
+            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
+        ).ws)
     }
 
 }
