@@ -21,10 +21,6 @@ object WebSocketRoutes {
                 println("Got message from $name")
                 ws.send(WsMessage("hello $name"))
                 ws.close()
-//                ws.onMessage {
-//                    ws.send(WsMessage("$name is responding"))
-//                }
-//                ws.onClose { println("$name is closing") }
             }
         }
     )

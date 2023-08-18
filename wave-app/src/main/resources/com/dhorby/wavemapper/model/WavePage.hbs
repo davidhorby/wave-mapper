@@ -12,7 +12,68 @@
             "callback": drawMap
         });
         // google.charts.setOnLoadCallback(drawMap);
+        var waveurl = 'https://icons.iconarchive.com/icons/iconsmind/outline/'
+        var sharkicon ="https://icons.iconarchive.com/icons/martin-berube/animal/32/shark-icon.png"
+        var sailboaticon = "https://icons.iconarchive.com/icons/aha-soft/transport/32/sailing-ship-icon.png"
+        var pirateshipico = "https://icons.iconarchive.com/icons/pixelpress/pirates/48/Pirate-Ship-icon.png"
+        var notavailable = "https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png"
+        var starticon = "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Flag-yellow-icon.png"
+        var finishicon = "https://icons.iconarchive.com/icons/icons8/windows-8/48/Sports-Finish-Flag-icon.png"
+        var waveicon = 'Wave-icon.png'
 
+        var options = {
+            zoomLevel: 3,
+            showTooltip: true,
+            showInfoWindow: true,
+            useMapTypeControl: true,
+            showLine: true,
+            icons: {
+                verybig: {
+                    normal:   waveurl + '/72/' + waveicon,
+                    selected: waveurl + '/72/' + waveicon
+                },
+                big: {
+                    normal:   waveurl + '/64/' + waveicon,
+                    selected: waveurl + '/64/' + waveicon
+                },
+                medium: {
+                    normal:   waveurl + '/48/' + waveicon,
+                    selected: waveurl + '/48/' + waveicon
+                },
+                small: {
+                    normal:   waveurl + '/32/' + waveicon,
+                    selected: waveurl + '/32/' + waveicon
+                },
+                verysmall: {
+                    normal:   waveurl + '/24/' + waveicon,
+                    selected: waveurl + '/24/' + waveicon,
+                },
+                shark: {
+                    normal:   sharkicon,
+                    selected: sharkicon,
+                },
+                boat: {
+                    normal:   sailboaticon,
+                    selected: sailboaticon,
+                },
+                start: {
+                    normal:   starticon,
+                    selected: starticon,
+                },
+                finish: {
+                    normal:   finishicon,
+                    selected: finishicon,
+                },
+                pirate: {
+                    normal:   pirateshipico,
+                    selected: pirateshipico,
+                },
+                notavailable: {
+                    normal:   notavailable,
+                    selected: notavailable,
+                }
+            }
+        };
 
 
         function drawChart() {
@@ -32,110 +93,19 @@
             chart.draw(data, options);
         }
 
+        function redoMap() {
+                var data = google.visualization.arrayToDataTable([['Lat', 'Long', 'Name', 'Marker'],[49.9167,-2.883,'CHANNEL  0.0m 44km E', 'notavailable']]);
+                reDrawMap(data);
+        }
+
+        function reDrawMap(data) {
+
+        }
+
         function drawMap() {
             var data = google.visualization.arrayToDataTable([{{{waveData}}}])
-
-            var waveurl = 'https://icons.iconarchive.com/icons/iconsmind/outline/'
-
-            var sharkicon ="https://icons.iconarchive.com/icons/martin-berube/animal/32/shark-icon.png"
-
-            var sailboaticon = "https://icons.iconarchive.com/icons/aha-soft/transport/32/sailing-ship-icon.png"
-
-            var pirateshipico = "https://icons.iconarchive.com/icons/pixelpress/pirates/48/Pirate-Ship-icon.png"
-
-            var notavailable = "https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png"
-
-            var starticon = "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Flag-yellow-icon.png"
-
-            var finishicon = "https://icons.iconarchive.com/icons/icons8/windows-8/48/Sports-Finish-Flag-icon.png"
-
-            var waveicon = 'Wave-icon.png'
-
-            var options = {
-                zoomLevel: 3,
-                showTooltip: true,
-                showInfoWindow: true,
-                useMapTypeControl: true,
-                showLine: true,
-                icons: {
-                    verybig: {
-                        normal:   waveurl + '/72/' + waveicon,
-                        selected: waveurl + '/72/' + waveicon
-                    },
-                    big: {
-                        normal:   waveurl + '/64/' + waveicon,
-                        selected: waveurl + '/64/' + waveicon
-                    },
-                    medium: {
-                        normal:   waveurl + '/48/' + waveicon,
-                        selected: waveurl + '/48/' + waveicon
-                    },
-                    small: {
-                        normal:   waveurl + '/32/' + waveicon,
-                        selected: waveurl + '/32/' + waveicon
-                    },
-                    verysmall: {
-                        normal:   waveurl + '/24/' + waveicon,
-                        selected: waveurl + '/24/' + waveicon,
-                    },
-                    shark: {
-                        normal:   sharkicon,
-                        selected: sharkicon,
-                    },
-                    boat: {
-                        normal:   sailboaticon,
-                        selected: sailboaticon,
-                    },
-                    start: {
-                        normal:   starticon,
-                        selected: starticon,
-                    },
-                    finish: {
-                        normal:   finishicon,
-                        selected: finishicon,
-                    },
-                    pirate: {
-                        normal:   pirateshipico,
-                        selected: pirateshipico,
-                    },
-                    notavailable: {
-                        normal:   notavailable,
-                        selected: notavailable,
-                    }
-                }
-            };
-
-
             var map = new google.visualization.Map(document.getElementById('map_div'));
             map.draw(data, options);
-
-            // google.visualization.events.addListener(map, 'select', selectHandler)
-
-            function selectHandler(e) {
-                var selection = map.getSelection()
-                var message = '';
-                var dataTable = data;
-                for (var i = 0; i < selection.length; i++) {
-                    var item = selection[i];
-                    if (item.row != null) {
-                        var lon = data.getFormattedValue(item.row, 0); // 0,1,2,3
-                        var lat = data.getFormattedValue(item.row, 1); // 0,1,2,3
-                        message += '{lat:' + lat + ',lon:' + lon + '}';
-                        // message += '{lat:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
-                    }
-                }
-                if (message == '') {
-                    message = 'nothing';
-                }
-                fetch('/api/location?lat=' + lat + '&lon=' + lon)
-                        .then(response=>response.text())
-                        .then(data=> processLocation(data));
-
-            }
-
-            function processLocation(data) {
-                alert('You selected ' + data)
-            }
 
             var table =
                     new google.visualization.Table(document.getElementById('table_div'));
