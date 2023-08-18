@@ -1,6 +1,7 @@
 package com.dhorby.gcloud.algorithms
 
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object GeoDistance {
@@ -20,7 +21,7 @@ object GeoDistance {
         val a = (Math.pow(Math.sin(dLat / 2), 2.0)
                 + (Math.cos(start.lat) * Math.cos(finish.lat)
                 * Math.pow(Math.sin(dLon / 2), 2.0)))
-        val c = 2 * Math.asin(Math.sqrt(a))
+        val c = 2 * Math.asin(Math.sqrt(abs(a)))
 
         // Radius of earth in kilometers. Use 3956
         // for miles.

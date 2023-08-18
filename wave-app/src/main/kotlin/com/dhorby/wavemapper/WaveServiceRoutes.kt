@@ -14,9 +14,12 @@ import org.http4k.format.Jackson
 import org.http4k.lens.Query
 import org.http4k.lens.float
 import org.http4k.routing.ResourceLoader.Companion.Classpath
+import org.http4k.routing.RoutingWsHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
+import org.http4k.server.PolyHandler
+
 
 object WaveServiceRoutes {
 
@@ -30,13 +33,14 @@ object WaveServiceRoutes {
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
 
-    operator fun invoke(): HttpHandler =
-        routes(
+    val tt: RoutingWsHandler =  WebSocketRoutes.ws
 
+
+    operator fun invoke(): PolyHandler {
+        val httpHandler: HttpHandler = routes(
             "/ping" bind Method.GET to {
                 Response(Status.OK).body("pong")
             },
-
             "/" bind Method.GET to waveHandlers.getWavePage(),
             "/data" bind Method.GET to waveHandlers.getWaveData(),
             "/properties" bind Method.GET to waveHandlers.getProperties(),
@@ -47,12 +51,14 @@ object WaveServiceRoutes {
             "/css" bind static(Classpath("/css")),
             "/api" bind contract {
                 renderer = OpenApi3(ApiInfo("Wave Mapper API", "v1.0"), Jackson)
-                routes += "/location"  meta {
+                routes += "/location" meta {
                     summary = "Get location data from Google API for co-ordinates"
                     queries += latQuery
                     queries += lonQuery
                 } bindContract Method.GET to waveHandlers.getLocationData()
-            },static(Classpath("public"))
+            }, static(Classpath("public"))
         )
+        return PolyHandler(httpHandler, WebSocketRoutes.ws)
+    }
 
 }

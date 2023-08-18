@@ -43,14 +43,14 @@
 
             var notavailable = "https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png"
 
-            var starticon = "https://icons.iconarchive.com/icons/ampeross/qetto-2/48/start-icon.png"
+            var starticon = "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Flag-yellow-icon.png"
 
             var finishicon = "https://icons.iconarchive.com/icons/icons8/windows-8/48/Sports-Finish-Flag-icon.png"
 
             var waveicon = 'Wave-icon.png'
 
             var options = {
-                zoomLevel: 6,
+                zoomLevel: 3,
                 showTooltip: true,
                 showInfoWindow: true,
                 useMapTypeControl: true,
@@ -214,9 +214,18 @@
                             <tr>
                                 <td>
                                     <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
-                                        <form action="/clear" method="GET" class="form-clear">
+                                        <form action="/start" method="GET" class="form-clear">
                                             <div class="form-clear">
-                                                <input type="submit" value="Clear">
+                                                <input type="submit" value="Start">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
+                                        <form action="/move" method="GET" class="form-clear">
+                                            <div class="form-clear">
+                                                <input type="submit" value="Move">
                                             </div>
                                         </form>
                                     </div>

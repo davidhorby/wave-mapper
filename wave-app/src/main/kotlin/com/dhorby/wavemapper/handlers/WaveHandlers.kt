@@ -131,10 +131,12 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         writeToDatastore(pieceLocation)
         Response(FOUND).header("Location", "/")
     }
+
+    fun clear(): HttpHandler = {
+        clearDatastore("PieceLocation")
+        Response(FOUND).header("Location", "/")
+    }
+
 }
 
-fun clear(): HttpHandler = {
-    clearDatastore("PieceLocation")
-    Response(FOUND).header("Location", "/")
-}
 
