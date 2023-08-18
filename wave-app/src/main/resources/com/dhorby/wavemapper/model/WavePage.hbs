@@ -94,12 +94,24 @@
         }
 
         function redoMap() {
-                var data = google.visualization.arrayToDataTable([['Lat', 'Long', 'Name', 'Marker'],[49.9167,-2.883,'CHANNEL  0.0m 44km E', 'notavailable']]);
-                reDrawMap(data);
+                var dataArray = [['Lat', 'Long', 'Name', 'Marker'],[49.9167,-2.883,'CHANNEL  0.0m 44km E', 'notavailable']];
+                reDrawMap(dataArray);
         }
 
-        function reDrawMap(data) {
+        function reDrawMap(dataArray) {
+<!--            var data = google.visualization.arrayToDataTable(newData)-->
+            var data = google.visualization.arrayToDataTable(dataArray);
+            var map = new google.visualization.Map(document.getElementById('map_div'));
+            map.draw(data, options);
 
+            var table =
+                    new google.visualization.Table(document.getElementById('table_div'));
+            table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
+
+            google.visualization.events.addListener(map, 'select',
+                    function() {
+                        table.setSelection(map.getSelection());
+                    });
         }
 
         function drawMap() {
@@ -127,7 +139,7 @@
             );
             conn.onmessage = function(e){
                 console.log(e.data);
-                drawMap();
+                redoMap();
             };
             conn.onopen = () => conn.send('hello');
         }
