@@ -164,11 +164,6 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
         Response(FOUND).header("Location", "/")
     }
 
-    fun sailMove(geoLocation:GeoLocation):GeoLocation {
-        return GeoLocation(geoLocation.lat  + (0..5).random().toDouble(),
-            geoLocation.lon  + (0..10).random().toDouble())
-    }
-
     fun clear(): HttpHandler = {
         clearDatastore("PieceLocation")
         Response(FOUND).header("Location", "/")

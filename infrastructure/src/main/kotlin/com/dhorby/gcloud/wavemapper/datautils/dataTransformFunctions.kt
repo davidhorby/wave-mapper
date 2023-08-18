@@ -5,28 +5,42 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.mapWaveHeightToIcon
 import java.util.*
 
+fun <T, U> combine(first: Array<T>, second: Array<U>): Array<Any> {
+    val list: MutableList<Any> = first.map { i -> i as Any }.toMutableList()
+    list.addAll(second.map { i -> i as Any })
+    return list.toTypedArray()
+}
 
-fun List<Location>.toGoogleMapFormatList(): List<List<String>> {
-    val header = listOf<String>("Lat", "Long", "Name", "Marker")
-    val mutableList: MutableList<List<String>> = mutableListOf(header)
-    val stringList = this.map { location ->
-        when (location.pieceType) {
+fun List<Location>.toGoogleMapFormatList(): Array<Array<Any>> {
+    val header:Array<Any> = arrayOf("Lat", "Long", "Name", "Marker")
+    val mutableList: MutableList<Array<Any>> = mutableListOf<Array<Any>>()
+    mutableList.add(header)
+    this.forEach() { location ->
+        val value: Array<Any> = when (location.pieceType) {
             PieceType.WAVE -> {
                 val waveHeight: Float = location.waveDataReadings?.firstOrNull()?.waveHeight ?: 0F
                 val windSpeed = location.waveDataReadings?.firstOrNull()?.windSpeed ?: 0F
                 val windDirection = location.waveDataReadings?.firstOrNull()?.windDirection ?: 0F
-                listOf("${location.geoLocation.lat}","${location.geoLocation.lon}","${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}", "${waveHeight.mapWaveHeightToIcon()}")
+                arrayOf(
+                    location.geoLocation.lat,
+                    location.geoLocation.lon,
+                    "${location.name}  ${waveHeight}m ${windSpeed}km ${windDirection}",
+                    "${waveHeight.mapWaveHeightToIcon()}"
+                )
             }
 
-            else -> listOf("${location.geoLocation.lat}","${location.geoLocation.lon}","${location.name}", "${
-                location.pieceType.name.lowercase(
-                    Locale.getDefault()
-                )
-            }")
+            else -> arrayOf(
+                location.geoLocation.lat, location.geoLocation.lon, "${location.name}", "${
+                    location.pieceType.name.lowercase(
+                        Locale.getDefault()
+                    )
+                }"
+            )
         }
+        mutableList.add(value)
     }
-    mutableList.addAll(stringList)
-    return mutableList
+    val toTypedArray: Array<Array<Any>> = mutableList.toTypedArray()
+    return toTypedArray
 }
 
 fun List<Location>.toGoogleMapFormat(): String {

@@ -18,6 +18,10 @@ import kotlin.math.roundToInt
 typealias SiteListFunction = () -> MutableList<Site>
 typealias DataForSiteFunction = (site: String) -> WaveLocation?
 
+fun sailMove(geoLocation:GeoLocation):GeoLocation {
+    return GeoLocation(geoLocation.lat  + (0..5).random().toDouble(),
+        geoLocation.lon  + (0..10).random().toDouble())
+}
 
 fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
@@ -33,6 +37,23 @@ fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: Dat
             .withStored(PieceType.FINISH)
             .toGoogleMapFormat()
     return waveData
+}
+
+fun getAllWaveDataWithPieces(
+    siteListFunction: SiteListFunction,
+    dataForSiteFunction: DataForSiteFunction
+): MutableList<Location> {
+    val mapNotNull: List<WaveLocation> = siteListFunction().mapNotNull { site ->
+        dataForSiteFunction(site.id)
+    }
+    val waveData: MutableList<Location> = mapNotNull.filter { location ->
+        location.id.isNotEmpty()
+    }.toMutableList()
+    return waveData.withStored(PieceType.SHARK)
+        .withStored(PieceType.BOAT)
+        .withStored(PieceType.PIRATE)
+        .withStored(PieceType.START)
+        .withStored(PieceType.FINISH)
 }
 
 fun getAllWaveData(
