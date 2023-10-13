@@ -15,7 +15,7 @@ object WaveMapperHttp4kApp {
 
         LOG.info("Starting the Wave Mapper App")
 
-        val server = WaveServiceRoutes().asServer(Jetty(80)).start()
+        val server = WaveServiceRoutes().asServer(Jetty(8080)).start()
 
         println("Server started on " + server.port())
     }
