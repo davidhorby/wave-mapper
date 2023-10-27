@@ -1,8 +1,8 @@
 package com.dhorby.gcloud
 
-import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
+import com.dhorby.gcloud.wavemapper.DataStorage
 import com.google.cloud.functions.HttpFunction
 import com.google.cloud.functions.HttpRequest
 import com.google.cloud.functions.HttpResponse
@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class HttpToFirestoreFunc : HttpFunction {
+class HttpToFirestoreFunc(val dataStorage: DataStorage) : HttpFunction {
 
     // Use GSON (https://github.com/google/gson) to parse JSON content.
     private val gson = Gson()
@@ -30,7 +30,7 @@ class HttpToFirestoreFunc : HttpFunction {
         val jsonObject: JsonObject = gson.fromJson(request.reader, JsonObject::class.java)
         val jsonString = jsonObject.toString()
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
-        writeToDatastore(pieceLocation)
+        dataStorage.write(pieceLocation)
     }
 }
 

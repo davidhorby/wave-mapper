@@ -1,8 +1,8 @@
 package com.dhorby.gcloud
 
-import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.tools.getFirstJsonObject
+import com.dhorby.gcloud.wavemapper.DataStorage
 import com.google.cloud.functions.BackgroundFunction
 import com.google.cloud.functions.Context
 import com.google.cloud.storage.Storage
@@ -14,7 +14,7 @@ import java.util.logging.Logger
 
 data class Command(val name:String, val command:String): Serializable
 
-class BucketToDSFunc : BackgroundFunction<BucketToDSFunc.GCSEvent> {
+class BucketToDSFunc(val dataStorage: DataStorage) : BackgroundFunction<BucketToDSFunc.GCSEvent>  {
 
     class GCSEvent {
         var bucket: String? = null
@@ -30,7 +30,7 @@ class BucketToDSFunc : BackgroundFunction<BucketToDSFunc.GCSEvent> {
         val storage: Storage = StorageOptions.getDefaultInstance().service
         val jsonString: String = getFirstJsonObject(storage, bucket, filename)
         val pieceLocation = Json.decodeFromString<PieceLocation>(jsonString)
-        writeToDatastore(pieceLocation)
+        dataStorage.write(pieceLocation)
     }
 
     companion object {

@@ -1,12 +1,9 @@
 package com.dhorby.gcloud.wavemapper
 
-import DataStoreClient
-import com.dhorby.gcloud.algorithms.GeoDistance.distanceKm
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
-import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.LatLng
@@ -27,34 +24,7 @@ fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
 }
 
-fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String {
-    val waveData: String =
-        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-            .withStored(PieceType.SHARK)
-            .withStored(PieceType.BOAT)
-            .withStored(PieceType.PIRATE)
-            .withStored(PieceType.START)
-            .withStored(PieceType.FINISH)
-            .toGoogleMapFormat()
-    return waveData
-}
 
-fun getAllWaveDataWithPieces(
-    siteListFunction: SiteListFunction,
-    dataForSiteFunction: DataForSiteFunction
-): MutableList<Location> {
-    val mapNotNull: List<WaveLocation> = siteListFunction().mapNotNull { site ->
-        dataForSiteFunction(site.id)
-    }
-    val waveData: MutableList<Location> = mapNotNull.filter { location ->
-        location.id.isNotEmpty()
-    }.toMutableList()
-    return waveData.withStored(PieceType.SHARK)
-        .withStored(PieceType.BOAT)
-        .withStored(PieceType.PIRATE)
-        .withStored(PieceType.START)
-        .withStored(PieceType.FINISH)
-}
 
 fun getAllWaveData(
     siteListFunction: SiteListFunction,
@@ -88,28 +58,7 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     return this
 }
 
-fun getSharkLocationsFromDatastore(): PieceLocation? {
-    return DataStoreClient.readFromDatastore()?.toPieceLocation()
-}
 
-fun getAllLocationsFromDatastore(pieceType: PieceType): List<PieceLocation> =
-    DataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
-        it.toPieceLocation()
-    }
-
-fun getDistances(): List<Player> {
-    val boats = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
-        it.toPieceLocation()
-    }
-    val finish = DataStoreClient.getKeysOfKind("PieceLocation", PieceType.FINISH).map {
-        it.toPieceLocation()
-    }.firstOrNull()
-    return finish?.let {
-        boats.map { boat ->
-            Player(boat, distanceKm(boat.geoLocation, finish.geoLocation))
-        }
-    } ?: emptyList()
-}
 fun Entity.toPieceLocation(): PieceLocation {
     val location: LatLng = this.getLatLng("location")
     val lat = location.latitude
@@ -122,10 +71,11 @@ fun Entity.toPieceLocation(): PieceLocation {
     )
 }
 
-fun MutableList<Location>.withStored(pieceType: PieceType): MutableList<Location> {
-    getAllLocationsFromDatastore(pieceType).forEach(this::add)
+fun MutableList<Location>.withStored(pieceType: PieceType, dataStorage: DataStorage): MutableList<Location> {
+    dataStorage.getAllLocationsFromDatastore(pieceType).forEach(this::add)
     return this
 }
+
 
 
 fun JsonNode.getSiteLocations(): List<Site> {

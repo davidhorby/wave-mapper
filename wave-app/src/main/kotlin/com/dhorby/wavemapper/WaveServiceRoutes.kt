@@ -1,5 +1,7 @@
 package com.dhorby.wavemapper
 
+import DataStoreClient
+import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.contract.contract
@@ -24,9 +26,12 @@ object WaveServiceRoutes {
 
     private val waveServiceFunctions = WaveServiceFunctions()
 
+    private val dataStorage = DataStorage(DataStoreClient())
+
     private val waveHandlers = WaveHandlers(
         siteListFunction = waveServiceFunctions.siteListFunction,
-        dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
+        dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
+        dataStorage = dataStorage
     )
 
     val latQuery = Query.float().required("lat")
@@ -58,7 +63,8 @@ object WaveServiceRoutes {
         )
         return PolyHandler(httpHandler, WebSocketRoutes(
             siteListFunction = waveServiceFunctions.siteListFunction,
-            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
+            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
+            dataStorage = dataStorage
         ).ws)
     }
 

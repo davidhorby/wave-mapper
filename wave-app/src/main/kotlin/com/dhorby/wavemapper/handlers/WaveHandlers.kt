@@ -1,8 +1,5 @@
 package com.dhorby.wavemapper.handlers
 
-import DataStoreClient
-import DataStoreClient.clearDatastore
-import DataStoreClient.writeToDatastore
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -15,7 +12,6 @@ import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.waveLocationListBodyLens
-import com.google.cloud.datastore.Entity
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.FOUND
@@ -28,7 +24,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
 
-class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction) {
+class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction, val dataStorage: DataStorage) {
 
     companion object {
         val start = PieceLocation(
@@ -61,8 +57,8 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             mapsApiKey.let { mapsApiKey ->
                 try {
                     val waveData: String =
-                        getWaveDataOnly(siteListFunction, dataForSiteFunction)
-                    WavePage(waveData, mapsApiKey, getDistances())
+                        dataStorage.getWaveDataOnly(siteListFunction, dataForSiteFunction)
+                    WavePage(waveData, mapsApiKey, dataStorage.getDistances())
                 } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)
                     null
@@ -139,17 +135,17 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
             pieceType = pieceType,
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
-        writeToDatastore(pieceLocation)
+        dataStorage.write(pieceLocation)
         Response(FOUND).header("Location", "/")
     }
 
 
     fun startRace() {
-        writeToDatastore(start)
-        writeToDatastore(finish)
-        DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map(Entity::toPieceLocation)
+        dataStorage.write(start)
+        dataStorage.write(finish)
+        dataStorage.getKeysOfKind(PieceType.BOAT)
             .map { it.copy(geoLocation = start.geoLocation) }
-            .forEach(::writeToDatastore)
+            .forEach(dataStorage::write)
     }
 
     fun start(): HttpHandler = {
@@ -158,14 +154,15 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
     fun move():HttpHandler  = {
-        DataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map(Entity::toPieceLocation)
+        dataStorage.getKeysOfKind(PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-            .forEach(::writeToDatastore)
+            .forEach(dataStorage::write)
         Response(FOUND).header("Location", "/")
     }
 
+
     fun clear(): HttpHandler = {
-        clearDatastore("PieceLocation")
+        dataStorage.clear("PieceLocation")
         Response(FOUND).header("Location", "/")
     }
 }

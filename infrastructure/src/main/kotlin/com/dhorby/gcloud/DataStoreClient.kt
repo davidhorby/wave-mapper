@@ -6,9 +6,9 @@ import com.google.cloud.datastore.testing.LocalDatastoreHelper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-object DataStoreClient {
+class DataStoreClient {
 
-    private val datastore: Datastore  by lazy {
+    val datastore: Datastore  by lazy {
         LOG.info("Environment -->> ${Settings.ENV}" )
 //        if (Settings.ENV == "local") {
 //            DatastoreOptions.newBuilder()

@@ -1,6 +1,8 @@
 package com.dhorby.wavemapper.functional.handlers
 
+import DataStoreClient
 import com.dhorby.gcloud.model.Site
+import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.natpryce.hamkrest.assertion.assertThat
@@ -13,10 +15,16 @@ import org.junit.jupiter.api.Test
 
 internal class WaveHandlersTest: FunctionalTestEnv() {
 
+    val dataStorage: DataStorage = DataStorage(DataStoreClient())
+
     @Test
     fun `returns OK with invalid site list`() {
         val invalidSiteList = { emptyList<Site>().toMutableList() }
-        val wavePage: (Request) -> Response = WaveHandlers(siteListFunction = invalidSiteList, dataForSiteFunction = dataForSiteFunctionFake).getWaveData()
+        val wavePage: (Request) -> Response = WaveHandlers(
+            siteListFunction = invalidSiteList,
+            dataForSiteFunction = dataForSiteFunctionFake,
+            dataStorage = dataStorage
+        ).getWaveData()
         val response = wavePage(Request(Method.GET, "/"))
         assertThat(response.status, equalTo(OK))
         assertThat(response.bodyString(), equalTo("[]"))
