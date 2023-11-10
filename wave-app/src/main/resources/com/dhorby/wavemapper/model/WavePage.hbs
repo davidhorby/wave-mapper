@@ -189,15 +189,15 @@
         <td style="width: 50%;">
             <div id="map_div" style="width: 100%; height: 100%;"></div>
         </td>
-        <td style="width: 50%; height: 30%">
-            <table align="center" width="100%" height="100%">
-                <tr valign="top">
+        <td>
+            <table style="width: 100%; height: 500px">
+                <tr style="vertical-align: top;" >
                     <td style="width: 100%;" colspan="3">
-                        <div id="table_div"></div>
+                        <div id="table_div" style="height:300px;"></div>
                     </td>
                 </tr>
-                <tr valign="top">
-                    <td style="width: 50%;height: 10%">
+                <tr style="vertical-align: top;">
+                    <td >
                         <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 10%;">
                             <form action="/" method="POST" class="form-example">
                                 <div class="form-example">
@@ -205,8 +205,6 @@
                                         <tr>
                                             <td>Name</td>
                                             <td><input type="test" name="name" id="name_ip" required></td>
-                                        </tr>
-                                        <tr>
                                             <td>Type</td>
                                             <td>
                                                 <select id="pieceType" name="pieceType">
@@ -221,8 +219,6 @@
                                         <tr>
                                             <td>Lat</td>
                                             <td><input type="text" name="lat" id="lat_ip" required></td>
-                                        </tr>
-                                        <tr>
                                             <td>Lon</td>
                                             <td><input type="text" name="lon" id="long_ip" required></td>
                                         </tr>
@@ -262,7 +258,7 @@
                 <tr valign="top">
                     <td height="20">Players</td>
                     <td height="20">Distance to finish (km)</td>
-                    <td height="20">Distance from prirates (km)</td>
+                    <td height="20">Distance from pirates (km)</td>
                 </tr>
                 {{#each players}}
                     <tr valign="top">
@@ -274,6 +270,7 @@
                                         <tr><td>{{pirateName}}</td><td>{{distance}}</td></tr>
                                     </table>
                                 {{/each}}
+                            </div>
                             </td>
                     </tr>
                 {{/each}}
