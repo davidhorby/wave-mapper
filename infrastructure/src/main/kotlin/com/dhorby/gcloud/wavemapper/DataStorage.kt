@@ -20,8 +20,7 @@ interface WaveDataActions {
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location>
 
-    fun loadDistanceFromPirates(pieceLocation: PieceLocation, pieceType: PieceType): List<PirateDistance>
-    fun loadDistanceFromSharks(pieceLocation: PieceLocation, pieceType: PieceType): List<SharkDistance>
+    fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance>
 }
 
 interface WaveDataCalculations {
@@ -58,27 +57,19 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
                 Player(
                     boat,
                     GeoDistance.distanceKm(boat.geoLocation, finish.geoLocation),
-                    loadDistanceFromPirates(boat, PieceType.PIRATE),
-                    loadDistanceFromSharks(boat, PieceType.SHARK)
+                    loadDistance(boat, PieceType.PIRATE),
+                    loadDistance(boat, PieceType.SHARK)
                 )
             }
         } ?: emptyList()
     }
 
-    override fun loadDistanceFromPirates(pieceLocation: PieceLocation, pieceType: PieceType): List<PirateDistance> =
+    override fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance> =
         dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
-        }.map { PirateDistance(it.key.name, it.value) }
-
-    override fun loadDistanceFromSharks(pieceLocation: PieceLocation, pieceType: PieceType): List<SharkDistance> {
-        return dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
-            it.toPieceLocation()
-        }.associateWith {
-            GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
-        }.map { SharkDistance(it.key.name, it.value) }
-    }
+        }.map { Distance(it.key.name, it.value) }
 
     override fun getAllWaveData(
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction
