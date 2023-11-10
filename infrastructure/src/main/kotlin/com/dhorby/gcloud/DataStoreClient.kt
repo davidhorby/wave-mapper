@@ -8,19 +8,27 @@ import org.slf4j.LoggerFactory
 
 class DataStoreClient {
 
-    val datastore: Datastore  by lazy {
+    private val datastore: Datastore  by lazy {
         LOG.info("Environment -->> ${Settings.ENV}" )
-//        if (Settings.ENV == "local") {
-//            DatastoreOptions.newBuilder()
-//                .setHost(Settings.HOST)
-//                .setProjectId(Settings.PROJECT_ID)
-//                .build()
-//                .service
-//        } else {
+        if (Settings.ENV == "local") {
+            val localDatastoreHelper = LocalDatastoreHelper
+                .newBuilder()
+                .setPort(8081)
+                .setConsistency(1.0) // If the consistency is not 1.0, the data may not be there yet
+                .build()
+            localDatastoreHelper.start()
+            DatastoreOptions.newBuilder()
+                .setHost("localhost:8081")
+                .setProjectId(Settings.PROJECT_ID)
+                .build()
+                .service
+        } else {
             LocalDatastoreHelper.newBuilder()
             DatastoreOptions.getDefaultInstance().service
-//        }
+        }
     }
+
+
 
     private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
 
@@ -64,6 +72,7 @@ class DataStoreClient {
                 )
             )
             .build()
+        datastore.put()
         val queryResults: QueryResults<Entity> = datastore.run(query)
 
 

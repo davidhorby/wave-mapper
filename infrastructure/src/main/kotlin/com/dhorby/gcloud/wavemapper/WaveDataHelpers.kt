@@ -72,7 +72,7 @@ fun Entity.toPieceLocation(): PieceLocation {
 }
 
 fun MutableList<Location>.withStored(pieceType: PieceType, dataStorage: DataStorage): MutableList<Location> {
-    dataStorage.getAllLocationsFromDatastore(pieceType).forEach(this::add)
+    dataStorage.getAllLocations(pieceType).forEach(this::add)
     return this
 }
 

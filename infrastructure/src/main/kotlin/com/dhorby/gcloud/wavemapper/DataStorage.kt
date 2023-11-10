@@ -11,11 +11,6 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
         this.dataStoreClient.writeToDatastore(pieceLocation)
     }
 
-    fun getSharkLocationsFromDatastore(): PieceLocation? {
-        return dataStoreClient.readFromDatastore()?.toPieceLocation()
-
-    }
-
     fun getKeysOfKind(pieceType:PieceType) : List<PieceLocation> {
         return dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
             it.toPieceLocation()
@@ -26,8 +21,8 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
         dataStoreClient.clearDatastore(kind)
     }
 
-    fun getAllLocationsFromDatastore(pieceType: PieceType): List<PieceLocation> =
-        getKeysOfKind( pieceType)
+    fun getAllLocations(pieceType: PieceType): List<PieceLocation> =
+        getKeysOfKind(pieceType)
 
     fun getDistances(): List<Player> {
         val boats = dataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
@@ -53,7 +48,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
             GeoDistance.distanceKm(it.geoLocation, player.pieceLocation.geoLocation)
         }
 
-    fun getAllWaveData(
+    private fun getAllWaveData(
         siteListFunction: SiteListFunction,
         dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location> {
@@ -65,19 +60,14 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
         }.toMutableList()
     }
 
-    fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String {
-        val waveData: String =
-            getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
-                .withStored(PieceType.SHARK, this)
-                .withStored(PieceType.BOAT, this)
-                .withStored(PieceType.PIRATE, this)
-                .withStored(PieceType.START, this)
-                .withStored(PieceType.FINISH, this)
-                .toGoogleMapFormat()
-        return waveData
-    }
-
-
+    fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String =
+        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+            .withStored(PieceType.SHARK, this)
+            .withStored(PieceType.BOAT, this)
+            .withStored(PieceType.PIRATE, this)
+            .withStored(PieceType.START, this)
+            .withStored(PieceType.FINISH, this)
+            .toGoogleMapFormat()
 
     fun getAllWaveDataWithPieces(
         siteListFunction: SiteListFunction,

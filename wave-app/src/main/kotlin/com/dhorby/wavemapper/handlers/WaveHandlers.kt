@@ -140,7 +140,7 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
     }
 
 
-    fun startRace() {
+    private fun startRace() {
         dataStorage.write(start)
         dataStorage.write(finish)
         dataStorage.getKeysOfKind(PieceType.BOAT)
