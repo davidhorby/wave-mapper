@@ -5,26 +5,49 @@ import com.dhorby.gcloud.algorithms.GeoDistance
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 
-class DataStorage(private val dataStoreClient: DataStoreClient) {
 
-    fun write(pieceLocation: PieceLocation) {
+interface WaveDataActions {
+    fun clear(kind: String)
+    fun write(pieceLocation: PieceLocation)
+    fun getKeysOfKind(pieceType: PieceType) : List<PieceLocation>
+    fun getAllLocations(pieceType: PieceType): List<PieceLocation>
+    fun loadDistanceFromPirates(player: Player): Map<PieceLocation, Int>
+    fun getAllWaveData(
+        siteListFunction: SiteListFunction,
+        dataForSiteFunction: DataForSiteFunction
+    ): MutableList<Location>
+
+    fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String
+    fun getAllWaveDataWithPieces(
+        siteListFunction: SiteListFunction,
+        dataForSiteFunction: DataForSiteFunction
+    ): MutableList<Location>
+}
+
+interface WaveDataCalculations {
+    fun getDistances(): List<Player>
+}
+
+class DataStorage(private val dataStoreClient: DataStoreClient):WaveDataActions, WaveDataCalculations {
+
+    override fun clear(kind:String) {
+        dataStoreClient.clearDatastore(kind)
+    }
+
+    override fun write(pieceLocation: PieceLocation) {
         this.dataStoreClient.writeToDatastore(pieceLocation)
     }
 
-    fun getKeysOfKind(pieceType:PieceType) : List<PieceLocation> {
+    override fun getKeysOfKind(pieceType:PieceType) : List<PieceLocation> {
         return dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
             it.toPieceLocation()
         }
     }
 
-    fun clear(kind:String) {
-        dataStoreClient.clearDatastore(kind)
-    }
-
-    fun getAllLocations(pieceType: PieceType): List<PieceLocation> =
+    override fun getAllLocations(pieceType: PieceType): List<PieceLocation> =
         getKeysOfKind(pieceType)
 
-    fun getDistances(): List<Player> {
+    override fun getDistances(): List<Player> {
         val boats = dataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
             it.toPieceLocation()
         }
@@ -41,14 +64,14 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
         } ?: emptyList()
     }
 
-    fun loadDistanceFromPirates(player: Player): Map<PieceLocation, Int> =
+    override fun loadDistanceFromPirates(player: Player): Map<PieceLocation, Int> =
         dataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, player.pieceLocation.geoLocation)
         }
 
-    private fun getAllWaveData(
+    override fun getAllWaveData(
         siteListFunction: SiteListFunction,
         dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location> {
@@ -60,7 +83,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
         }.toMutableList()
     }
 
-    fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String =
+    override fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String =
         getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
             .withStored(PieceType.SHARK, this)
             .withStored(PieceType.BOAT, this)
@@ -69,7 +92,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) {
             .withStored(PieceType.FINISH, this)
             .toGoogleMapFormat()
 
-    fun getAllWaveDataWithPieces(
+    override fun getAllWaveDataWithPieces(
         siteListFunction: SiteListFunction,
         dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location> {

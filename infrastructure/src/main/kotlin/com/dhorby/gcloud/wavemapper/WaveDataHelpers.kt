@@ -24,8 +24,6 @@ fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
 }
 
-
-
 fun getAllWaveData(
     siteListFunction: SiteListFunction,
     dataForSiteFunction: DataForSiteFunction
