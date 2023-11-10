@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model.com.dhorby.gcloud.model
+package com.dhorby.gcloud.model
 
 import kotlinx.serialization.Serializable
 

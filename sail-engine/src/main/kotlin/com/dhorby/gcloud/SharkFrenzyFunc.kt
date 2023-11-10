@@ -2,7 +2,7 @@ package com.dhorby.gcloud
 
 import DataStoreClient
 import com.dhorby.gcloud.algorithms.RandomSharkGenerator
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
+import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.DataStorage
 import com.google.cloud.functions.HttpFunction
 import com.google.cloud.functions.HttpRequest

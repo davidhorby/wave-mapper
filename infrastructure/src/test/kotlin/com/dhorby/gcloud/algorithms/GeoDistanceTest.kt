@@ -1,6 +1,9 @@
 package com.dhorby.gcloud.algorithms
 
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
+import com.dhorby.gcloud.algorithms.GeoDistance.kmPerHourToMPerSecond
+import com.dhorby.gcloud.algorithms.GeoDistance.toRadians
+import com.dhorby.gcloud.model.Bearing
+import com.dhorby.gcloud.model.GeoLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
@@ -13,5 +16,20 @@ class GeoDistanceTest {
         val finish = GeoLocation(49.17, -5.05)
         val distanceKm = GeoDistance.distanceKm(start, finish)
         assertThat(distanceKm, equalTo(2084))
+    }
+
+
+    @Test
+    fun `should convert km per hour to metres per second`() {
+        assertThat(22.kmPerHourToMPerSecond(), equalTo(6))
+        assertThat(8.kmPerHourToMPerSecond(), equalTo(2))
+    }
+
+    @Test
+    fun `should convert degress to radians`() {
+        val bearing = Bearing(45.0)
+        val radians = bearing.toRadians()
+        val expectedRadians = Math.toRadians(bearing.degrees)
+        assertThat(radians, equalTo(expectedRadians))
     }
 }

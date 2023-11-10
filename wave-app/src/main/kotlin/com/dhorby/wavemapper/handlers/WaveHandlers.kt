@@ -1,9 +1,9 @@
 package com.dhorby.wavemapper.handlers
 
+import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer

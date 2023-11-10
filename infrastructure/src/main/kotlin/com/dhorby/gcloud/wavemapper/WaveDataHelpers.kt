@@ -1,7 +1,6 @@
 package com.dhorby.gcloud.wavemapper
 
 import com.dhorby.gcloud.model.*
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.fasterxml.jackson.databind.JsonNode
@@ -15,7 +14,7 @@ import kotlin.math.roundToInt
 typealias SiteListFunction = () -> MutableList<Site>
 typealias DataForSiteFunction = (site: String) -> WaveLocation?
 
-fun sailMove(geoLocation:GeoLocation):GeoLocation {
+fun sailMove(geoLocation: GeoLocation): GeoLocation {
     return GeoLocation(geoLocation.lat  + (0..5).random().toDouble(),
         geoLocation.lon  + (0..10).random().toDouble())
 }

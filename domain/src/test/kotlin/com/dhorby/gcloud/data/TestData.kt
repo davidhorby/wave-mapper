@@ -1,7 +1,6 @@
 package com.dhorby.gcloud.data
 
 import com.dhorby.gcloud.model.*
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
 import java.time.LocalDate
 
 val siteId = "12345"

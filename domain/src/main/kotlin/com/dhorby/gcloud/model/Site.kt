@@ -1,7 +1,5 @@
 package com.dhorby.gcloud.model
 
-import com.dhorby.gcloud.model.com.dhorby.gcloud.model.GeoLocation
-
 data class Site (
     val id:String,
     val geoLocation: GeoLocation,
