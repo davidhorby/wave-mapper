@@ -18,7 +18,10 @@ class DataStoreFunctionalTests {
 
     @Test
     fun `can calculate the distance from pirates`() {
-        val player: Player = Player(pieceLocation = TestData.testBoatLocation, distanceToFinish = 0)
+        val player: Player = Player(
+            pieceLocation = TestData.testBoatLocation,
+            distanceToFinish = 0
+        )
         val distanceFromPirates = dataStorage.loadDistanceFromPirates(TestData.testBoatLocation)
     }
 

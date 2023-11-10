@@ -1,3 +1,8 @@
 package com.dhorby.gcloud.model
 
-data class Player(val pieceLocation: PieceLocation, val distanceToFinish: Int, val distanceFromPirates:List<PirateDistance> = emptyList())
+data class Player(
+    val pieceLocation: PieceLocation,
+    val distanceToFinish: Int,
+    val distanceFromPirates: List<PirateDistance> = emptyList(),
+    val loadDistanceFromSharks: List<SharkDistance> = emptyList()
+)
