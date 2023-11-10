@@ -1,7 +1,7 @@
 package com.dhorby.gcloud.config
 
 object Settings {
-    val ENV = System.getenv("ENV")?:"local"
+    val ENV = System.getenv("ENV")?:"staging"
     val HOST = System.getenv("DATASTORE_HOST")?:"localhost:8081"
     val PROJECT_ID = System.getenv("DATASTORE_PROJECT_ID")?:"analytics-springernature"
 }

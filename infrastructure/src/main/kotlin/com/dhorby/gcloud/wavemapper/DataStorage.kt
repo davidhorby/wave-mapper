@@ -11,7 +11,6 @@ interface WaveDataActions {
     fun write(pieceLocation: PieceLocation)
     fun getKeysOfKind(pieceType: PieceType) : List<PieceLocation>
     fun getAllLocations(pieceType: PieceType): List<PieceLocation>
-    fun loadDistanceFromPirates(player: Player): Map<PieceLocation, Int>
     fun getAllWaveData(
         siteListFunction: SiteListFunction,
         dataForSiteFunction: DataForSiteFunction
@@ -22,6 +21,8 @@ interface WaveDataActions {
         siteListFunction: SiteListFunction,
         dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location>
+
+    fun loadDistanceFromPirates(pieceLocation: PieceLocation): List<PirateDistance>
 }
 
 interface WaveDataCalculations {
@@ -58,18 +59,19 @@ class DataStorage(private val dataStoreClient: DataStoreClient):WaveDataActions,
             boats.map { boat ->
                 Player(
                     boat,
-                    GeoDistance.distanceKm(boat.geoLocation, finish.geoLocation)
+                    GeoDistance.distanceKm(boat.geoLocation, finish.geoLocation),
+                    loadDistanceFromPirates(boat)
                 )
             }
         } ?: emptyList()
     }
 
-    override fun loadDistanceFromPirates(player: Player): Map<PieceLocation, Int> =
+    override fun loadDistanceFromPirates(pieceLocation: PieceLocation): List<PirateDistance> =
         dataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
             it.toPieceLocation()
         }.associateWith {
-            GeoDistance.distanceKm(it.geoLocation, player.pieceLocation.geoLocation)
-        }
+            GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
+        }.map { PirateDistance(it.key.name, it.value) }
 
     override fun getAllWaveData(
         siteListFunction: SiteListFunction,

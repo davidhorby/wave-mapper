@@ -262,11 +262,19 @@
                 <tr valign="top">
                     <td height="20">Players</td>
                     <td height="20">Distance to finish (km)</td>
+                    <td height="20">Distance from prirates (km)</td>
                 </tr>
                 {{#each players}}
                     <tr valign="top">
                             <td><div class="row">{{ pieceLocation.name }}</div></td>
                             <td><div class="row">{{ distanceToFinish }}(km)</div></td>
+                            <td><div class="row">
+                                {{#each distanceFromPirates}}
+                                    <table align="center" width="100%" height="100%">
+                                        <tr><td>{{pirateName}}</td><td>{{distance}}</td></tr>
+                                    </table>
+                                {{/each}}
+                            </td>
                     </tr>
                 {{/each}}
             </table>
