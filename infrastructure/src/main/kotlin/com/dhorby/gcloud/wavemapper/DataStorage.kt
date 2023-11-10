@@ -38,7 +38,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun getKeysOfKind(pieceType: PieceType): List<PieceLocation> {
-        return dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
+        return dataStoreClient.getPieces(pieceType).map {
             it.toPieceLocation()
         }
     }
@@ -46,10 +46,10 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     override fun getAllLocations(pieceType: PieceType): List<PieceLocation> = getKeysOfKind(pieceType)
 
     override fun getDistances(): List<Player> {
-        val boats = dataStoreClient.getKeysOfKind("PieceLocation", PieceType.BOAT).map {
+        val boats = dataStoreClient.getPieces( PieceType.BOAT).map {
             it.toPieceLocation()
         }
-        val finish = dataStoreClient.getKeysOfKind("PieceLocation", PieceType.FINISH).map {
+        val finish = dataStoreClient.getPieces( PieceType.FINISH).map {
             it.toPieceLocation()
         }.firstOrNull()
         return finish?.let {
@@ -65,7 +65,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance> =
-        dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
+        dataStoreClient.getPieces(pieceType).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)

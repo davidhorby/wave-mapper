@@ -60,12 +60,9 @@ class DataStoreClient {
         datastore.get(key).properties.forEach { (t, u) -> LOG.info("$t:$u") }
     }
 
-    fun getKeysOfKind(kind: String, type: PieceType): MutableList<Entity> {
-
-
-//        LOG.info("Reading from datastore" + DatastoreOptions.getDefaultInstance().projectId)
+    fun getPieces(type: PieceType): MutableList<Entity> {
         val query: Query<Entity> = Query.newEntityQueryBuilder()
-            .setKind(kind)
+            .setKind("PieceLocation")
             .setFilter(
                 StructuredQuery.CompositeFilter.and(
                     StructuredQuery.PropertyFilter.eq("type", type.name)
