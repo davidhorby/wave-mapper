@@ -22,7 +22,7 @@ class DataStoreFunctionalTests {
             pieceLocation = TestData.testBoatLocation,
             distanceToFinish = 0
         )
-        val distanceFromPirates = dataStorage.loadDistanceFromPirates(TestData.testBoatLocation)
+        val distanceFromPirates = dataStorage.loadDistanceFromPirates(TestData.testBoatLocation, PieceType.PIRATE)
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.dhorby.gcloud.model
 
-data class PirateDistance(val pirateName: String, val distance: Int) {
+data class PirateDistance(val name: String, val distance: Int) {
     val alertLevel: String =
         when {
             distance < 1000 -> "red"

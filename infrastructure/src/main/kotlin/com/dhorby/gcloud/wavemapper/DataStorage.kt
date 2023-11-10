@@ -20,8 +20,8 @@ interface WaveDataActions {
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location>
 
-    fun loadDistanceFromPirates(pieceLocation: PieceLocation): List<PirateDistance>
-    fun loadDistanceFromSharks(pieceLocation: PieceLocation): List<SharkDistance>
+    fun loadDistanceFromPirates(pieceLocation: PieceLocation, pieceType: PieceType): List<PirateDistance>
+    fun loadDistanceFromSharks(pieceLocation: PieceLocation, pieceType: PieceType): List<SharkDistance>
 }
 
 interface WaveDataCalculations {
@@ -58,22 +58,22 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
                 Player(
                     boat,
                     GeoDistance.distanceKm(boat.geoLocation, finish.geoLocation),
-                    loadDistanceFromPirates(boat),
-                    loadDistanceFromSharks(boat)
+                    loadDistanceFromPirates(boat, PieceType.PIRATE),
+                    loadDistanceFromSharks(boat, PieceType.SHARK)
                 )
             }
         } ?: emptyList()
     }
 
-    override fun loadDistanceFromPirates(pieceLocation: PieceLocation): List<PirateDistance> =
-        dataStoreClient.getKeysOfKind("PieceLocation", PieceType.PIRATE).map {
+    override fun loadDistanceFromPirates(pieceLocation: PieceLocation, pieceType: PieceType): List<PirateDistance> =
+        dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
         }.map { PirateDistance(it.key.name, it.value) }
 
-    override fun loadDistanceFromSharks(pieceLocation: PieceLocation): List<SharkDistance> {
-        return dataStoreClient.getKeysOfKind("PieceLocation", PieceType.SHARK).map {
+    override fun loadDistanceFromSharks(pieceLocation: PieceLocation, pieceType: PieceType): List<SharkDistance> {
+        return dataStoreClient.getKeysOfKind("PieceLocation", pieceType).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
