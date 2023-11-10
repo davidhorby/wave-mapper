@@ -192,7 +192,7 @@
         <td>
             <table style="width: 100%; height: 500px">
                 <tr style="vertical-align: top;" >
-                    <td style="width: 100%;" colspan="3">
+                    <td style="width: 100%;" colspan="4">
                         <div id="table_div" style="height:300px;"></div>
                     </td>
                 </tr>
@@ -230,7 +230,7 @@
                             </form>
                         </div>
                     </td>
-                    <td colspan="2">
+                    <td colspan="3">
                         <table>
                             <tr>
                                 <td>Admin</td>
@@ -259,18 +259,29 @@
                     <td height="20">Players</td>
                     <td height="20">Distance to finish (km)</td>
                     <td height="20">Distance from pirates (km)</td>
+                    <td height="20">Distance from sharks (km)</td>
                 </tr>
                 {{#each players}}
                     <tr valign="top">
                             <td><div class="row">{{ pieceLocation.name }}</div></td>
                             <td><div class="row">{{ distanceToFinish }}</div></td>
-                            <td><div class="row">
-                                {{#each distanceFromPirates}}
-                                    <table align="center" width="100%" height="100%">
-                                        <tr style="background-color: {{alertLevel}}"><td>{{pirateName}}</td><td>{{distance}}</td></tr>
-                                    </table>
-                                {{/each}}
-                            </div>
+                            <td>
+                                <div class="row">
+                                    {{#each distanceFromPirates}}
+                                        <table align="center" width="100%" height="100%">
+                                            <tr style="background-color: {{alertLevel}}"><td>{{pirateName}}</td><td>{{distance}}</td></tr>
+                                        </table>
+                                    {{/each}}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    {{#each distanceFromSharks}}
+                                        <table align="center" width="100%" height="100%">
+                                            <tr style="background-color: {{alertLevel}}"><td>{{sharkName}}</td><td>{{distance}}</td></tr>
+                                        </table>
+                                    {{/each}}
+                                </div>
                             </td>
                     </tr>
                 {{/each}}

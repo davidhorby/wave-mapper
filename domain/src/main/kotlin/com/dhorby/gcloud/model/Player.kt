@@ -4,5 +4,5 @@ data class Player(
     val pieceLocation: PieceLocation,
     val distanceToFinish: Int,
     val distanceFromPirates: List<PirateDistance> = emptyList(),
-    val loadDistanceFromSharks: List<SharkDistance> = emptyList()
+    val distanceFromSharks: List<SharkDistance> = emptyList()
 )
