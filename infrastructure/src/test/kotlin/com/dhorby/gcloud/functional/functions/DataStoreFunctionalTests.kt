@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 
 class DataStoreFunctionalTests {
 
-    val dataStorage = DataStorage(DataStoreClient())
+    val dataStorage = DataStorage(DataStoreClient(com.dhorby.wavemapper.WaveServiceRoutes.events))
 
 
     @Test

@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.handlers
 
+import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
@@ -58,7 +59,13 @@ class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFuncti
                 try {
                     val waveData: String =
                         dataStorage.getWaveDataOnly(siteListFunction, dataForSiteFunction)
-                    WavePage(waveData, mapsApiKey, dataStorage.getDistances())
+                    WavePage(
+                        waveData = waveData,
+                        mapsApiKey = mapsApiKey,
+                        players = dataStorage.getDistances(),
+                        hostname = Settings.HOST,
+                        port = Settings.PORT
+                    )
                 } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)
                     null

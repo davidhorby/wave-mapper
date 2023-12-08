@@ -3,32 +3,128 @@ package com.dhorby.wavemapper
 import DataStoreClient
 import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
+import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.v3.OpenApi3
-import org.http4k.core.HttpHandler
-import org.http4k.core.Method
-import org.http4k.core.Response
-import org.http4k.core.Status
+import org.http4k.core.*
+import org.http4k.events.*
+import org.http4k.filter.ResponseFilters
 import org.http4k.format.Jackson
 import org.http4k.lens.Query
 import org.http4k.lens.float
+import org.http4k.routing.RequestWithRoute
 import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.PolyHandler
+import org.http4k.websocket.WsConsumer
+import org.http4k.websocket.WsFilter
+import org.http4k.websocket.WsResponse
+import org.http4k.websocket.then
+import java.time.Clock
+import java.time.Duration
 
+
+// here is a new EventFilter that adds custom metadata to the emitted events
+fun AddRequestCount(): EventFilter {
+    var requestCount = 0
+    return EventFilter { next ->
+        {
+            next(it + ("requestCount" to requestCount++))
+        }
+    }
+}
+
+
+data class WsTransaction(
+    val request: Request,
+    val response: WsResponse,
+    val duration: Duration,
+    val labels: Map<String, String> = when {
+        response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
+        request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
+        else -> emptyMap()
+    }
+) {
+    fun label(name: String, value: String) = copy(labels = labels + (name to value))
+    fun label(name: String) = labels[name]
+
+    companion object {
+        internal const val ROUTING_GROUP_LABEL = "routingGroup"
+    }
+}
+
+data class DbTransaction(
+    val request: Request,
+    val response: WsResponse,
+    val duration: Duration,
+    val labels: Map<String, String> = when {
+        response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
+        request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
+        else -> emptyMap()
+    }
+) {
+    fun label(name: String, value: String) = copy(labels = labels + (name to value))
+    fun label(name: String) = labels[name]
+
+    val routingGroup = labels[ROUTING_GROUP_LABEL] ?: "UNMAPPED"
+
+    companion object {
+        internal const val ROUTING_GROUP_LABEL = "routingGroup"
+    }
+}
+
+typealias WsTransactionLabeler = (WsTransaction) -> WsTransaction
+
+typealias DbTransactionLabeler = (DbTransaction) -> DbTransaction
+
+object ReportWsTransaction {
+    operator fun invoke(
+        clock: Clock = Clock.systemUTC(),
+        transactionLabeler: WsTransactionLabeler = { it },
+        recordFn: (WsTransaction) -> Unit
+    ): WsFilter = WsFilter { next ->
+        {
+            clock.instant().let { start ->
+                next(it).apply {
+                    recordFn(transactionLabeler(WsTransaction(
+                        request = it,
+                        response = this,
+                        duration = Duration.between(start, clock.instant())
+                    )))
+                }
+            }
+        }
+    }
+}
+
+// this is our custom event which will be printed in a structured way
+data class IncomingHttpRequest(val uri: Uri, val status: Int, val duration: Long) : Event
+
+// this is our custom event which will be printed in a structured way
+data class IncomingWsRequest(val uri: Uri, val status: Int, val duration: Long) : Event
 
 object WaveServiceRoutes {
 
+    val events: (Event) -> Unit =
+        EventFilters.AddTimestamp()
+            .then(EventFilters.AddEventName())
+            .then(EventFilters.AddZipkinTraces())
+            .then(AddRequestCount())
+            .then(AutoMarshallingEvents(Jackson))
+
+    private val tracingFilter = TracingFilter()
+
     private val waveServiceFunctions = WaveServiceFunctions()
 
-    private val dataStorage = DataStorage(DataStoreClient())
+    private val dataStorage: DataStorage = DataStorage(DataStoreClient(events))
 
-    private val waveHandlers = WaveHandlers(
+
+    private val waveHandlers: WaveHandlers = WaveHandlers(
         siteListFunction = waveServiceFunctions.siteListFunction,
         dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
         dataStorage = dataStorage
@@ -38,6 +134,7 @@ object WaveServiceRoutes {
     val lonQuery = Query.float().required("lon")
 
     operator fun invoke(): PolyHandler {
+
         val httpHandler: HttpHandler = routes(
             "/ping" bind Method.GET to {
                 Response(Status.OK).body("pong")
@@ -51,7 +148,9 @@ object WaveServiceRoutes {
             "/clear" bind Method.GET to waveHandlers.clear(),
             "/start" bind Method.GET to waveHandlers.start(),
             "/move" bind Method.GET to waveHandlers.move(),
-            "/css" bind static(Classpath("/css")),
+            "/css" bind static(
+                Classpath("/css")
+            ),
             "/api" bind contract {
                 renderer = OpenApi3(ApiInfo("Wave Mapper API", "v1.0"), Jackson)
                 routes += "/location" meta {
@@ -61,11 +160,41 @@ object WaveServiceRoutes {
                 } bindContract Method.GET to waveHandlers.getLocationData()
             }, static(Classpath("public"))
         )
-        return PolyHandler(httpHandler, WebSocketRoutes(
+
+
+        val handlerWithEvents =
+            ResponseFilters.ReportHttpTransaction {
+                // to "emit" an event, just invoke() the Events!
+                events(
+                    IncomingHttpRequest(
+                        uri = it.request.uri,
+                        status = it.response.status.code,
+                        duration = it.duration.toMillis()
+                    )
+                )
+            }.then(httpHandler)
+
+
+        val webSocketRoutes: WebSocketRoutes = WebSocketRoutes(
             siteListFunction = waveServiceFunctions.siteListFunction,
             dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
             dataStorage = dataStorage
-        ).ws)
+        )
+
+        val reportWsTransaction = ReportWsTransaction {
+            events(
+                IncomingWsRequest(
+                    uri = it.request.uri,
+                    status = 200,
+                    duration = it.duration.toMillis()
+                )
+            )
+        }.then(webSocketRoutes.ws)
+
+
+        return PolyHandler(
+            handlerWithEvents, reportWsTransaction
+        )
     }
 
 }

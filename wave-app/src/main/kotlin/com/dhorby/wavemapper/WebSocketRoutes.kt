@@ -8,6 +8,7 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.core.Request
+import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
 import org.http4k.lens.Path
 import org.http4k.routing.RoutingWsHandler
@@ -17,8 +18,17 @@ import org.http4k.websocket.Websocket
 import org.http4k.websocket.WsMessage
 import org.http4k.websocket.WsResponse
 
+class WsEvent(val actor:String) : Event {
+    operator fun invoke() = println("$actor")
+}
 
-class WebSocketRoutes(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction, val dataStorage: DataStorage) {
+
+
+class WebSocketRoutes(
+    val siteListFunction: SiteListFunction,
+    val dataForSiteFunction: DataForSiteFunction,
+    val dataStorage: DataStorage
+) {
 
     val namePath = Path.of("name")
 
@@ -26,14 +36,13 @@ class WebSocketRoutes(val siteListFunction: SiteListFunction, val dataForSiteFun
         "/message/{name}" bind { req: Request ->
             WsResponse { ws: Websocket ->
                 val name = namePath(req)
-                println("Got message from $name")
                 val waveDataOnly = dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
                 ws.close()
             }
         },
-        "/move" bind { req: Request ->
+        "/move" bind {
             dataStorage.getKeysOfKind(PieceType.BOAT)
                 .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
                 .forEach(dataStorage::write)
@@ -47,13 +56,18 @@ class WebSocketRoutes(val siteListFunction: SiteListFunction, val dataForSiteFun
         "/start" bind { req: Request ->
             startRace()
             WsResponse { ws: Websocket ->
-                val waveDataOnly = dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
-                val message =  WsMessage(waveDataOnly.asJsonObject().toString())
-                ws.send(message)
-                ws.close()
+                startRace(ws)
             }
         }
     )
+
+    private fun startRace(ws: Websocket) {
+        val waveDataOnly =
+            dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
+        val message = WsMessage(waveDataOnly.asJsonObject().toString())
+        ws.send(message)
+        ws.close()
+    }
 
     fun startRace() {
         dataStorage.write(WaveHandlers.start)

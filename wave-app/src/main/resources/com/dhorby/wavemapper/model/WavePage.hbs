@@ -135,7 +135,7 @@
     <script type="text/javascript">
         function sendMessage(data)  {
             const conn = new WebSocket(
-                  "ws://localhost/message/david"
+                  "ws://{{hostname}}:{{port}}/message/david"
             );
             conn.onmessage = function(e){
                 if (typeof e.data === 'string'){
@@ -149,7 +149,7 @@
         }
         function move(data)  {
             const conn = new WebSocket(
-                  "ws://localhost/move"
+                  "ws://{{hostname}}:{{port}}/move"
             );
             conn.onmessage = function(e){
                 if (typeof e.data === 'string'){
@@ -163,7 +163,7 @@
         }
         function start(data)  {
             const conn = new WebSocket(
-                  "ws://localhost/start"
+                  "ws://{{hostname}}:{{port}}/start"
             );
             conn.onmessage = function(e){
                 if (typeof e.data === 'string'){

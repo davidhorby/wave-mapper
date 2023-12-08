@@ -1,15 +1,18 @@
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
+import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.google.cloud.datastore.*
 import com.google.cloud.datastore.testing.LocalDatastoreHelper
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.http4k.events.Event
 
-class DataStoreClient {
+//import org.slf4j.Logger
+//import org.slf4j.LoggerFactory
+
+class DataStoreClient(val events: (Event) -> Unit) {
 
     private val datastore: Datastore  by lazy {
-        LOG.info("Environment -->> ${Settings.ENV}" )
+//        LOG.info("Environment -->> ${Settings.ENV}" )
         if (Settings.ENV == "local") {
             val localDatastoreHelper = LocalDatastoreHelper
                 .newBuilder()
@@ -30,11 +33,13 @@ class DataStoreClient {
 
 
 
-    private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
+//    private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
 
     fun writeToDatastore(pieceLocation: PieceLocation) {
 
-        LOG.info("Writing to datastore")
+        events(DatastoreEvent("writing to datastore"))
+
+//        LOG.info("Writing to datastore")
 
         // The kind for the new entity
         val kind = "PieceLocation"
@@ -55,12 +60,14 @@ class DataStoreClient {
         // Saves the entity
         datastore.put(pieceLocationEntity)
 
-        LOG.info("Writing to datastore" + DatastoreOptions.getDefaultInstance().projectId)
+//        LOG.info("Writing to datastore" + DatastoreOptions.getDefaultInstance().projectId)
 
-        datastore.get(key).properties.forEach { (t, u) -> LOG.info("$t:$u") }
+//        datastore.get(key).properties.forEach { (t, u) -> LOG.info("$t:$u") }
     }
 
     fun getPieces(type: PieceType): MutableList<Entity> {
+
+        events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind("PieceLocation")
             .setFilter(

@@ -53,11 +53,13 @@ dependencies {
     implementation platform("com.google.cloud:libraries-bom:20.6.0");
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation(platform("org.http4k:http4k-bom:5.10.4.0"))
 
     implementation("ch.qos.logback:logback-classic:1.4.5")
 
     testImplementation junit5
     testImplementation kotlinTest
+    testImplementation("org.http4k:http4k-testing-tracerbullet")
 
     testImplementation project( path: ":domain", configuration: "testArtifact")
 

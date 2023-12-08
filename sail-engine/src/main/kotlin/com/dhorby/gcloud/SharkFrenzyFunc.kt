@@ -10,7 +10,7 @@ import com.google.cloud.functions.HttpResponse
 
 class SharkFrenzyFunc : HttpFunction {
 
-    private val dataStorage: DataStorage = DataStorage(DataStoreClient())
+    private val dataStorage: DataStorage = DataStorage(DataStoreClient(com.dhorby.wavemapper.WaveServiceRoutes.events))
 
     @Throws(Exception::class)
     override fun service(request: HttpRequest, response: HttpResponse) {
