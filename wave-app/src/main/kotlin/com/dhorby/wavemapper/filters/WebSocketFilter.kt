@@ -5,7 +5,7 @@ import org.http4k.websocket.WsHandler
 
 class WebSocketFilter:WsFilter {
     override fun invoke(p1: WsHandler): WsHandler = {
-        println("Hellooo" + p1.toString())
+        println(p1.toString())
         p1.invoke(it)
     }
 }

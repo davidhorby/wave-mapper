@@ -93,6 +93,7 @@ class DataStoreClient(val events: (Event) -> Unit) {
     }
 
     fun clearDatastore(kind: String = "PieceLocation") {
+        events(DatastoreEvent("Clearing datastore"))
         val allEntitiesByKind = getAllEntitiesByKind(datastore, kind)
         val iterator = allEntitiesByKind.iterator()
         while (iterator.hasNext()) {

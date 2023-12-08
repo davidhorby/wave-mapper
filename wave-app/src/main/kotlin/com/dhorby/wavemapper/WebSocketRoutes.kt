@@ -53,10 +53,17 @@ class WebSocketRoutes(
                 ws.close()
             }
         },
-        "/start" bind { req: Request ->
+        "/start" bind {
             startRace()
             WsResponse { ws: Websocket ->
                 startRace(ws)
+            }
+        },
+        "/clear" bind {
+            dataStorage.clear("PieceLocation")
+            WsResponse { ws: Websocket ->
+                ws.send(WsMessage("Success"))
+                ws.close()
             }
         }
     )

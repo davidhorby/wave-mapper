@@ -161,6 +161,20 @@
             };
             conn.onopen = () => conn.send('hello');
         }
+        function clearData(data)  {
+            const conn = new WebSocket(
+                  "ws://{{hostname}}:{{port}}/clear"
+            );
+            conn.onmessage = function(e){
+                if (typeof e.data === 'string'){
+                    var parsedData = e.data.replace(/\\"/g, '"')
+                    var obj = JSON.parse(parsedData);
+                    console.log(obj);
+                    reDrawMap(obj);
+                }
+            };
+            conn.onopen = () => conn.send('hello');
+        }
         function start(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/start"
@@ -244,6 +258,10 @@
                                 <td>
                                     <div class="form-clear">
                                         <button onclick="move()">Move</button>
+                                    </div>
+                                </td>                                <td>
+                                    <div class="form-clear">
+                                        <button onclick="clearData()">Clear</button>
                                     </div>
                                 </td>
                                 <td>

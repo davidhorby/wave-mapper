@@ -145,7 +145,7 @@ object WaveServiceRoutes {
             "/datasheet" bind Method.GET to waveHandlers.getDataSheet(),
             "/map" bind Method.GET to waveHandlers.getMap(),
             "/" bind Method.POST to waveHandlers.addPiece(),
-            "/clear" bind Method.GET to waveHandlers.clear(),
+//            "/clear" bind Method.GET to waveHandlers.clear(),
             "/start" bind Method.GET to waveHandlers.start(),
             "/move" bind Method.GET to waveHandlers.move(),
             "/css" bind static(
@@ -160,7 +160,6 @@ object WaveServiceRoutes {
                 } bindContract Method.GET to waveHandlers.getLocationData()
             }, static(Classpath("public"))
         )
-
 
         val handlerWithEvents =
             ResponseFilters.ReportHttpTransaction {
