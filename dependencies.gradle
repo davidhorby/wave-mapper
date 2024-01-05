@@ -20,23 +20,6 @@ ext {
 
     slf4jVersion = '1.7.26'
 
-    http4k = [
-            "org.http4k:http4k-core:${http4kVersion}",
-            "org.http4k:http4k-format-jackson:${http4kVersion}",
-            "org.http4k:http4k-format-xml:${http4kVersion}",
-            "org.http4k:http4k-template-handlebars:${http4kVersion}",
-            "org.http4k:http4k-contract:${http4kVersion}",
-            "org.http4k:http4k-format-argo:${http4kVersion}",
-            "org.http4k:http4k-client-apache:${http4kVersion}",
-            "org.http4k:http4k-server-jetty:${http4kVersion}",
-            "org.http4k:http4k-client-websocket:${http4kVersion}"
-    ]
-//
-//    http4kws = [
-//            "org.http4k:http4k-server-jetty:${http4kVersion}",
-//            "org.http4k:http4k-client-websocket:${http4kVersion}",
-//            "org.http4k:http4k-client-bom:5.4.0.0"
-//    ]
 
     kotlinDeps = [
             "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
@@ -45,9 +28,7 @@ ext {
             "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
     ]
 
-    result4k = [
-            "dev.forkhandles:result4k:$result4kVersion"
-    ]
+
 
     /////////////////////////// TEST DEPENDENCIES ///////////////////////////
 
@@ -66,13 +47,7 @@ ext {
             "org.http4k:http4k-testing-hamkrest:$http4kTestHamkrestVersion",
     ]
 
-    googleCloud = [
-            "com.google.cloud.functions:functions-framework-api:1.0.4",
-            "com.google.cloud:google-cloud-storage:2.12.0",
-            "com.google.cloud:google-cloud-datastore:2.11.4",
-            "com.google.cloud:google-cloud-secretmanager:2.6.0",
-            "com.google.appengine:appengine-api-1.0-sdk:1.9.89"
-    ]
+
 
     googleCloudAppEngineTest = [
             "com.google.appengine:appengine-testing:$googleCloudAppEngineTestVersion",

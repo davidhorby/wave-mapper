@@ -3,7 +3,7 @@ kotlin = "1.9.22"
 http4k = "5.12.0.0"
 forkhandlesVersion = "2.11.1.0"
 junit-jupiter = "5.10.1"
-result4k = '2.2.0.0'
+result4kVersion = "2.11.1.0"
 jacksonVersion="2.16.1"
 gcloudFunctions="1.1.0"
 gcloudStorage="2.30.1"
@@ -13,6 +13,7 @@ gcloudAppEngine="2.0.24"
 
 
 [libraries]
+result4k = { module = "dev.forkhandles:result4k", version.ref = "result4kVersion" }
 http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
 http4k-format-jackson = { module = "org.http4k:http4k-format-jackson", version.ref = "http4k" }
 http4k-format-xml = { module = "org.http4k:http4k-format-xml", version.ref = "http4k" }
@@ -22,6 +23,7 @@ http4k-format-argo = { module = "org.http4k:http4k-format-argo", version.ref = "
 http4k-client-apache = { module = "org.http4k:http4k-client-apache", version.ref = "http4k" }
 http4k-server-jetty = { module = "org.http4k:http4k-server-jetty", version.ref = "http4k" }
 http4k-client-websocket = { module = "org.http4k:http4k-client-websocket", version.ref = "http4k" }
+http4k-client-tracerbullet = { module = "org.http4k:http4k-testing-tracerbullet", version.ref = "http4k" }
 
 gcloud-functions = { module = "com.google.cloud.functions:functions-framework-api", version.ref = "gcloudFunctions" }
 gcloud-storage = { module = "com.google.cloud:google-cloud-storage", version.ref = "gcloudStorage" }
@@ -37,6 +39,6 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 
 
 [bundles]
-http4k = ["http4k-core", "http4k-format-jackson", "http4k-format-xml", "http4k-template-handlebars", "http4k-contract", "http4k-format-argo", "http4k-client-apache", "http4k-server-jetty", "http4k-client-websocket"]
+http4k = ["http4k-core", "http4k-format-jackson", "http4k-format-xml", "http4k-template-handlebars", "http4k-contract", "http4k-format-argo", "http4k-client-apache", "http4k-server-jetty", "http4k-client-websocket", "http4k-client-tracerbullet"]
 googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-secretmanager","gcloud-appengine"]
 jackson = ["jackson-core","jackson-kotlin","jackson-dataformat","jackson-datatype","jackson-databind"]

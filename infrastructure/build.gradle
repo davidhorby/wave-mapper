@@ -9,10 +9,9 @@ configurations {
 
 dependencies {
     implementation kotlinDeps
-    implementation googleCloud
-    implementation jackson
-    implementation http4k
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
+    implementation libs.bundles.googleCloud
+    implementation libs.bundles.jackson
+    implementation libs.bundles.http4k
 
     implementation project(":domain")
 
