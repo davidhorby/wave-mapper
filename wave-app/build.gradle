@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id 'java'
     id 'java-test-fixtures'
+    alias libs.plugins.kotlinjvm
     alias libs.plugins.shadowJar
 }
 
@@ -20,6 +21,16 @@ apply plugin: 'java'
 
 application {
     mainClass = 'com.dhorby.wavemapper.WaveMapperHttp4kApp'
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+java {
+    consistentResolution {
+        useCompileClasspathVersions()
+    }
 }
 
 jar {
@@ -66,6 +77,7 @@ dependencies {
 }
 
 // Always run unit tests
+test.dependsOn shadowJar
 appengineDeploy.dependsOn test
 appengineStage.dependsOn test
 

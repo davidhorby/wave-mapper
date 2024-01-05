@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     id "idea"
     id 'java'
+    alias libs.plugins.kotlinjvm
 }
 
 allprojects {
