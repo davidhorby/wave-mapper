@@ -30,12 +30,4 @@ ext {
 
 
 
-    googleCloudAppEngineTest = [
-            "com.google.appengine:appengine-testing:$googleCloudAppEngineTestVersion",
-            "com.google.appengine:appengine-api-stubs:$googleCloudAppEngineTestVersion",
-            "com.google.appengine:appengine-tools-sdk:$googleCloudAppEngineTestVersion"
-    ]
-
-
-
 }

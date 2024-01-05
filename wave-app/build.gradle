@@ -59,9 +59,9 @@ dependencies {
 
     testImplementation project( path: ":domain", configuration: "testArtifact")
 
-    testRuntimeOnly junit5RuntimeOnly
+    testRuntimeOnly libs.bundles.testRuntime
 
-    testImplementation googleCloudAppEngineTest
+    testImplementation libs.bundles.googleCloudAppEngineTest
 
 }
 

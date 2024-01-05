@@ -16,7 +16,7 @@ dependencies {
     implementation project(":domain")
 
     testImplementation libs.bundles.test
-    testRuntimeOnly junit5RuntimeOnly
+    testRuntimeOnly libs.bundles.testRuntime
 
     testImplementation project( path: ":domain", configuration: "testArtifact")
 

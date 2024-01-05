@@ -11,7 +11,7 @@ dependencies {
     implementation libs.bundles.kotlin
 
     testImplementation libs.bundles.test
-    testRuntimeOnly junit5RuntimeOnly
+    testRuntimeOnly libs.bundles.testRuntime
 
     testArtifact sourceSets.test.output
 
