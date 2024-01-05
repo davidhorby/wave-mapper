@@ -30,8 +30,6 @@ dependencies {
     implementation libs.bundles.kotlin
     implementation libs.bundles.googleCloud
     implementation libs.bundles.jackson
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.cloud.functions:functions-framework-api:1.0.4'
 
     invoker 'com.google.cloud.functions.invoker:java-function-invoker:1.1.1'
 

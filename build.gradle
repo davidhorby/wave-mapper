@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     id "idea"
     id 'java'
+    id 'java-test-fixtures'
     alias libs.plugins.kotlinjvm
 }
 
@@ -14,6 +15,7 @@ allprojects {
 subprojects {
 
     apply plugin: 'java'
+    apply plugin: 'java-test-fixtures'
     apply plugin: 'kotlin'
 
     kotlin {

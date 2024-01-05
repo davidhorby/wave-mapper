@@ -8,15 +8,12 @@ buildscript {
 }
 
 plugins {
-    id 'java'
-    id 'java-test-fixtures'
     alias libs.plugins.shadowJar
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 apply plugin: 'application'
-apply plugin: 'java'
 
 application {
     mainClass = 'com.dhorby.wavemapper.WaveMapperHttp4kApp'
@@ -51,18 +48,12 @@ dependencies {
     implementation project(":domain")
     implementation project(":infrastructure")
 
-
-    implementation platform("com.google.cloud:libraries-bom:20.6.0");
-    implementation(platform("org.http4k:http4k-bom:5.10.4.0"))
-
     testImplementation libs.bundles.test
+    testImplementation libs.bundles.googleCloudAppEngineTest
 
     testImplementation project( path: ":domain", configuration: "testArtifact")
 
     testRuntimeOnly libs.bundles.testRuntime
-
-    testImplementation libs.bundles.googleCloudAppEngineTest
-
 }
 
 // Always run unit tests
