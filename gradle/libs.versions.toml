@@ -12,7 +12,7 @@ gcloudDatastore="2.17.6"
 gcloudSecretmanager="2.32.0"
 gcloudAppEngine="2.0.24"
 gloudAppEngineTest="2.0.24"
-johnRengelmanVersion = '7.1.0'
+johnRengelmanVersion = '7.1.2'
 
 
 [libraries]

@@ -9,13 +9,9 @@ buildscript {
 
 
 plugins {
-    alias libs.plugins.kotlinjvm
     alias libs.plugins.kotlinserialization
 }
 
-kotlin {
-    jvmToolchain(21)
-}
 
 configurations {
     testArtifact

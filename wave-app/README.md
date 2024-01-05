@@ -15,7 +15,7 @@ gcloud auth configure-docker
 
 #### Run locally
 ```bash
-./gradlew wave-app:run
+../gradlew run
 ```
 
 ### Run in docker
