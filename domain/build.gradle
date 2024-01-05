@@ -10,8 +10,7 @@ configurations {
 dependencies {
     implementation kotlinDeps
 
-    testImplementation kotlinTest
-    testImplementation junit5
+    testImplementation libs.bundles.test
     testRuntimeOnly junit5RuntimeOnly
 
     testArtifact sourceSets.test.output

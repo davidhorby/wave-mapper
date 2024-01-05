@@ -32,19 +32,8 @@ ext {
 
     /////////////////////////// TEST DEPENDENCIES ///////////////////////////
 
-    junit5 = [
-            "org.junit.platform:junit-platform-commons:$junitPlatformVersion",
-            "org.junit.platform:junit-platform-launcher:$junitPlatformVersion",
-            "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
-            "org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion",
-    ]
-
     junit5RuntimeOnly = [
             "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
-    ]
-
-    kotlinTest = [
-            "org.http4k:http4k-testing-hamkrest:$http4kTestHamkrestVersion",
     ]
 
 
@@ -55,12 +44,6 @@ ext {
             "com.google.appengine:appengine-tools-sdk:$googleCloudAppEngineTestVersion"
     ]
 
-    jackson = [
-            "com.fasterxml.jackson.core:jackson-core:$jacksonVersion",
-            "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion",
-            "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion",
-            "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion",
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    ]
+
 
 }
