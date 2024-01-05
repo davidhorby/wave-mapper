@@ -18,10 +18,6 @@ allprojects {
 //    project.version = (version == "unspecified") ? "SNAPSHOT" : version
     project.group = "com.dhorby"
 
-    repositories {
-        mavenCentral()
-    }
-
 }
 
 kotlin {

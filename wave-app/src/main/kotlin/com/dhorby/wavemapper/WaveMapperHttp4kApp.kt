@@ -12,11 +12,6 @@ object WaveMapperHttp4kApp {
 
     private val LOG: Logger = LoggerFactory.getLogger(WaveMapperHttp4kApp::class.java)
 
-//    val events = TracerBulletEvents(
-//        listOf(HttpTracer(actor)), // A tracer to capture HTTP calls
-//        listOf(PumlSequenceDiagram), // Render the HTTP traffic as a PUML diagram
-//        TraceRenderPersistence.FileSystem(File(".")) // Store the result
-//    )
 
     @JvmStatic
     fun main(args: Array<String>) {

@@ -2,6 +2,7 @@ package com.dhorby.wavemapper
 
 import DataStoreClient
 import com.dhorby.gcloud.wavemapper.DataStorage
+import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
@@ -78,6 +79,34 @@ data class DbTransaction(
     }
 }
 
+fun interface DbFilter : (DatastoreEvent) -> Unit {
+    companion object
+}
+
+//fun DbFilter.then(next: DbFilter): DbFilter = { this(next)(it) }
+
+val isEven = DbFilter { p1 -> p1() }
+
+object ReportDbTransaction {
+    operator fun invoke(
+        clock: Clock = Clock.systemUTC(),
+        transactionLabeler: DbTransactionLabeler = { it },
+        recordFn: (DbTransaction) -> Unit
+    ): WsFilter = WsFilter { next ->
+        {
+            clock.instant().let { start ->
+                next(it).apply {
+                    recordFn(transactionLabeler(DbTransaction(
+                        request = it,
+                        response = this,
+                        duration = Duration.between(start, clock.instant())
+                    )))
+                }
+            }
+        }
+    }
+}
+
 typealias WsTransactionLabeler = (WsTransaction) -> WsTransaction
 
 typealias DbTransactionLabeler = (DbTransaction) -> DbTransaction
@@ -108,6 +137,8 @@ data class IncomingHttpRequest(val uri: Uri, val status: Int, val duration: Long
 // this is our custom event which will be printed in a structured way
 data class IncomingWsRequest(val uri: Uri, val status: Int, val duration: Long) : Event
 
+data class IncomingDbRequest(val uri: Uri, val status: Int, val duration: Long) : Event
+
 object WaveServiceRoutes {
 
     val events: (Event) -> Unit =
@@ -122,6 +153,16 @@ object WaveServiceRoutes {
     private val waveServiceFunctions = WaveServiceFunctions()
 
     private val dataStorage: DataStorage = DataStorage(DataStoreClient(events))
+
+//    private val dbHandler = ReportDbTransaction.invoke {
+//        events(
+//            IncomingDbRequest(
+//                uri = it.request.uri,
+//                status = 200,
+//                duration = it.duration.toMillis()
+//            )
+//        )
+//    }.then(TODO())
 
 
     private val waveHandlers: WaveHandlers = WaveHandlers(
@@ -145,7 +186,6 @@ object WaveServiceRoutes {
             "/datasheet" bind Method.GET to waveHandlers.getDataSheet(),
             "/map" bind Method.GET to waveHandlers.getMap(),
             "/" bind Method.POST to waveHandlers.addPiece(),
-//            "/clear" bind Method.GET to waveHandlers.clear(),
             "/start" bind Method.GET to waveHandlers.start(),
             "/move" bind Method.GET to waveHandlers.move(),
             "/css" bind static(
@@ -174,7 +214,7 @@ object WaveServiceRoutes {
             }.then(httpHandler)
 
 
-        val webSocketRoutes: WebSocketRoutes = WebSocketRoutes(
+        val webSocketRoutes = WebSocketRoutes(
             siteListFunction = waveServiceFunctions.siteListFunction,
             dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
             dataStorage = dataStorage

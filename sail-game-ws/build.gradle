@@ -5,9 +5,6 @@ plugins {
 group = 'com.dhorby'
 version = 'unspecified'
 
-repositories {
-    mavenCentral()
-}
 
 dependencies {
 

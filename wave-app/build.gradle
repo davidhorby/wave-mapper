@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'java-test-fixtures'
     id 'com.github.johnrengelman.shadow' version "$johnRengelmanVersion"
 }
 
@@ -43,7 +44,7 @@ dependencies {
 
     implementation kotlinDeps
     implementation result4k
-    implementation http4k
+    implementation libs.bundles.http4k
 
     implementation project(":domain")
     implementation project(":infrastructure")
@@ -51,7 +52,6 @@ dependencies {
     implementation jackson
     implementation googleCloud
     implementation platform("com.google.cloud:libraries-bom:20.6.0");
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation 'org.slf4j:slf4j-api:2.0.7'
     implementation(platform("org.http4k:http4k-bom:5.10.4.0"))
 
