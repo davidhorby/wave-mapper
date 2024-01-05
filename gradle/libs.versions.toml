@@ -4,6 +4,7 @@ http4k = "5.12.0.0"
 forkhandlesVersion = "2.11.1.0"
 junit-jupiter = "5.10.1"
 result4k = '2.2.0.0'
+jacksonVersion="2.16.1"
 gcloudFunctions="1.1.0"
 gcloudStorage="2.30.1"
 gcloudDatastore="2.17.6"
@@ -28,7 +29,14 @@ gcloud-datastore = { module = "com.google.cloud:google-cloud-datastore", version
 gcloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager", version.ref = "gcloudSecretmanager" }
 gcloud-appengine = { module = "com.google.appengine:appengine-api-1.0-sdk", version.ref = "gcloudAppEngine" }
 
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jacksonVersion" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
+jackson-dataformat = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jacksonVersion" }
+jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jacksonVersion" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonVersion" }
+
 
 [bundles]
 http4k = ["http4k-core", "http4k-format-jackson", "http4k-format-xml", "http4k-template-handlebars", "http4k-contract", "http4k-format-argo", "http4k-client-apache", "http4k-server-jetty", "http4k-client-websocket"]
 googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-secretmanager","gcloud-appengine"]
+jackson = ["jackson-core","jackson-kotlin","jackson-dataformat","jackson-datatype","jackson-databind"]

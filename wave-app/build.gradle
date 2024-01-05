@@ -45,13 +45,13 @@ dependencies {
     implementation kotlinDeps
     implementation result4k
     implementation libs.bundles.http4k
+    implementation libs.bundles.jackson
+    implementation libs.bundles.googleCloud
 
     implementation project(":domain")
     implementation project(":infrastructure")
 
-    implementation jackson
-    implementation googleCloud
-    implementation libs.bundles.googleCloud
+
     implementation platform("com.google.cloud:libraries-bom:20.6.0");
     implementation 'org.slf4j:slf4j-api:2.0.7'
     implementation(platform("org.http4k:http4k-bom:5.10.4.0"))
