@@ -66,3 +66,9 @@ kotlin = ["kotlin-stdlib","kotlin-reflect","kotlin-annotations","kotlin-json"]
 test = [ "junitJupiterApi", "junitJupiterParams", "kotlinTest", "hamkrest", "http4kTestingHamkrest" ]
 testRuntime = [ "junitJupiterEngine" ]
 googleCloudAppEngineTest = ["gcloud-json-appengine-testing", "gcloud-json-appengine-api-stubs", "gcloud-json-appengine-tools-sdk"]
+
+[plugins]
+kotlinjvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinserialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+shadowJar = { id = "com.github.johnrengelman.shadow", version.ref = "johnRengelmanVersion" }
+

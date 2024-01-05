@@ -1,6 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
-    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
+    alias libs.plugins.kotlinjvm
+    alias libs.plugins.kotlinserialization
 }
 
 configurations {
@@ -18,7 +18,7 @@ dependencies {
     testImplementation libs.bundles.test
     testRuntimeOnly libs.bundles.testRuntime
 
-    testImplementation project( path: ":domain", configuration: "testArtifact")
+    testImplementation project(path: ":domain", configuration: "testArtifact")
 
     testArtifact sourceSets.test.output
 

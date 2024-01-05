@@ -1,28 +1,12 @@
 ext {
 
-    kotlinJvmTarget = '11'
-    kotlinVersion = '1.9.0'
-
-    result4kVersion = '2.2.0.0'
-
-    http4kVersion = '5.6.5.0'
-
-    junitPlatformVersion = '1.9.1'
-    junitJupiterVersion = '5.9.1'
-
-    jacksonVersion = '2.13.4'
-
-    googleCloudAppEngineTestVersion = '1.9.89'
-
-    http4kTestHamkrestVersion = '5.4.0.0'
-
-//    johnRengelmanVersion = '7.1.0'
-
-    slf4jVersion = '1.7.26'
-
-
-
-
-
+//    kotlinJvmTarget = '11'
+//    kotlinVersion = '1.9.0'
+//
+//
+//
+//
+//
+//
 
 }

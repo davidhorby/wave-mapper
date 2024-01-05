@@ -10,7 +10,7 @@ buildscript {
 plugins {
     id 'java'
     id 'java-test-fixtures'
-    alias(libs.plugins.versions)
+    alias libs.plugins.shadowJar
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'

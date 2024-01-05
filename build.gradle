@@ -1,39 +1,18 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-buildscript {
-    apply from: project.file('dependencies.gradle')
-}
-
 plugins {
     id "idea"
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
-    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
-    alias(libs.plugins.versions)
 }
 
 allprojects {
-    apply from: rootProject.file("dependencies.gradle")
-
-//    project.version = (version == "unspecified") ? "SNAPSHOT" : version
     project.group = "com.dhorby"
-
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-    // Or shorter:
-    jvmToolchain(17)
-    // For example:
-    jvmToolchain(17)
-}
 
 subprojects {
 
     apply plugin: 'java'
-    apply plugin: 'kotlin'
 
     test {
         useJUnitPlatform()

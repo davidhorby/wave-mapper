@@ -1,6 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
-    alias(libs.plugins.versions)
+    alias libs.plugins.shadowJar
 }
 
 configurations {
@@ -33,7 +32,7 @@ dependencies {
     implementation libs.bundles.jackson
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.cloud.functions:functions-framework-api:1.0.4'
-    implementation "org.slf4j:slf4j-simple:$slf4jVersion"
+//    implementation "org.slf4j:slf4j-simple:$slf4jVersion"
 
     invoker 'com.google.cloud.functions.invoker:java-function-invoker:1.1.1'
 
