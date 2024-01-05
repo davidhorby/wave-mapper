@@ -8,7 +8,7 @@ configurations {
 }
 
 dependencies {
-    implementation kotlinDeps
+    implementation libs.bundles.kotlin
 
     testImplementation libs.bundles.test
     testRuntimeOnly junit5RuntimeOnly

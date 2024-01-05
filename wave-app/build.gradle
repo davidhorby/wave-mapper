@@ -42,7 +42,7 @@ distZip.dependsOn(shadowJar)
 
 dependencies {
 
-    implementation kotlinDeps
+    implementation libs.bundles.kotlin
     implementation libs.result4k
     implementation libs.bundles.http4k
     implementation libs.bundles.jackson

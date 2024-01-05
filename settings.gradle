@@ -2,7 +2,6 @@ rootProject.name = 'wave-mapper'
 
 include 'domain', 'infrastructure', 'wave-app', 'sail-engine'
 include 'sailgame'
-include 'sail-game-ws'
 include 'test'
 
 dependencyResolutionManagement {
