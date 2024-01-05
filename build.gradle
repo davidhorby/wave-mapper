@@ -9,7 +9,7 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
-    id 'com.github.johnrengelman.shadow' version "$johnRengelmanVersion"
+    alias(libs.plugins.versions)
 }
 
 allprojects {

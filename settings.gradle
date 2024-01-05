@@ -3,6 +3,11 @@ rootProject.name = 'wave-mapper'
 include 'domain', 'infrastructure', 'wave-app', 'sail-engine'
 
 dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            plugin('versions', 'com.github.johnrengelman.shadow').version('7.1.0')
+        }
+    }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()

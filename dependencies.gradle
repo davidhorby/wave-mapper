@@ -16,17 +16,12 @@ ext {
 
     http4kTestHamkrestVersion = '5.4.0.0'
 
-    johnRengelmanVersion = '7.1.0'
+//    johnRengelmanVersion = '7.1.0'
 
     slf4jVersion = '1.7.26'
 
 
 
-    /////////////////////////// TEST DEPENDENCIES ///////////////////////////
-
-    junit5RuntimeOnly = [
-            "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
-    ]
 
 
 
