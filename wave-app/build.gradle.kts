@@ -37,11 +37,11 @@ dependencies {
     implementation(libs.bundles.googleCloud)
 
     implementation(project(":domain"))
-    implementation(project(":infrastructure"))
+    implementation(project(":shared"))
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.googleCloudAppEngineTest)
-    testImplementation(testFixtures(project(":infrastructure")))
+    testImplementation(testFixtures(project(":shared")))
     testFixturesApi(libs.http4kTestingChaos)
     testRuntimeOnly(libs.bundles.testRuntime)
 }

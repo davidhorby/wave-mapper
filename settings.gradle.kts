@@ -1,7 +1,7 @@
 rootProject.name = 'wave-mapper'
 
 include("domain")
-include("infrastructure")
+include("shared")
 include("wave-app")
 include("sail-engine")
 
