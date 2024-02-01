@@ -1,10 +1,5 @@
 ![image](https://github.com/davidhorby/wave-mapper/assets/16700900/39f9e5b9-ea97-49dc-b266-2585339676c5)
 
-
-
-
-
-
 Data Point Site List
 
 http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/sitelist?res=3hourly&key=<metofficekey>
@@ -12,7 +7,6 @@ http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/sitelist?r
 Wave URL
 
 http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=<metofficekey>
-
 
 ## Prerequisites
 
