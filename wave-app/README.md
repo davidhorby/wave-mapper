@@ -49,17 +49,17 @@ gcloud config set functions/region europe-west2
 
 #### Run the shadowJar executable directly
 ```bash
-java -jar ./build/libs/wave-app.jar
-```
-
-#### Deploy the app
-```bash
-gcloud app deploy ./build/libs/wave-app.jar --appyaml=./app.yaml
+java -jar ./build/libs/wave-app-all.jar
 ```
 
 #### Deploy the app using gradle
 ```bash
 ../gradlew appengineDeploy
+```
+
+#### Deploy the app using gcloud cli
+```bash
+gcloud app deploy ./build/libs/wave-app-all.jar --appyaml=./src/main/appengine/app.yaml
 ```
 
 #### Stream logs from the command line by running

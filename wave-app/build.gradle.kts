@@ -1,5 +1,4 @@
-//import com.google.cloud.tools.gradle.appengine.core.deployextension
-//import com.google.cloud.tools.gradle.appengine.standard.runextension
+import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
 buildscript {
@@ -12,40 +11,22 @@ buildscript {
     }
 }
 
+
 plugins {
     alias(libs.plugins.shadowJar)
-//    id("com.github.johnrengelman.shadow") version "7.0.0"
-//    id("com.github.johnrengelman.shadow")
     application
-//    "com.google.cloud.tools.appengine"
-//    id("com.google.cloud.tools.appengine") version "2.1.0"
 }
 
 apply(plugin = "com.google.cloud.tools.appengine")
 apply(plugin = "com.github.johnrengelman.shadow")
 
-//allprojects {
-//    apply(plugin = "com.github.johnrengelman.shadow")
-//    apply(plugin = "com.google.cloud.tools.appengine")
-//    apply(plugin = "application")
-////}
-
 application {
     mainClass = "com.dhorby.wavemapper.WaveMapperHttp4kApp"
 }
 
-
-//shadowJar {
-//    dependsOn(jar)
-//    archiveBaseName.set(project.name)
-//    archiveClassifier.set(null)
-//    archiveVersion.set(null)
-//    mergeServiceFiles()
-//}
-
-//distTar.dependsOn(shadowJar)
-//startScripts.dependsOn(shadowJar)
-//distZip.dependsOn(shadowJar)
+configure<ShadowExtension> {
+    this.applicationDistribution
+}
 
 dependencies {
 
@@ -65,12 +46,6 @@ dependencies {
     testRuntimeOnly(libs.bundles.testRuntime)
 }
 
-
-
-//tasks.register("appengineDeploy") {
-//    dependsOn(tasks.named("shadowJar"))
-//}
-
 configure<AppEngineAppYamlExtension> {
     stage {
         setArtifact("build/libs/${project.name}-all.jar")
@@ -82,15 +57,3 @@ configure<AppEngineAppYamlExtension> {
     }
 }
 
-
-//// Always run unit tests
-////test.dependsOn shadowJar
-//appengineDeploy.dependsOn test
-//appengineStage.dependsOn(test)
-//
-//appengine {  // App Engine tasks configuration
-//    deploy {   // deploy configuration
-//        projectId = 'analytics-springernature'
-//        version = '1'
-//    }
-//}
