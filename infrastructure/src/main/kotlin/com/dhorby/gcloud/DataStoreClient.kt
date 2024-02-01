@@ -9,9 +9,9 @@ import org.http4k.events.Event
 //import org.slf4j.Logger
 //import org.slf4j.LoggerFactory
 
-class DataStoreClient(val events: (Event) -> Unit) {
+class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore) {
 
-    private val datastore: Datastore  by lazy {
+    private val datastore2: Datastore  by lazy {
 //        LOG.info("Environment -->> ${Settings.ENV}" )
         if (Settings.ENV == "local") {
             val localDatastoreHelper = LocalDatastoreHelper

@@ -27,6 +27,7 @@ http4k-client-apache = { module = "org.http4k:http4k-client-apache", version.ref
 http4k-server-jetty = { module = "org.http4k:http4k-server-jetty", version.ref = "http4k" }
 http4k-client-websocket = { module = "org.http4k:http4k-client-websocket", version.ref = "http4k" }
 http4k-client-tracerbullet = { module = "org.http4k:http4k-testing-tracerbullet", version.ref = "http4k" }
+http4kTestingChaos = { module = "org.http4k:http4k-testing-chaos", version.ref = "http4k" }
 
 gcloud-functions = { module = "com.google.cloud.functions:functions-framework-api", version.ref = "gcloudFunctions" }
 gcloud-storage = { module = "com.google.cloud:google-cloud-storage", version.ref = "gcloudStorage" }

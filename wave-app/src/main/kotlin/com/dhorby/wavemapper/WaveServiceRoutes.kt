@@ -6,6 +6,7 @@ import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
+import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
@@ -152,7 +153,9 @@ object WaveServiceRoutes {
 
     private val waveServiceFunctions = WaveServiceFunctions()
 
-    private val dataStorage: DataStorage = DataStorage(DataStoreClient(events))
+    private val dataStoreClient = DataStoreClient(events, DatastoreOptions.getDefaultInstance().service!!)
+
+    private val dataStorage: DataStorage = DataStorage(dataStoreClient)
 
 //    private val dbHandler = ReportDbTransaction.invoke {
 //        events(

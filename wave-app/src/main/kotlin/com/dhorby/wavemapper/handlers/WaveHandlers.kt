@@ -25,7 +25,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
 
-class WaveHandlers(val siteListFunction: SiteListFunction, val dataForSiteFunction: DataForSiteFunction, val dataStorage: DataStorage) {
+class WaveHandlers(
+    val siteListFunction: SiteListFunction,
+    val dataForSiteFunction: DataForSiteFunction,
+    val dataStorage: DataStorage
+) {
 
     companion object {
         val start = PieceLocation(

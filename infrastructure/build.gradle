@@ -1,5 +1,6 @@
 plugins {
     id 'idea'
+    id 'java-test-fixtures'
     alias libs.plugins.kotlinserialization
 }
 
@@ -17,6 +18,8 @@ dependencies {
 
     testImplementation libs.bundles.test
     testRuntimeOnly libs.bundles.testRuntime
+    testFixturesApi libs.http4kTestingChaos
+    testFixturesImplementation libs.junitJupiterApi
 
     testImplementation project(path: ":domain", configuration: "testArtifact")
 
