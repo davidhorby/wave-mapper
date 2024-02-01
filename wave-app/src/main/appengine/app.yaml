@@ -1,0 +1,15 @@
+runtime: java
+env: flex
+instance_class: F4
+
+runtime_config:
+  operating_system: "ubuntu22"
+  runtime_version: "21"
+
+env_variables:
+  ENV: "live"
+  HOST: "analytics-springernature.nw.r.appspot.com"
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2

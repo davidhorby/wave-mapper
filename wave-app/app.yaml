@@ -1,8 +1,0 @@
-runtime: java21
-env: standard
-instance_class: F4
-
-env_variables:
-  ENV: "live"
-  HOST: "analytics-springernature.nw.r.appspot.com"
-  PORT: "443"

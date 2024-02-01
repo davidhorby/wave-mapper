@@ -57,6 +57,11 @@ java -jar ./build/libs/wave-app.jar
 gcloud app deploy ./build/libs/wave-app.jar --appyaml=./app.yaml
 ```
 
+#### Deploy the app using gradle
+```bash
+../gradlew appengineDeploy
+```
+
 #### Stream logs from the command line by running
 ```bash
 gcloud app logs tail -s default
@@ -74,3 +79,4 @@ http://localhost/openapi/index.html
 ````bash
 gcloud app --project analytics-springernature instances disable-debug
 ````
+
