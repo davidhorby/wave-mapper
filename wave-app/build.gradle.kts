@@ -24,10 +24,6 @@ application {
     mainClass = "com.dhorby.wavemapper.WaveMapperHttp4kApp"
 }
 
-//configure<ShadowExtension> {
-//    this.applicationDistribution
-//}
-
 dependencies {
 
     implementation(libs.bundles.kotlin)

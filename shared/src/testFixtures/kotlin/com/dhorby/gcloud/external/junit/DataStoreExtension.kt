@@ -6,11 +6,21 @@ import org.junit.jupiter.api.extension.*
 
 class DataStoreExtension : BeforeTestExecutionCallback, BeforeAllCallback, AfterAllCallback, AfterEachCallback, ParameterResolver {
 
-    private val localDatastoreHelper = LocalDatastoreHelper
+    val localDatastoreHelper: LocalDatastoreHelper = LocalDatastoreHelper
         .newBuilder()
         .setConsistency(1.0) // If the consistency is not 1.0, the data may not be there yet
         .setStoreOnDisk(false)
         .build()
+
+    fun builder(): Builder {
+        return Builder()
+    }
+
+    class Builder {
+        fun build(): DataStoreExtension {
+            return DataStoreExtension()
+        }
+    }
 
     override fun beforeTestExecution(context: ExtensionContext) = store(context).put("datastore", localDatastoreHelper.options.service)
 
