@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
 buildscript {
@@ -45,6 +46,8 @@ dependencies {
     testFixturesApi(libs.http4kTestingChaos)
     testRuntimeOnly(libs.bundles.testRuntime)
 }
+
+tasks.withType<ShadowJar> { isZip64 = true }
 
 configure<AppEngineAppYamlExtension> {
     stage {
