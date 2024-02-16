@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 
@@ -25,9 +24,9 @@ application {
     mainClass = "com.dhorby.wavemapper.WaveMapperHttp4kApp"
 }
 
-configure<ShadowExtension> {
-    this.applicationDistribution
-}
+//configure<ShadowExtension> {
+//    this.applicationDistribution
+//}
 
 dependencies {
 
@@ -47,7 +46,10 @@ dependencies {
     testRuntimeOnly(libs.bundles.testRuntime)
 }
 
-tasks.withType<ShadowJar> { isZip64 = true }
+tasks.withType<ShadowJar> {
+    isZip64 = true
+    mergeServiceFiles()
+}
 
 configure<AppEngineAppYamlExtension> {
     stage {

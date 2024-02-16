@@ -3,6 +3,7 @@ kotlin = "1.9.20"
 koltinJson="1.6.2"
 http4k = "5.12.0.0"
 junit-jupiter = "5.10.1"
+junit-platform-launcher = "1.10.2"
 hamkrest = "1.8.0.1"
 result4kVersion = "2.11.1.0"
 jacksonVersion="2.16.1"
@@ -12,7 +13,7 @@ gcloudDatastore="2.17.6"
 gcloudSecretmanager="2.32.0"
 gcloudAppEngine="2.0.24"
 gloudAppEngineTest="2.0.24"
-johnRengelmanVersion = '7.1.2'
+johnRengelmanVersion = '8.1.1'
 
 
 [libraries]
@@ -44,6 +45,7 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 junitJupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
+junitPlatforLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher" }
 
 hamkrest = { module = "com.natpryce:hamkrest", version.ref = "hamkrest" }
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -65,7 +67,7 @@ googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-se
 jackson = ["jackson-core","jackson-kotlin","jackson-dataformat","jackson-datatype","jackson-databind"]
 kotlin = ["kotlin-stdlib","kotlin-reflect","kotlin-annotations","kotlin-json"]
 test = [ "junitJupiterApi", "junitJupiterParams", "kotlinTest", "hamkrest", "http4kTestingHamkrest" ]
-testRuntime = [ "junitJupiterEngine" ]
+testRuntime = [ "junitJupiterEngine", "junitPlatforLauncher" ]
 googleCloudAppEngineTest = ["gcloud-json-appengine-testing", "gcloud-json-appengine-api-stubs", "gcloud-json-appengine-tools-sdk"]
 
 [plugins]
