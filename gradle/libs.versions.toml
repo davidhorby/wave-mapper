@@ -47,7 +47,7 @@ junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", versio
 junitJupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
 junitPlatforLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher" }
 
-hamkrest = { module = "com.natpryce:hamkrest", version.ref = "hamkrest" }
+#hamkrest = { module = "com.natpryce:hamkrest", version.ref = "hamkrest" }
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 http4kTestingHamkrest = { module = "org.http4k:http4k-testing-hamkrest", version.ref = "http4k" }
 
@@ -66,7 +66,7 @@ http4k = ["http4k-core", "http4k-format-jackson", "http4k-format-xml", "http4k-t
 googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-secretmanager","gcloud-appengine"]
 jackson = ["jackson-core","jackson-kotlin","jackson-dataformat","jackson-datatype","jackson-databind"]
 kotlin = ["kotlin-stdlib","kotlin-reflect","kotlin-annotations","kotlin-json"]
-test = [ "junitJupiterApi", "junitJupiterParams", "kotlinTest", "hamkrest", "http4kTestingHamkrest" ]
+test = [ "junitJupiterApi", "junitJupiterParams", "kotlinTest", "http4kTestingHamkrest" ]
 testRuntime = [ "junitJupiterEngine", "junitPlatforLauncher" ]
 googleCloudAppEngineTest = ["gcloud-json-appengine-testing", "gcloud-json-appengine-api-stubs", "gcloud-json-appengine-tools-sdk"]
 

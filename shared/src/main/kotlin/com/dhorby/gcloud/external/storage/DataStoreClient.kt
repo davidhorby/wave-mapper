@@ -1,3 +1,5 @@
+package com.dhorby.gcloud.external.storage
+
 import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -9,7 +11,7 @@ import org.http4k.events.Event
 //import org.slf4j.Logger
 //import org.slf4j.LoggerFactory
 
-class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore) {
+class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
 
     private val datastore2: Datastore  by lazy {
 //        LOG.info("Environment -->> ${Settings.ENV}" )
@@ -33,9 +35,9 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
 
 
 
-//    private val LOG: Logger = LoggerFactory.getLogger(DataStoreClient::class.java)
+//    private val LOG: Logger = LoggerFactory.getLogger(com.dhorby.gcloud.external.storage.DataStoreClient::class.java)
 
-    fun writeToDatastore(pieceLocation: PieceLocation) {
+    override fun writeToDatastore(pieceLocation: PieceLocation): Entity? {
 
         events(DatastoreEvent("writing to datastore"))
 
@@ -58,7 +60,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         datastore
 
         // Saves the entity
-        datastore.put(pieceLocationEntity)
+        return datastore.put(pieceLocationEntity)
 
 //        LOG.info("Writing to datastore" + DatastoreOptions.getDefaultInstance().projectId)
 

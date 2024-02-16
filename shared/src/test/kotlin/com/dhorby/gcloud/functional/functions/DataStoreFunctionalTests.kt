@@ -2,7 +2,7 @@ package com.dhorby.gcloud.functional.functions
 
 class DataStoreFunctionalTests {
 
-//    val dataStorage = DataStorage(DataStoreClient(com.dhorby.wavemapper.WaveServiceRoutes.events))
+//    val dataStorage = DataStorage(com.dhorby.gcloud.external.storage.DataStoreClient(com.dhorby.wavemapper.WaveServiceRoutes.events))
 //
 //
 //    @Test

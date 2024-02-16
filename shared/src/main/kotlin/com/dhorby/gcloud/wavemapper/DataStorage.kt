@@ -1,7 +1,7 @@
 package com.dhorby.gcloud.wavemapper
 
-import DataStoreClient
 import com.dhorby.gcloud.algorithms.GeoDistance
+import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 

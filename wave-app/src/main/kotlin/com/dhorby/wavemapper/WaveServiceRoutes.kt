@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper
 
-import DataStoreClient
+import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions

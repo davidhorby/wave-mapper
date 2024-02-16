@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.functional.handlers
 
-import DataStoreClient
 import com.dhorby.gcloud.external.junit.DataStoreExtension
+import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.Site
 import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.wavemapper.AddRequestCount

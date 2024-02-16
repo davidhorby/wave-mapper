@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory
 
 object WaveMapperHttp4kApp {
 
-
-
     private val LOG: Logger = LoggerFactory.getLogger(WaveMapperHttp4kApp::class.java)
-
 
     @JvmStatic
     fun main(args: Array<String>) {
