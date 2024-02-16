@@ -1,24 +1,29 @@
 package com.dhorby.gcloud.wavemapper
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import java.net.URL
+import java.net.URI
 
 class WaveServiceFunctions: AppFunctions {
 
     private val xmlMapper = XmlMapper()
 
+    companion object {
+        private val setListUrls = URI(Constants.siteListUrl).toURL()
+    }
+
     override val siteListFunction: SiteListFunction = {
-        val xmlText = URL(Constants.siteListUrl).readText()
+        val xmlText = setListUrls.readText()
         val readTree = xmlMapper.readTree(xmlText)
         readTree.getSiteLocations().toMutableList()
     }
 
     override val dataForSiteFunction: DataForSiteFunction = { site ->
         try {
-            val xmlText = URL(getMetOfficeUrl(site)).readText()
+            val metOfficeUrls = URI(getMetOfficeUrl(site)).toURL()
+            val xmlText = metOfficeUrls.readText()
             xmlMapper.readTree(xmlText).getLocation()
         } catch (ex: Exception) {
-            println("Failed to read url ${URL(Constants.metOfficeUrl)} ${ex.message}")
+            println("Failed to read url ${URI(Constants.metOfficeUrl).toURL()} ${ex.message}")
             null
         }
     }

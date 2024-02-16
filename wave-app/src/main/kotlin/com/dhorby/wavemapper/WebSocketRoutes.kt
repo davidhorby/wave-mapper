@@ -37,7 +37,7 @@ class WebSocketRoutes(
     val ws: RoutingWsHandler = websockets(
         "/message/{name}" bind { req: Request ->
             WsResponse { ws: Websocket ->
-                val name = namePath(req)
+//                val name = namePath(req)
                 val waveDataOnly = dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
