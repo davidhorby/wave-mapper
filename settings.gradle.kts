@@ -1,4 +1,4 @@
-rootProject.name = 'wave-mapper'
+rootProject.name = "wave-mapper"
 
 include("domain")
 include("shared")

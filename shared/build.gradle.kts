@@ -1,7 +1,6 @@
 plugins {
     id("idea")
     `java-test-fixtures`
-    `kotlin-dsl`
     alias(libs.plugins.kotlinserialization)
 }
 
