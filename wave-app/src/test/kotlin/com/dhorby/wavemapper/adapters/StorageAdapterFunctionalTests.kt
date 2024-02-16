@@ -20,6 +20,7 @@ class StorageAdapterFunctionalTests:StorageAdapterContract {
         pieceType = PieceType.BOAT
     )
     override val entityMatcher: Matcher<Entity> = equalTo(pieceLocation.toEntity())
+    override val pieceLocationMatcher: Matcher<PieceLocation> = equalTo(pieceLocation)
 
     init {
         dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND,pieceLocation)

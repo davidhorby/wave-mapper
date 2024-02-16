@@ -14,11 +14,14 @@ interface StorageAdapterContract {
     val dataStoreClient: Storable
     val pieceLocation:PieceLocation
     val entityMatcher: Matcher<Entity>
+    val pieceLocationMatcher: Matcher<PieceLocation>
 
     @Test
     fun `should store a piece`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
-        val entity = storageAdapter.write(pieceLocation)
+        val entity: Entity? = storageAdapter.write(pieceLocation)
         assertThat(entity, present(entityMatcher))
+        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        assertThat(storedPieceLocation, present(pieceLocationMatcher))
     }
 }

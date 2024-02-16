@@ -49,6 +49,7 @@ class StorageAdapterIntegrationTests:StorageAdapterContract {
     override val entityMatcher: Matcher<Entity>  = isA<Entity>(
         has("reputation", { it.getValue<Value<String>>("name").get() }, equalTo("test piece"))
     )
+    override val pieceLocationMatcher: Matcher<PieceLocation> = isA<PieceLocation>(equalTo(pieceLocation))
 
     init {
         dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)

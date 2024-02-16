@@ -1,6 +1,8 @@
 package com.dhorby.gcloud.external.storage
 
+import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
+import com.dhorby.gcloud.model.PieceType
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.LatLng
@@ -16,4 +18,16 @@ fun PieceLocation.toEntity(): Entity {
         .set("type", this.pieceType.name)
         .build()
     return pieceLocationEntity
+}
+
+fun Entity.toPieceLocation(): PieceLocation {
+    val location: LatLng = this.getLatLng("location")
+    val lat = location.latitude
+    val lng = location.longitude
+    return PieceLocation(
+        id = this.properties["id"]?.get().toString(),
+        name = this.properties["name"]?.get().toString(),
+        pieceType = PieceType.valueOf(this.properties["type"]?.get().toString()),
+        geoLocation = GeoLocation(lat, lng)
+    )
 }

@@ -3,6 +3,7 @@ package com.dhorby.gcloud.wavemapper
 import com.dhorby.gcloud.algorithms.GeoDistance
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.external.storage.DatastoreKind.PIECE_LOCATION_KIND
+import com.dhorby.gcloud.external.storage.toPieceLocation
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 

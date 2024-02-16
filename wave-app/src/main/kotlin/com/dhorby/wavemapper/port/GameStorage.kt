@@ -5,4 +5,5 @@ import com.google.cloud.datastore.Entity
 
 interface GameStorage {
     fun write(pieceLocation: PieceLocation): Entity?
+    fun read(name: String): PieceLocation?
 }

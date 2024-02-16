@@ -4,8 +4,6 @@ import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.cloud.datastore.Entity
-import com.google.cloud.datastore.LatLng
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -56,17 +54,7 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
 }
 
 
-fun Entity.toPieceLocation(): PieceLocation {
-    val location: LatLng = this.getLatLng("location")
-    val lat = location.latitude
-    val lng = location.longitude
-    return PieceLocation(
-        id = this.properties["id"]?.get().toString(),
-        name = this.properties["name"]?.get().toString(),
-        pieceType = PieceType.valueOf(this.properties["type"]?.get().toString()),
-        geoLocation = GeoLocation(lat, lng)
-    )
-}
+
 
 fun MutableList<Location>.withStored(pieceType: PieceType, dataStorage: DataStorage): MutableList<Location> {
     dataStorage.getAllLocations(pieceType).forEach(this::add)
