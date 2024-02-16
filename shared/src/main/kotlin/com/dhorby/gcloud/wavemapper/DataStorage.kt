@@ -2,6 +2,7 @@ package com.dhorby.gcloud.wavemapper
 
 import com.dhorby.gcloud.algorithms.GeoDistance
 import com.dhorby.gcloud.external.storage.DataStoreClient
+import com.dhorby.gcloud.external.storage.DatastoreKind.PIECE_LOCATION_KIND
 import com.dhorby.gcloud.model.*
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 
@@ -34,7 +35,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun write(pieceLocation: PieceLocation) {
-        this.dataStoreClient.writeToDatastore(pieceLocation)
+        this.dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)
     }
 
     override fun getKeysOfKind(pieceType: PieceType): List<PieceLocation> {

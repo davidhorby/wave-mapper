@@ -6,9 +6,14 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.google.cloud.datastore.Entity
 
 class FakeDataStoreClient: Storable {
-    private val storedEntities = mutableListOf(String, PieceLocation)
-    override fun writeToDatastore(pieceLocation: PieceLocation): Entity? {
-        storedEntities.add(pieceLocation)
+    private val storedEntities = mutableMapOf<String, Map<String, PieceLocation>>()
+
+    override fun writeToDatastore(kind:String, pieceLocation: PieceLocation): Entity {
+        storedEntities[kind] = mapOf(pieceLocation.id to pieceLocation)
         return pieceLocation.toEntity()
+    }
+
+    override fun readFromDatastore(kind: String, name: String): Entity? {
+        return storedEntities[kind]?.get(name)?.toEntity()
     }
 }

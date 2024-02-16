@@ -2,6 +2,7 @@ package com.dhorby.wavemapper.adapters
 
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
+import com.dhorby.gcloud.external.storage.DatastoreKind.PIECE_LOCATION_KIND
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
@@ -50,6 +51,6 @@ class StorageAdapterIntegrationTests:StorageAdapterContract {
     )
 
     init {
-        dataStoreClient.writeToDatastore(pieceLocation)
+        dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)
     }
 }

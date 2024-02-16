@@ -37,14 +37,14 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
 
 //    private val LOG: Logger = LoggerFactory.getLogger(com.dhorby.gcloud.external.storage.DataStoreClient::class.java)
 
-    override fun writeToDatastore(pieceLocation: PieceLocation): Entity? {
+    override fun writeToDatastore(kind:String, pieceLocation: PieceLocation): Entity? {
 
         events(DatastoreEvent("writing to datastore"))
 
 //        LOG.info("Writing to datastore")
 
         // The kind for the new entity
-        val kind = "PieceLocation"
+//        val kind = "PieceLocation"
         // The name/ID for the new entity
         val name = "create"
         // The Cloud Datastore key for the new entity
@@ -89,7 +89,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         return results
     }
 
-    fun readFromDatastore(kind: String = "PieceLocation", name: String = "create"): Entity? {
+    override fun readFromDatastore(kind: String, name: String): Entity? {
         val key = datastore.newKeyFactory().setKind(kind).newKey(name)
         return datastore.get(key)
     }

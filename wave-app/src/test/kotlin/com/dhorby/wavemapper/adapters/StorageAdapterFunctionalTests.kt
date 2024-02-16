@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.adapters
 
+import com.dhorby.gcloud.external.storage.DatastoreKind.PIECE_LOCATION_KIND
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.external.storage.toEntity
 import com.dhorby.gcloud.model.GeoLocation
@@ -21,6 +22,6 @@ class StorageAdapterFunctionalTests:StorageAdapterContract {
     override val entityMatcher: Matcher<Entity> = equalTo(pieceLocation.toEntity())
 
     init {
-        dataStoreClient.writeToDatastore(pieceLocation)
+        dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND,pieceLocation)
     }
 }
