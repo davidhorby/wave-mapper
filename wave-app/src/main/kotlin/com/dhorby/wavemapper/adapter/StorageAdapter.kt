@@ -22,10 +22,6 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
         return dataStoreClient.getAllEntitiesOfKind("PieceLocation").map { it.toPieceLocation() }
     }
 
-    fun clearDatastore(kind: String) {
-        dataStoreClient.clearDatastore(kind)
-    }
-
     fun getTheData(): List<Location> {
         val storedPieces: List<PieceLocation> = getAllPieces()
         val waveLocations: MutableList<Location> = waveLocations()
@@ -44,8 +40,7 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
                 Player(
                     boat,
                     GeoDistance.distanceKm(boat.geoLocation, finish.geoLocation),
-                    loadDistance(boat, PieceType.PIRATE),
-                    loadDistance(boat, PieceType.SHARK)
+                    loadDistance(boat)
                 )
             }
         } ?: emptyList()
@@ -67,7 +62,7 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
         }
     }
 
-    private fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance> =
+    private fun loadDistance(pieceLocation: PieceLocation): List<Distance> =
         dataStoreClient.getAllEntitiesOfKind("PieceLocation").map {
             it.toPieceLocation()
         }.associateWith {

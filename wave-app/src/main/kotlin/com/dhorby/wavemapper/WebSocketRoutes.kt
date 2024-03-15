@@ -3,11 +3,9 @@ package com.dhorby.wavemapper
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.wavemapper.DataForSiteFunction
-import com.dhorby.gcloud.wavemapper.DataStorage
-import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
+import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
@@ -26,9 +24,7 @@ class WsEvent(val actor:String) : Event {
 
 
 class WebSocketRoutes(
-    val siteListFunction: SiteListFunction,
-    val dataForSiteFunction: DataForSiteFunction,
-    val dataStorage: DataStorage
+    private val storageAdapter: StorageAdapter
 ) {
 
     val namePath = Path.of("name")
@@ -37,18 +33,18 @@ class WebSocketRoutes(
         "/message/{name}" bind {
             WsResponse { ws: Websocket ->
 //                val name = namePath(req)
-                val waveDataOnly = dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
+                val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
                 ws.close()
             }
         },
         "/move" bind {
-            dataStorage.getKeysOfType("PieceLocation",PieceType.BOAT)
+            storageAdapter.getKeysOfType("PieceLocation",PieceType.BOAT)
                 .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-                .forEach(dataStorage::write)
+                .forEach(storageAdapter::write)
             WsResponse { ws: Websocket ->
-                val waveDataOnly = dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
+                val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
                 ws.close()
@@ -61,7 +57,7 @@ class WebSocketRoutes(
             }
         },
         "/clear" bind {
-            dataStorage.clear("PieceLocation")
+            storageAdapter.clear("PieceLocation")
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
@@ -101,11 +97,11 @@ class WebSocketRoutes(
                 geoLocation = GeoLocation(lat = 20.45, lon = -15.01),
                 pieceType = PieceType.PIRATE
             )
-            dataStorage.write(startLocation)
-            dataStorage.write(finishLocation)
-            dataStorage.write(testSharkLocation)
-            dataStorage.write(testBoatLocation)
-            dataStorage.write(testPirateLocation)
+            storageAdapter.write(startLocation)
+            storageAdapter.write(finishLocation)
+            storageAdapter.write(testSharkLocation)
+            storageAdapter.write(testBoatLocation)
+            storageAdapter.write(testPirateLocation)
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
@@ -114,18 +110,17 @@ class WebSocketRoutes(
     )
 
     private fun startRace(ws: Websocket) {
-        val waveDataOnly =
-            dataStorage.getAllWaveDataWithPieces(siteListFunction, dataForSiteFunction).toGoogleMapFormatList()
+        val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
         val message = WsMessage(waveDataOnly.asJsonObject().toString())
         ws.send(message)
         ws.close()
     }
 
     fun startRace() {
-        dataStorage.write(WaveHandlers.start)
-        dataStorage.write(WaveHandlers.finish)
-        dataStorage.getKeysOfType("PieceLocation", PieceType.BOAT)
+        storageAdapter.write(WaveHandlers.start)
+        storageAdapter.write(WaveHandlers.finish)
+        storageAdapter.getKeysOfType("PieceLocation", PieceType.BOAT)
             .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
-            .forEach(dataStorage::write)
+            .forEach(storageAdapter::write)
     }
 }

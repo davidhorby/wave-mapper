@@ -219,9 +219,7 @@ object WaveServiceRoutes {
 
 
         val webSocketRoutes = WebSocketRoutes(
-            siteListFunction = waveServiceFunctions.siteListFunction,
-            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
-            dataStorage = dataStorage
+            storageAdapter =  StorageAdapter(dataStoreClient)
         )
 
         val reportWsTransaction = ReportWsTransaction {
