@@ -1,39 +1,16 @@
 package com.dhorby.gcloud.external.storage
 
-import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.google.cloud.datastore.*
-import com.google.cloud.datastore.testing.LocalDatastoreHelper
 import org.http4k.events.Event
 
-//import org.slf4j.Logger
-//import org.slf4j.LoggerFactory
 
 class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
+    
 
-    private val datastore2: Datastore  by lazy {
-//        LOG.info("Environment -->> ${Settings.ENV}" )
-        if (Settings.ENV == "local") {
-            val localDatastoreHelper = LocalDatastoreHelper
-                .newBuilder()
-                .setPort(8081)
-                .setConsistency(1.0) // If the consistency is not 1.0, the data may not be there yet
-                .build()
-            localDatastoreHelper.start()
-            DatastoreOptions.newBuilder()
-                .setHost("localhost:8081")
-                .setProjectId(Settings.PROJECT_ID)
-                .build()
-                .service
-        } else {
-            LocalDatastoreHelper.newBuilder()
-            DatastoreOptions.getDefaultInstance().service
-        }
-    }
-
-    override fun writeToDatastore(kind:String, pieceLocation: PieceLocation): Entity? {
+    override fun writeToDatastore(kind:String, pieceLocation: PieceLocation) {
 
         events(DatastoreEvent("writing to datastore"))
 
@@ -47,17 +24,32 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
             .set("location", LatLng.of(pieceLocation.geoLocation.lat, pieceLocation.geoLocation.lon))
             .set("type", pieceLocation.pieceType.name)
             .build()
-        datastore
 
         // Saves the entity
-        return datastore.put(pieceLocationEntity)
+        datastore.put(pieceLocationEntity)
     }
 
-    fun getPieces(type: PieceType): MutableList<Entity> {
+    override fun getAllEntitiesOfKind(kind: String): List<Entity> {
 
         events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind("PieceLocation")
+            .build()
+        val queryResults: QueryResults<Entity> = datastore.run(query)
+
+
+        val results = mutableListOf<Entity>()
+        while (queryResults.hasNext()) {
+            results += queryResults.next()
+        }
+        return results
+    }
+
+    override fun getAllEntitiesOfType(kind:String,type: PieceType): MutableList<Entity> {
+
+        events(DatastoreEvent("Reading from to datastore"))
+        val query: Query<Entity> = Query.newEntityQueryBuilder()
+            .setKind(kind)
             .setFilter(
                 StructuredQuery.CompositeFilter.and(
                     StructuredQuery.PropertyFilter.eq("type", type.name)

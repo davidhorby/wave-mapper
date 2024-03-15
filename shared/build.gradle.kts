@@ -10,14 +10,11 @@ dependencies {
     implementation(libs.bundles.jackson)
     implementation(libs.bundles.http4k)
     implementation(project(":domain"))
+//    implementation("wave-mapper:domain")
 
     testImplementation(libs.bundles.test)
     testRuntimeOnly(libs.bundles.testRuntime)
     testFixturesApi(libs.http4kTestingChaos)
     testFixturesImplementation(libs.junitJupiterApi)
-
-//    testImplementation project(path: ":domain", configuration: "testArtifact")
-
-//    testArtifact sourceSets.test.output
 
 }

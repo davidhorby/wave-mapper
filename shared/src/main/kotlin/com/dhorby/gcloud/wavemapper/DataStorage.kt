@@ -11,8 +11,8 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 interface WaveDataActions {
     fun clear(kind: String)
     fun write(pieceLocation: PieceLocation)
-    fun getKeysOfKind(pieceType: PieceType): List<PieceLocation>
-    fun getAllLocations(pieceType: PieceType): List<PieceLocation>
+    fun getKeysOfKind(kind: String): List<PieceLocation>
+    fun getAllLocations(kind: String): List<PieceLocation>
     fun getAllWaveData(
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction
     ): MutableList<Location>
@@ -23,6 +23,7 @@ interface WaveDataActions {
     ): MutableList<Location>
 
     fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance>
+    fun getKeysOfType(kind: String, type: PieceType): List<PieceLocation>
 }
 
 interface WaveDataCalculations {
@@ -36,22 +37,29 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun write(pieceLocation: PieceLocation) {
-        this.dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)
+        this.dataStoreClient. writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)
     }
 
-    override fun getKeysOfKind(pieceType: PieceType): List<PieceLocation> {
-        return dataStoreClient.getPieces(pieceType).map {
+    override fun getKeysOfKind(kind: String): List<PieceLocation> {
+        return dataStoreClient.getAllEntitiesOfKind(kind).map {
             it.toPieceLocation()
         }
     }
 
-    override fun getAllLocations(pieceType: PieceType): List<PieceLocation> = getKeysOfKind(pieceType)
+    override fun getKeysOfType(kind: String, type:PieceType): List<PieceLocation> {
+        return dataStoreClient.getAllEntitiesOfType(kind, type).map {
+            it.toPieceLocation()
+        }
+    }
+
+
+    override fun getAllLocations(kind: String): List<PieceLocation> = getKeysOfKind(kind)
 
     override fun getDistances(): List<Player> {
-        val boats = dataStoreClient.getPieces( PieceType.BOAT).map {
+        val boats = dataStoreClient.getAllEntitiesOfType( "PieceLocation", PieceType.BOAT).map {
             it.toPieceLocation()
         }
-        val finish = dataStoreClient.getPieces( PieceType.FINISH).map {
+        val finish = dataStoreClient.getAllEntitiesOfType( "PieceLocation", PieceType.FINISH).map {
             it.toPieceLocation()
         }.firstOrNull()
         return finish?.let {
@@ -67,7 +75,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun loadDistance(pieceLocation: PieceLocation, pieceType: PieceType): List<Distance> =
-        dataStoreClient.getPieces(pieceType).map {
+        dataStoreClient.getAllEntitiesOfKind("PieceLocation").map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)
@@ -85,9 +93,9 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
     }
 
     override fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String =
-        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction).withStored(PieceType.SHARK, this)
-            .withStored(PieceType.BOAT, this).withStored(PieceType.PIRATE, this).withStored(PieceType.START, this)
-            .withStored(PieceType.FINISH, this).toGoogleMapFormat()
+        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction).withStored(this)
+            .withStored(this).withStored(this).withStored(this)
+            .withStored(this).toGoogleMapFormat()
 
     override fun getAllWaveDataWithPieces(
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction
@@ -98,7 +106,7 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
         val waveData: MutableList<Location> = mapNotNull.filter { location ->
             location.id.isNotEmpty()
         }.toMutableList()
-        return waveData.withStored(PieceType.SHARK, this).withStored(PieceType.BOAT, this)
-            .withStored(PieceType.PIRATE, this).withStored(PieceType.START, this).withStored(PieceType.FINISH, this)
+        return waveData.withStored(this).withStored(this)
+            .withStored(this).withStored(this).withStored(this)
     }
 }

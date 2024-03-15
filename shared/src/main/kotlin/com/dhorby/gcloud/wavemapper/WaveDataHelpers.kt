@@ -56,8 +56,8 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
 
 
 
-fun MutableList<Location>.withStored(pieceType: PieceType, dataStorage: DataStorage): MutableList<Location> {
-    dataStorage.getAllLocations(pieceType).forEach(this::add)
+fun MutableList<Location>.withStored(dataStorage: DataStorage): MutableList<Location> {
+    dataStorage.getAllLocations("PieceLocation").forEach(this::add)
     return this
 }
 

@@ -154,7 +154,7 @@ class WaveHandlers(
     private fun startRace() {
         dataStorage.write(start)
         dataStorage.write(finish)
-        dataStorage.getKeysOfKind(PieceType.BOAT)
+        dataStorage.getKeysOfType("PieceLocation", PieceType.BOAT)
             .map { it.copy(geoLocation = start.geoLocation) }
             .forEach(dataStorage::write)
     }
@@ -165,7 +165,7 @@ class WaveHandlers(
     }
 
     fun move():HttpHandler  = {
-        dataStorage.getKeysOfKind(PieceType.BOAT)
+        dataStorage.getKeysOfType("PieceLocation",PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(dataStorage::write)
         Response(FOUND).header("Location", "/")
