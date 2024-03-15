@@ -8,7 +8,6 @@ import org.http4k.events.Event
 
 
 class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
-    
 
     override fun writeToDatastore(kind:String, pieceLocation: PieceLocation) {
 
@@ -16,6 +15,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
 
         // The Cloud Datastore key for the new entity
         val key: Key = datastore.newKeyFactory().setKind(kind).newKey(pieceLocation.id)
+        println("Adding ${key.name} to $datastore")
         // Prepares the new entity
         val pieceLocationEntity: Entity = Entity
             .newBuilder(key)
@@ -56,7 +56,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
                 )
             )
             .build()
-        datastore.put()
+
         val queryResults: QueryResults<Entity> = datastore.run(query)
 
 
@@ -78,8 +78,14 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         val iterator = allEntitiesByKind.iterator()
         while (iterator.hasNext()) {
             val entity = iterator.next()
+            println("Removing ${entity.key.name} from $datastore")
             datastore.delete(entity.key)
         }
+    }
+
+    override fun deleteEntity(kind: String, name:String) {
+        val key: Key = datastore.newKeyFactory().setKind(kind).newKey(name)
+        datastore.delete(key)
     }
 
     private fun getAllEntitiesByKind(datastore: Datastore, kind: String): Sequence<Entity> {

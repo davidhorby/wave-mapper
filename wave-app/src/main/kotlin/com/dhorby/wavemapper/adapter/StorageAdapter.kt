@@ -18,15 +18,10 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
         .readFromDatastore(PIECE_LOCATION_KIND, name)
         ?.toPieceLocation()
 
-    override fun getAllPieces(): List<PieceLocation> {
-        return dataStoreClient.getAllEntitiesOfKind("PieceLocation").map { it.toPieceLocation() }
-    }
+    override fun getAllPieces(): List<PieceLocation> =
+        dataStoreClient.getAllEntitiesOfKind("PieceLocation").map { it.toPieceLocation() }
 
-    fun getTheData(): List<Location> {
-        val storedPieces: List<PieceLocation> = getAllPieces()
-        val waveLocations: MutableList<Location> = waveLocations()
-        return   waveLocations+storedPieces
-    }
+    fun getLocationData(): List<Location> = waveLocations() + getAllPieces()
 
     fun getDistances(): List<Player> {
         val boats = dataStoreClient.getAllEntitiesOfType( "PieceLocation", PieceType.BOAT).map {
@@ -55,6 +50,9 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
         dataStoreClient.clearDatastore(kind)
     }
 
+    fun deleteEntity(kind: String, id:String) {
+        dataStoreClient.deleteEntity(kind, id)
+    }
 
     fun getKeysOfType(kind: String, pieceType: PieceType): List<PieceLocation> {
         return dataStoreClient.getAllEntitiesOfType(kind, pieceType).map {

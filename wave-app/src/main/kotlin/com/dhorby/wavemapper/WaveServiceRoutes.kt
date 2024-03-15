@@ -1,7 +1,6 @@
 package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
@@ -155,8 +154,6 @@ object WaveServiceRoutes {
     private val waveServiceFunctions = WaveServiceFunctions()
 
     private val dataStoreClient = DataStoreClient(events, DatastoreOptions.getDefaultInstance().service!!)
-
-    private val dataStorage: DataStorage = DataStorage(dataStoreClient)
 
 //    private val dbHandler = ReportDbTransaction.invoke {
 //        events(

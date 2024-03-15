@@ -4,11 +4,8 @@ import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.google.cloud.datastore.Entity
-import com.natpryce.hamkrest.Matcher
+import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
-import com.natpryce.hamkrest.present
 import org.junit.jupiter.api.Test
 
 interface StorageAdapterContract {
@@ -35,5 +32,27 @@ interface StorageAdapterContract {
         }
         val storedPieces = storageAdapter.getAllPieces()
         assertThat(storedPieces, present(hasSize(equalTo(2))))
+    }
+
+    @Test
+    fun `should delete a datastore entity`(){
+        val storageAdapter = StorageAdapter(dataStoreClient)
+        storageAdapter.write(pieceLocation)
+        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        assertThat(storedPieceLocation, present(pieceLocationMatcher))
+        storageAdapter.deleteEntity("PieceLocation", pieceLocation.id)
+        val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
+        assertThat(newStoredPieceLocation, absent())
+    }
+
+    @Test
+    fun `should clear the datastore `(){
+        val storageAdapter = StorageAdapter(dataStoreClient)
+        storageAdapter.write(pieceLocation)
+        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        assertThat(storedPieceLocation, present(pieceLocationMatcher))
+        storageAdapter.clear("PieceLocation")
+        val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
+        assertThat(newStoredPieceLocation, absent())
     }
 }

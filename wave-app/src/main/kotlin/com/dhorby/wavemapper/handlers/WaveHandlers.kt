@@ -63,7 +63,7 @@ class WaveHandlers(
 
     fun getWavePage(): HttpHandler = {
 
-        val theData: String = storageAdapter.getTheData().toGoogleMapFormat()
+        val theData: String = storageAdapter.getLocationData().toGoogleMapFormat()
         val viewModel: ViewModel? =
             mapsApiKey.let { mapsApiKey ->
                 try {

@@ -53,16 +53,6 @@ fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     return this
 }
 
-
-
-
-fun MutableList<Location>.withStored(dataStorage: DataStorage): MutableList<Location> {
-    dataStorage.getAllLocations("PieceLocation").forEach(this::add)
-    return this
-}
-
-
-
 fun JsonNode.getSiteLocations(): List<Site> {
     return this.getLocationPath().map {
         Site(

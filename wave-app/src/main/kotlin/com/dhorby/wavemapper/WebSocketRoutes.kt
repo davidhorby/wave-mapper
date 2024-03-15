@@ -33,7 +33,7 @@ class WebSocketRoutes(
         "/message/{name}" bind {
             WsResponse { ws: Websocket ->
 //                val name = namePath(req)
-                val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
+                val waveDataOnly = storageAdapter.getLocationData().toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
                 ws.close()
@@ -44,7 +44,7 @@ class WebSocketRoutes(
                 .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
                 .forEach(storageAdapter::write)
             WsResponse { ws: Websocket ->
-                val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
+                val waveDataOnly = storageAdapter.getLocationData().toGoogleMapFormatList()
                 val message =  WsMessage(waveDataOnly.asJsonObject().toString())
                 ws.send(message)
                 ws.close()
@@ -110,7 +110,7 @@ class WebSocketRoutes(
     )
 
     private fun startRace(ws: Websocket) {
-        val waveDataOnly = storageAdapter.getTheData().toGoogleMapFormatList()
+        val waveDataOnly = storageAdapter.getLocationData().toGoogleMapFormatList()
         val message = WsMessage(waveDataOnly.asJsonObject().toString())
         ws.send(message)
         ws.close()
