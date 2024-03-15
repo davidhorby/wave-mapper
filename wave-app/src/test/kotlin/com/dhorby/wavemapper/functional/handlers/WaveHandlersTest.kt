@@ -3,8 +3,8 @@ package com.dhorby.wavemapper.functional.handlers
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.Site
-import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.wavemapper.AddRequestCount
+import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.google.cloud.datastore.Datastore
@@ -37,11 +37,11 @@ internal class WaveHandlersTest : FunctionalTestEnv() {
     @Test
     fun `returns OK with invalid site list`(datastore: Datastore) {
         val invalidSiteList = { emptyList<Site>().toMutableList() }
-        val dataStorage = DataStorage(DataStoreClient(events = events, datastore = datastore))
+        val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
         val wavePage: (Request) -> Response = WaveHandlers(
             siteListFunction = invalidSiteList,
             dataForSiteFunction = dataForSiteFunctionFake,
-            dataStorage = dataStorage
+            storageAdapter = StorageAdapter(dataStoreClient)
         ).getWaveData()
         val response = wavePage(Request(Method.GET, "/"))
         assertThat(response.status, equalTo(OK))

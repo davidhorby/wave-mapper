@@ -5,10 +5,15 @@ import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.wavemapper.*
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
+import com.dhorby.gcloud.wavemapper.DataForSiteFunction
+import com.dhorby.gcloud.wavemapper.SiteListFunction
+import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
+import com.dhorby.gcloud.wavemapper.getAllWaveData
+import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.WaveServiceRoutes
+import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
@@ -28,7 +33,7 @@ import java.util.*
 class WaveHandlers(
     val siteListFunction: SiteListFunction,
     val dataForSiteFunction: DataForSiteFunction,
-    val dataStorage: DataStorage
+    val storageAdapter: StorageAdapter
 ) {
 
     companion object {
@@ -58,15 +63,14 @@ class WaveHandlers(
 
     fun getWavePage(): HttpHandler = {
 
+        val theData: String = storageAdapter.getTheData().toGoogleMapFormat()
         val viewModel: ViewModel? =
             mapsApiKey.let { mapsApiKey ->
                 try {
-                    val waveData: String =
-                        dataStorage.getWaveDataOnly(siteListFunction, dataForSiteFunction)
                     WavePage(
-                        waveData = waveData,
+                        waveData = theData,
                         mapsApiKey = mapsApiKey,
-                        players = dataStorage.getDistances(),
+                        players = storageAdapter.getDistances(),
                         hostname = Settings.HOST,
                         port = Settings.PORT
                     )
@@ -146,17 +150,18 @@ class WaveHandlers(
             pieceType = pieceType,
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
-        dataStorage.write(pieceLocation)
+        storageAdapter.write(pieceLocation)
         Response(FOUND).header("Location", "/")
     }
 
 
     private fun startRace() {
-        dataStorage.write(start)
-        dataStorage.write(finish)
-        dataStorage.getKeysOfType("PieceLocation", PieceType.BOAT)
+        storageAdapter.write(start)
+        storageAdapter.write(finish)
+        val keysOfType: List<PieceLocation> = storageAdapter.getKeysOfType("PieceLocation", PieceType.BOAT)
+        keysOfType
             .map { it.copy(geoLocation = start.geoLocation) }
-            .forEach(dataStorage::write)
+            .forEach(storageAdapter::write)
     }
 
     fun start(): HttpHandler = {
@@ -165,15 +170,15 @@ class WaveHandlers(
     }
 
     fun move():HttpHandler  = {
-        dataStorage.getKeysOfType("PieceLocation",PieceType.BOAT)
+        storageAdapter.getKeysOfType("PieceLocation",PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-            .forEach(dataStorage::write)
+            .forEach(storageAdapter::write)
         Response(FOUND).header("Location", "/")
     }
 
 
     fun clear(): HttpHandler = {
-        dataStorage.clear("PieceLocation")
+        storageAdapter.clear("PieceLocation")
         Response(FOUND).header("Location", "/")
     }
 }

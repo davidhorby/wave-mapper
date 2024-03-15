@@ -4,6 +4,7 @@ import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.DataStorage
 import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
+import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.google.cloud.datastore.DatastoreOptions
@@ -171,7 +172,7 @@ object WaveServiceRoutes {
     private val waveHandlers: WaveHandlers = WaveHandlers(
         siteListFunction = waveServiceFunctions.siteListFunction,
         dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
-        dataStorage = dataStorage
+        storageAdapter = StorageAdapter(dataStoreClient)
     )
 
     val latQuery = Query.float().required("lat")

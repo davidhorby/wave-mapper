@@ -92,10 +92,13 @@ class DataStorage(private val dataStoreClient: DataStoreClient) : WaveDataAction
         }.toMutableList()
     }
 
-    override fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String =
-        getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction).withStored(this)
-            .withStored(this).withStored(this).withStored(this)
-            .withStored(this).toGoogleMapFormat()
+    override fun getWaveDataOnly(siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction): String {
+        val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction = siteListFunction, dataForSiteFunction)
+        val withStored: MutableList<Location> = allWaveData
+            .withStored(this)
+        return withStored
+            .toGoogleMapFormat()
+    }
 
     override fun getAllWaveDataWithPieces(
         siteListFunction: SiteListFunction, dataForSiteFunction: DataForSiteFunction

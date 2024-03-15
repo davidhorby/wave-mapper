@@ -9,4 +9,5 @@ interface Storable {
     fun writeToDatastore(kind: String, pieceLocation: PieceLocation)
     fun getAllEntitiesOfKind(kind: String):List<Entity>
     fun getAllEntitiesOfType(kind: String, type: PieceType): MutableList<Entity>
+    fun clearDatastore(kind: String)
 }
