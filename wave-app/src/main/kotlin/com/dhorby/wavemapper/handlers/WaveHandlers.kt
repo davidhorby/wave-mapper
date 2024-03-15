@@ -1,6 +1,7 @@
 package com.dhorby.wavemapper.handlers
 
 import com.dhorby.gcloud.config.Settings
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
@@ -158,7 +159,7 @@ class WaveHandlers(
     private fun startRace() {
         storageAdapter.write(start)
         storageAdapter.write(finish)
-        val keysOfType: List<PieceLocation> = storageAdapter.getKeysOfType("PieceLocation", PieceType.BOAT)
+        val keysOfType: List<PieceLocation> = storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
         keysOfType
             .map { it.copy(geoLocation = start.geoLocation) }
             .forEach(storageAdapter::write)
@@ -170,7 +171,7 @@ class WaveHandlers(
     }
 
     fun move():HttpHandler  = {
-        storageAdapter.getKeysOfType("PieceLocation",PieceType.BOAT)
+        storageAdapter.getKeysOfType(PIECE_LOCATION,PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(storageAdapter::write)
         Response(FOUND).header("Location", "/")
@@ -178,7 +179,7 @@ class WaveHandlers(
 
 
     fun clear(): HttpHandler = {
-        storageAdapter.clear("PieceLocation")
+        storageAdapter.clear(PIECE_LOCATION)
         Response(FOUND).header("Location", "/")
     }
 }

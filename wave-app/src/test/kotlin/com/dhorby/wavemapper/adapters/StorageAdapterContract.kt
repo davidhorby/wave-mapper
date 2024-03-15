@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.adapters
 
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.wavemapper.adapter.StorageAdapter
@@ -40,7 +41,7 @@ interface StorageAdapterContract {
         storageAdapter.write(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
-        storageAdapter.deleteEntity("PieceLocation", pieceLocation.id)
+        storageAdapter.deleteEntity(PIECE_LOCATION, pieceLocation.id)
         val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(newStoredPieceLocation, absent())
     }
@@ -51,7 +52,7 @@ interface StorageAdapterContract {
         storageAdapter.write(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
-        storageAdapter.clear("PieceLocation")
+        storageAdapter.clear(PIECE_LOCATION)
         val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(newStoredPieceLocation, absent())
     }

@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper
 
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -40,7 +41,7 @@ class WebSocketRoutes(
             }
         },
         "/move" bind {
-            storageAdapter.getKeysOfType("PieceLocation",PieceType.BOAT)
+            storageAdapter.getKeysOfType(PIECE_LOCATION,PieceType.BOAT)
                 .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
                 .forEach(storageAdapter::write)
             WsResponse { ws: Websocket ->
@@ -57,7 +58,7 @@ class WebSocketRoutes(
             }
         },
         "/clear" bind {
-            storageAdapter.clear("PieceLocation")
+            storageAdapter.clear(PIECE_LOCATION)
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
@@ -119,7 +120,7 @@ class WebSocketRoutes(
     fun startRace() {
         storageAdapter.write(WaveHandlers.start)
         storageAdapter.write(WaveHandlers.finish)
-        storageAdapter.getKeysOfType("PieceLocation", PieceType.BOAT)
+        storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
             .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
             .forEach(storageAdapter::write)
     }

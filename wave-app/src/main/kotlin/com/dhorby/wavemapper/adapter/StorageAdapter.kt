@@ -1,7 +1,8 @@
 package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.algorithms.GeoDistance
-import com.dhorby.gcloud.external.storage.DatastoreKind.PIECE_LOCATION_KIND
+import com.dhorby.gcloud.external.storage.EntityKind
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.external.storage.toPieceLocation
 import com.dhorby.gcloud.model.*
@@ -12,22 +13,22 @@ import org.http4k.core.Status
 
 class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOfficePort() {
     override fun write(pieceLocation: PieceLocation) =
-        dataStoreClient.writeToDatastore(kind = PIECE_LOCATION_KIND, pieceLocation = pieceLocation)
+        dataStoreClient.writeToDatastore(kind = PIECE_LOCATION, pieceLocation = pieceLocation)
 
     override fun read(name: String): PieceLocation? = dataStoreClient
-        .readFromDatastore(PIECE_LOCATION_KIND, name)
+        .readFromDatastore(PIECE_LOCATION, name)
         ?.toPieceLocation()
 
     override fun getAllPieces(): List<PieceLocation> =
-        dataStoreClient.getAllEntitiesOfKind("PieceLocation").map { it.toPieceLocation() }
+        dataStoreClient.getAllEntitiesOfKind(PIECE_LOCATION).map { it.toPieceLocation() }
 
     fun getLocationData(): List<Location> = waveLocations() + getAllPieces()
 
     fun getDistances(): List<Player> {
-        val boats = dataStoreClient.getAllEntitiesOfType( "PieceLocation", PieceType.BOAT).map {
+        val boats = dataStoreClient.getAllEntitiesOfType( PIECE_LOCATION, PieceType.BOAT).map {
             it.toPieceLocation()
         }
-        val finish = dataStoreClient.getAllEntitiesOfType( "PieceLocation", PieceType.FINISH).map {
+        val finish = dataStoreClient.getAllEntitiesOfType( PIECE_LOCATION, PieceType.FINISH).map {
             it.toPieceLocation()
         }.firstOrNull()
         return finish?.let {
@@ -46,22 +47,22 @@ class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOf
         Response(Status.FOUND).header("Location", "/")
     }
 
-    fun clear(kind: String) {
+    fun clear(kind: EntityKind) {
         dataStoreClient.clearDatastore(kind)
     }
 
-    fun deleteEntity(kind: String, id:String) {
+    fun deleteEntity(kind: EntityKind, id:String) {
         dataStoreClient.deleteEntity(kind, id)
     }
 
-    fun getKeysOfType(kind: String, pieceType: PieceType): List<PieceLocation> {
+    fun getKeysOfType(kind: EntityKind, pieceType: PieceType): List<PieceLocation> {
         return dataStoreClient.getAllEntitiesOfType(kind, pieceType).map {
             it.toPieceLocation()
         }
     }
 
     private fun loadDistance(pieceLocation: PieceLocation): List<Distance> =
-        dataStoreClient.getAllEntitiesOfKind("PieceLocation").map {
+        dataStoreClient.getAllEntitiesOfKind(PIECE_LOCATION).map {
             it.toPieceLocation()
         }.associateWith {
             GeoDistance.distanceKm(it.geoLocation, pieceLocation.geoLocation)

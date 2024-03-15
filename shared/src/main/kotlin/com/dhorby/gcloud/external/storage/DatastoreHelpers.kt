@@ -1,5 +1,6 @@
 package com.dhorby.gcloud.external.storage
 
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
@@ -9,7 +10,7 @@ import com.google.cloud.datastore.LatLng
 
 
 fun PieceLocation.toEntity(): Entity {
-    val key = Key.newBuilder("test", "PieceLocation", "${this.id}").build()
+    val key = Key.newBuilder("test", PIECE_LOCATION.kind, "${this.id}").build()
     val pieceLocationEntity: com.google.cloud.datastore.Entity = com.google.cloud.datastore.Entity
         .newBuilder(key)
         .set("id", this.id)

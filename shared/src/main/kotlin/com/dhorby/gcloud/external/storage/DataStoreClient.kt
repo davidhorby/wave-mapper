@@ -9,13 +9,12 @@ import org.http4k.events.Event
 
 class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
 
-    override fun writeToDatastore(kind:String, pieceLocation: PieceLocation) {
+    override fun writeToDatastore(kind: EntityKind, pieceLocation: PieceLocation) {
 
         events(DatastoreEvent("writing to datastore"))
 
         // The Cloud Datastore key for the new entity
-        val key: Key = datastore.newKeyFactory().setKind(kind).newKey(pieceLocation.id)
-        println("Adding ${key.name} to $datastore")
+        val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(pieceLocation.id)
         // Prepares the new entity
         val pieceLocationEntity: Entity = Entity
             .newBuilder(key)
@@ -25,15 +24,14 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
             .set("type", pieceLocation.pieceType.name)
             .build()
 
-        // Saves the entity
         datastore.put(pieceLocationEntity)
     }
 
-    override fun getAllEntitiesOfKind(kind: String): List<Entity> {
+    override fun getAllEntitiesOfKind(kind: EntityKind): List<Entity> {
 
         events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
-            .setKind("PieceLocation")
+            .setKind(kind.kind)
             .build()
         val queryResults: QueryResults<Entity> = datastore.run(query)
 
@@ -45,11 +43,11 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         return results
     }
 
-    override fun getAllEntitiesOfType(kind:String,type: PieceType): MutableList<Entity> {
+    override fun getAllEntitiesOfType(kind: EntityKind, type: PieceType): MutableList<Entity> {
 
         events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
-            .setKind(kind)
+            .setKind(kind.kind)
             .setFilter(
                 StructuredQuery.CompositeFilter.and(
                     StructuredQuery.PropertyFilter.eq("type", type.name)
@@ -67,14 +65,14 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         return results
     }
 
-    override fun readFromDatastore(kind: String, name: String): Entity? {
-        val key = datastore.newKeyFactory().setKind(kind).newKey(name)
+    override fun readFromDatastore(kind: EntityKind, name: String): Entity? {
+        val key = datastore.newKeyFactory().setKind(kind.kind).newKey(name)
         return datastore.get(key)
     }
 
-    override fun clearDatastore(kind: String) {
+    override fun clearDatastore(kind: EntityKind) {
         events(DatastoreEvent("Clearing datastore"))
-        val allEntitiesByKind = getAllEntitiesByKind(datastore, kind)
+        val allEntitiesByKind = getAllEntitiesByKind(datastore, kind.kind)
         val iterator = allEntitiesByKind.iterator()
         while (iterator.hasNext()) {
             val entity = iterator.next()
@@ -83,8 +81,8 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         }
     }
 
-    override fun deleteEntity(kind: String, name:String) {
-        val key: Key = datastore.newKeyFactory().setKind(kind).newKey(name)
+    override fun deleteEntity(kind: EntityKind, name:String) {
+        val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(name)
         datastore.delete(key)
     }
 
