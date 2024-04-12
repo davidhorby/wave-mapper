@@ -1,11 +1,10 @@
 package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
+import com.dhorby.wavemapper.actions.resetRace
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
@@ -20,8 +19,6 @@ import org.http4k.websocket.WsResponse
 class WsEvent(val actor:String) : Event {
     operator fun invoke() = println("$actor")
 }
-
-
 
 class WebSocketRoutes(
     private val storageAdapter: StorageAdapter
@@ -63,44 +60,7 @@ class WebSocketRoutes(
             }
         },
         "/reset" bind {
-
-            val startLocation = PieceLocation(
-                id = "start",
-                name = "Newport",
-                geoLocation = GeoLocation(lat = 41.29, lon = -71.19),
-                pieceType = PieceType.START
-            )
-            val finishLocation = PieceLocation(
-                id = "finish",
-                name = "Lisbon",
-                geoLocation = GeoLocation(lat = 38.41, lon = -9.09),
-                pieceType = PieceType.START
-            )
-            val testSharkLocation = PieceLocation(
-                id = "1234",
-                name = "Sue",
-                geoLocation = GeoLocation(lat = 34.45, lon = -49.01),
-                pieceType = PieceType.SHARK
-            )
-
-            val testBoatLocation = PieceLocation(
-                id = "234ea",
-                name = "Albert",
-                geoLocation = GeoLocation(lat = 39.45, lon = -5.01),
-                pieceType = PieceType.BOAT
-            )
-
-            val testPirateLocation = PieceLocation(
-                id = "pir123",
-                name = "Captain Morgan",
-                geoLocation = GeoLocation(lat = 20.45, lon = -15.01),
-                pieceType = PieceType.PIRATE
-            )
-            storageAdapter.write(startLocation)
-            storageAdapter.write(finishLocation)
-            storageAdapter.write(testSharkLocation)
-            storageAdapter.write(testBoatLocation)
-            storageAdapter.write(testPirateLocation)
+            resetRace(storageAdapter)
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
