@@ -42,7 +42,7 @@ class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOffi
         } ?: emptyList()
     }
 
-    fun addPiece(pieceLocation: PieceLocation)  {
+    override fun addPiece(pieceLocation: PieceLocation)  {
         write(pieceLocation)
         Response(Status.FOUND).header("Location", "/")
     }

@@ -4,7 +4,7 @@ import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
-import com.dhorby.wavemapper.actions.resetRace
+import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
@@ -23,6 +23,7 @@ class WsEvent(val actor:String) : Event {
 class WebSocketRoutes(
     private val storagePort: StoragePort
 ) {
+    val raceActions = RaceActions(storagePort)
 
     val namePath = Path.of("name")
 
@@ -53,14 +54,14 @@ class WebSocketRoutes(
             }
         },
         "/clear" bind {
-            storagePort.clear(PIECE_LOCATION)
+            raceActions.clear()
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
             }
         },
         "/reset" bind {
-            resetRace(storagePort)
+            raceActions.resetRace()
             WsResponse { ws: Websocket ->
                 ws.send(WsMessage("Success"))
                 ws.close()
