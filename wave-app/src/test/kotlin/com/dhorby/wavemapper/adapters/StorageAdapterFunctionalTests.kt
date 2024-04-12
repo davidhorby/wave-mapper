@@ -1,12 +1,12 @@
 package com.dhorby.wavemapper.adapters
 
+import AddRequestCount
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.wavemapper.AddRequestCount
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Value
 import com.natpryce.hamkrest.Matcher

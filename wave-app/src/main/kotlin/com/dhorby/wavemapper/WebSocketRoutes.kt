@@ -7,7 +7,6 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.adapter.StorageAdapter
-import com.dhorby.wavemapper.handlers.WaveHandlers
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
 import org.http4k.lens.Path
@@ -52,7 +51,6 @@ class WebSocketRoutes(
             }
         },
         "/start" bind {
-            startRace()
             WsResponse { ws: Websocket ->
                 startRace(ws)
             }
@@ -115,13 +113,5 @@ class WebSocketRoutes(
         val message = WsMessage(waveDataOnly.asJsonObject().toString())
         ws.send(message)
         ws.close()
-    }
-
-    fun startRace() {
-        storageAdapter.write(WaveHandlers.start)
-        storageAdapter.write(WaveHandlers.finish)
-        storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
-            .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
-            .forEach(storageAdapter::write)
     }
 }

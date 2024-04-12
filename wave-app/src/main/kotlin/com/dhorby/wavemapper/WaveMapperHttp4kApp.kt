@@ -12,14 +12,10 @@ object WaveMapperHttp4kApp {
 
     @JvmStatic
     fun main(args: Array<String>) {
-
         LOG.info("Starting the Wave Mapper App")
-
         val server = WaveServiceRoutes().asServer(Jetty(8080)).start()
-
         println("Server started on " + server.port())
     }
-
 }
 
 

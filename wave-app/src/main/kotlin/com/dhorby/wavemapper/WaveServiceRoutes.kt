@@ -1,144 +1,35 @@
 package com.dhorby.wavemapper
 
+import AddRequestCount
 import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
+import com.dhorby.wavemapper.tracing.IncomingHttpRequest
+import com.dhorby.wavemapper.tracing.IncomingWsRequest
+import com.dhorby.wavemapper.tracing.ReportWsTransaction
 import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.v3.OpenApi3
 import org.http4k.core.*
-import org.http4k.events.*
+import org.http4k.events.AutoMarshallingEvents
+import org.http4k.events.Event
+import org.http4k.events.EventFilters
+import org.http4k.events.then
 import org.http4k.filter.ResponseFilters
 import org.http4k.format.Jackson
 import org.http4k.lens.Query
 import org.http4k.lens.float
-import org.http4k.routing.RequestWithRoute
 import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.PolyHandler
-import org.http4k.websocket.WsConsumer
-import org.http4k.websocket.WsFilter
-import org.http4k.websocket.WsResponse
 import org.http4k.websocket.then
-import java.time.Clock
-import java.time.Duration
 
-
-// here is a new EventFilter that adds custom metadata to the emitted events
-fun AddRequestCount(): EventFilter {
-    var requestCount = 0
-    return EventFilter { next ->
-        {
-            next(it + ("requestCount" to requestCount++))
-        }
-    }
-}
-
-
-data class WsTransaction(
-    val request: Request,
-    val response: WsResponse,
-    val duration: Duration,
-    val labels: Map<String, String> = when {
-        response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
-        request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
-        else -> emptyMap()
-    }
-) {
-    fun label(name: String, value: String) = copy(labels = labels + (name to value))
-    fun label(name: String) = labels[name]
-
-    companion object {
-        internal const val ROUTING_GROUP_LABEL = "routingGroup"
-    }
-}
-
-data class DbTransaction(
-    val request: Request,
-    val response: WsResponse,
-    val duration: Duration,
-    val labels: Map<String, String> = when {
-        response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
-        request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
-        else -> emptyMap()
-    }
-) {
-    fun label(name: String, value: String) = copy(labels = labels + (name to value))
-    fun label(name: String) = labels[name]
-
-    val routingGroup = labels[ROUTING_GROUP_LABEL] ?: "UNMAPPED"
-
-    companion object {
-        internal const val ROUTING_GROUP_LABEL = "routingGroup"
-    }
-}
-
-fun interface DbFilter : (DatastoreEvent) -> Unit {
-    companion object
-}
-
-//fun DbFilter.then(next: DbFilter): DbFilter = { this(next)(it) }
-
-val isEven = DbFilter { p1 -> p1() }
-
-object ReportDbTransaction {
-    operator fun invoke(
-        clock: Clock = Clock.systemUTC(),
-        transactionLabeler: DbTransactionLabeler = { it },
-        recordFn: (DbTransaction) -> Unit
-    ): WsFilter = WsFilter { next ->
-        {
-            clock.instant().let { start ->
-                next(it).apply {
-                    recordFn(transactionLabeler(DbTransaction(
-                        request = it,
-                        response = this,
-                        duration = Duration.between(start, clock.instant())
-                    )))
-                }
-            }
-        }
-    }
-}
-
-typealias WsTransactionLabeler = (WsTransaction) -> WsTransaction
-
-typealias DbTransactionLabeler = (DbTransaction) -> DbTransaction
-
-object ReportWsTransaction {
-    operator fun invoke(
-        clock: Clock = Clock.systemUTC(),
-        transactionLabeler: WsTransactionLabeler = { it },
-        recordFn: (WsTransaction) -> Unit
-    ): WsFilter = WsFilter { next ->
-        {
-            clock.instant().let { start ->
-                next(it).apply {
-                    recordFn(transactionLabeler(WsTransaction(
-                        request = it,
-                        response = this,
-                        duration = Duration.between(start, clock.instant())
-                    )))
-                }
-            }
-        }
-    }
-}
-
-// this is our custom event which will be printed in a structured way
-data class IncomingHttpRequest(val uri: Uri, val status: Int, val duration: Long) : Event
-
-// this is our custom event which will be printed in a structured way
-data class IncomingWsRequest(val uri: Uri, val status: Int, val duration: Long) : Event
-
-data class IncomingDbRequest(val uri: Uri, val status: Int, val duration: Long) : Event
 
 object WaveServiceRoutes {
 
@@ -202,7 +93,7 @@ object WaveServiceRoutes {
             }, static(Classpath("public"))
         )
 
-        val handlerWithEvents =
+        val handlerWithEvents: HttpHandler =
             ResponseFilters.ReportHttpTransaction {
                 // to "emit" an event, just invoke() the Events!
                 events(
@@ -213,7 +104,6 @@ object WaveServiceRoutes {
                     )
                 )
             }.then(httpHandler)
-
 
         val webSocketRoutes = WebSocketRoutes(
             storageAdapter =  StorageAdapter(dataStoreClient)
@@ -229,10 +119,8 @@ object WaveServiceRoutes {
             )
         }.then(webSocketRoutes.ws)
 
-
         return PolyHandler(
             handlerWithEvents, reportWsTransaction
         )
     }
-
 }
