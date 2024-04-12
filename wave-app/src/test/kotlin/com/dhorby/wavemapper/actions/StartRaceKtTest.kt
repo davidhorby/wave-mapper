@@ -10,13 +10,10 @@ import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.finishLocation
 import com.dhorby.wavemapper.game.startLocation
 import com.google.cloud.datastore.Datastore
-import com.natpryce.hamkrest.and
+import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.hasElement
-import org.http4k.events.AutoMarshallingEvents
-import org.http4k.events.Event
-import org.http4k.events.EventFilters
-import org.http4k.events.then
+import org.http4k.events.*
+import org.http4k.format.Gson.asJsonObject
 import org.http4k.format.Jackson
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,12 +21,17 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(DataStoreExtension::class)
 internal class StartRaceKtTest {
 
+    private val eventLog = mutableListOf<String>()
+
     private val events: (Event) -> Unit =
         EventFilters.AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
             .then(AddRequestCount())
             .then(AutoMarshallingEvents(Jackson))
+            .and {
+                eventLog.add(it.asJsonObject().toString())
+            }
 
     @Test
     fun `should be able to reset race back to starting positions`(datastore: Datastore) {
@@ -40,5 +42,18 @@ internal class StartRaceKtTest {
         assertThat(finishAndStartLocations,
             hasElement(startLocation)
                 and hasElement(finishLocation))
+        eventLog.forEach {
+            println(it)
+        }
+    }
+
+    @Test
+    fun `datatstore event should be traced`(datastore: Datastore) {
+        val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
+        val storageAdapter = StorageAdapter(dataStoreClient)
+        resetRace(storageAdapter = storageAdapter)
+        val finishAndStartLocations: List<PieceLocation> = storageAdapter.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START)
+        assertThat(eventLog, hasSize(greaterThan(0)))
+        assertThat(eventLog[0], containsSubstring("writing to datastore"))
     }
 }
