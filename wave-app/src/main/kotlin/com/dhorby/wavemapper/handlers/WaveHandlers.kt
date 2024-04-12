@@ -14,10 +14,10 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.WaveServiceRoutes
-import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
+import com.dhorby.wavemapper.port.DatastorePort
 import com.dhorby.wavemapper.waveLocationListBodyLens
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
@@ -34,7 +34,7 @@ import java.util.*
 class WaveHandlers(
     val siteListFunction: SiteListFunction,
     val dataForSiteFunction: DataForSiteFunction,
-    val storageAdapter: StorageAdapter
+    val storageAdapter: DatastorePort
 ) {
 
     companion object {

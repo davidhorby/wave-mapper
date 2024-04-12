@@ -42,13 +42,10 @@ internal class StartRaceKtTest {
         assertThat(finishAndStartLocations,
             hasElement(startLocation)
                 and hasElement(finishLocation))
-        eventLog.forEach {
-            println(it)
-        }
     }
 
     @Test
-    fun `datatstore event should be traced`(datastore: Datastore) {
+    fun `datatstore events should be traced`(datastore: Datastore) {
         val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
         val storageAdapter = StorageAdapter(dataStoreClient)
         resetRace(storageAdapter = storageAdapter)
