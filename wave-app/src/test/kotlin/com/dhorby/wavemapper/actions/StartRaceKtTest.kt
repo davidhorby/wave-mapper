@@ -9,6 +9,7 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.finishLocation
 import com.dhorby.wavemapper.game.startLocation
+import com.dhorby.wavemapper.port.StoragePort
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
@@ -36,20 +37,29 @@ internal class StartRaceKtTest {
     @Test
     fun `should be able to reset race back to starting positions`(datastore: Datastore) {
         val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
-        val storageAdapter = StorageAdapter(dataStoreClient)
-        resetRace(storageAdapter = storageAdapter)
-        val finishAndStartLocations: List<PieceLocation> = storageAdapter.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START)
+        val storagePort: StoragePort = StorageAdapter(dataStoreClient)
+        resetRace(storagePort = storagePort)
+        val finishAndStartLocations: List<PieceLocation> = storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START)
         assertThat(finishAndStartLocations,
             hasElement(startLocation)
-                and hasElement(finishLocation))
+                    and hasElement(finishLocation))
+    }
+
+    @Test
+    fun `should be able to remove all pieces`(datastore: Datastore) {
+        val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
+        val storagePort: StoragePort = StorageAdapter(dataStoreClient)
+        resetRace(storagePort = storagePort)
+        clear(storagePort = storagePort)
+        val finishAndStartLocations: List<PieceLocation> = storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START)
+        assertThat(finishAndStartLocations, isEmpty)
     }
 
     @Test
     fun `datatstore events should be traced`(datastore: Datastore) {
         val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
-        val storageAdapter = StorageAdapter(dataStoreClient)
-        resetRace(storageAdapter = storageAdapter)
-        val finishAndStartLocations: List<PieceLocation> = storageAdapter.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START)
+        val storagePort: StoragePort = StorageAdapter(dataStoreClient)
+        resetRace(storagePort = storagePort)
         assertThat(eventLog, hasSize(greaterThan(0)))
         assertThat(eventLog[0], containsSubstring("writing to datastore"))
     }

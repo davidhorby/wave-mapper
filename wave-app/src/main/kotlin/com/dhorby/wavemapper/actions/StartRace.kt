@@ -1,13 +1,13 @@
 package com.dhorby.wavemapper.actions
 
-import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.*
+import com.dhorby.wavemapper.port.StoragePort
 
 
-fun resetRace(storageAdapter:StorageAdapter) {
-    storageAdapter.write(startLocation)
-    storageAdapter.write(finishLocation)
-    storageAdapter.write(testSharkLocation)
-    storageAdapter.write(testBoatLocation)
-    storageAdapter.write(testPirateLocation)
+fun resetRace(storagePort: StoragePort) {
+    storagePort.write(startLocation)
+    storagePort.write(finishLocation)
+    storagePort.write(testSharkLocation)
+    storagePort.write(testBoatLocation)
+    storagePort.write(testPirateLocation)
 }

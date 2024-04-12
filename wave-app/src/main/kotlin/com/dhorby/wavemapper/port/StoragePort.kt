@@ -6,7 +6,7 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.model.Player
 
-interface DatastorePort {
+interface StoragePort {
     fun write(pieceLocation: PieceLocation)
     fun read(name: String): PieceLocation?
     fun getAllPieces():List<PieceLocation>

@@ -106,7 +106,7 @@ object WaveServiceRoutes {
             }.then(httpHandler)
 
         val webSocketRoutes = WebSocketRoutes(
-            storageAdapter =  StorageAdapter(dataStoreClient)
+            storagePort =  StorageAdapter(dataStoreClient)
         )
 
         val reportWsTransaction = ReportWsTransaction {

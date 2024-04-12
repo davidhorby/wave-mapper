@@ -6,12 +6,12 @@ import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.external.storage.toPieceLocation
 import com.dhorby.gcloud.model.*
-import com.dhorby.wavemapper.port.DatastorePort
 import com.dhorby.wavemapper.port.MetOfficePort
+import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.core.Response
 import org.http4k.core.Status
 
-class StorageAdapter(private val dataStoreClient: Storable):DatastorePort, MetOfficePort() {
+class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOfficePort() {
     override fun write(pieceLocation: PieceLocation) =
         dataStoreClient.writeToDatastore(kind = PIECE_LOCATION, pieceLocation = pieceLocation)
 
