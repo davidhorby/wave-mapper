@@ -42,8 +42,8 @@ class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOffi
         dataStoreClient.add(kind = PIECE_LOCATION, pieceLocation = pieceLocation)
     }
 
-    override fun delete(pieceLocation: PieceLocation) {
-        TODO("Not yet implemented")
+    override fun delete(kind:EntityKind, key:String) {
+        dataStoreClient.deleteEntity(kind, key)
     }
 
     override fun getPiece(kind:EntityKind, key: String): PieceLocation? {
@@ -52,10 +52,6 @@ class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOffi
 
     override fun clear(kind: EntityKind) {
         dataStoreClient.clearDatastore(kind)
-    }
-
-    fun deleteEntity(kind: EntityKind, id:String) {
-        dataStoreClient.deleteEntity(kind, id)
     }
 
     override fun getKeysOfType(kind: EntityKind, pieceType: PieceType): List<PieceLocation> {

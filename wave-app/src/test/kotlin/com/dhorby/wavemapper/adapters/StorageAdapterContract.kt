@@ -41,7 +41,7 @@ interface StorageAdapterContract {
         storageAdapter.add(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
-        storageAdapter.deleteEntity(PIECE_LOCATION, pieceLocation.id)
+        storageAdapter.delete(PIECE_LOCATION, pieceLocation.id)
         val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(newStoredPieceLocation, absent())
     }

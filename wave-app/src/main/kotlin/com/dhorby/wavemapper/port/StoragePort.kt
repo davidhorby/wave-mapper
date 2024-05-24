@@ -14,6 +14,6 @@ interface StoragePort {
     fun getDistances(): List<Player>
     fun clear(kind: EntityKind)
     fun add(pieceLocation: PieceLocation)
-    fun delete(pieceLocation: PieceLocation)
     fun getPiece(kind: EntityKind, key: String): PieceLocation?
+    fun delete(kind: EntityKind, key: String)
 }

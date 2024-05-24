@@ -40,13 +40,15 @@ class FakeStorageAdapter: StoragePort {
         pieces[pieceLocation.id] = pieceLocation
     }
 
-    override fun delete(pieceLocation: PieceLocation) {
-        TODO("Not yet implemented")
-    }
 
     override fun getPiece(kind: EntityKind, key: String): PieceLocation? {
         TODO("Not yet implemented")
     }
+
+    override fun delete(kind: EntityKind, key: String) {
+        TODO("Not yet implemented")
+    }
+
 
     fun get(key:String): PieceLocation? = pieces[key]
 }
