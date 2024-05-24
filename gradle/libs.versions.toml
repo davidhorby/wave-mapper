@@ -1,7 +1,7 @@
 [versions]
-kotlin = "1.9.20"
+kotlin = "2.0.0"
 koltinJson="1.6.2"
-http4k = "5.12.0.0"
+http4k = "5.21.0.0"
 junit-jupiter = "5.10.1"
 junit-platform-launcher = "1.10.2"
 hamkrest = "1.8.0.1"
