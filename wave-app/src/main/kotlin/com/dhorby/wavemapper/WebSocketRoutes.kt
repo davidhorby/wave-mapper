@@ -5,6 +5,7 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.actions.RaceActions
+import com.dhorby.wavemapper.actions.ResetRace
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
@@ -32,9 +33,7 @@ class WebSocketRoutes(
             WsResponse { ws: Websocket ->
 //                val name = namePath(req)
                 val waveDataOnly = storagePort.getLocationData().toGoogleMapFormatList()
-                val message =  WsMessage(waveDataOnly.asJsonObject().toString())
-                ws.send(message)
-                ws.close()
+                returnMessage(waveDataOnly.asJsonObject().toString())
             }
         },
         "/move" bind {
@@ -43,9 +42,7 @@ class WebSocketRoutes(
                 .forEach(storagePort::write)
             WsResponse { ws: Websocket ->
                 val waveDataOnly = storagePort.getLocationData().toGoogleMapFormatList()
-                val message =  WsMessage(waveDataOnly.asJsonObject().toString())
-                ws.send(message)
-                ws.close()
+                returnMessage(waveDataOnly.asJsonObject().toString())
             }
         },
         "/start" bind {
@@ -55,19 +52,19 @@ class WebSocketRoutes(
         },
         "/clear" bind {
             raceActions.clear()
-            WsResponse { ws: Websocket ->
-                ws.send(WsMessage("Success"))
-                ws.close()
-            }
+            returnMessage("Success")
         },
         "/reset" bind {
+            ResetRace(raceActions)
             raceActions.resetRace()
-            WsResponse { ws: Websocket ->
-                ws.send(WsMessage("Success"))
-                ws.close()
-            }
+            returnMessage("Success")
         }
     )
+
+    private fun returnMessage(message: String) = WsResponse { ws: Websocket ->
+        ws.send(WsMessage(message))
+        ws.close()
+    }
 
     private fun startRace(ws: Websocket) {
         val waveDataOnly = storagePort.getLocationData().toGoogleMapFormatList()

@@ -7,6 +7,12 @@ import com.dhorby.wavemapper.game.*
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.port.StoragePort
 
+sealed class RaceActions1(raceActions: RaceActions)
+
+class ResetRace(private val raceActions: RaceActions): RaceActions1(raceActions) {
+    operator fun invoke() = raceActions.resetRace()
+}
+
 class RaceActions(private val storagePort: StoragePort) {
 
     fun startRace() {
