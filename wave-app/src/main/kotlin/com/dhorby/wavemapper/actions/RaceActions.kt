@@ -46,6 +46,10 @@ class RaceActions(private val storagePort: StoragePort) {
         storagePort.addPiece(pieceLocation)
     }
 
+    fun getPiece(kind: EntityKind, keyValue:String): PieceLocation? {
+        return storagePort.getPiece(kind, keyValue)
+    }
+
     fun getStartAndFinish(): List<PieceLocation> {
         return storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START) + storagePort.getKeysOfType(
             EntityKind.PIECE_LOCATION,

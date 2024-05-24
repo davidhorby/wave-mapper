@@ -8,6 +8,8 @@ import com.dhorby.gcloud.model.Player
 import com.dhorby.wavemapper.port.StoragePort
 
 class FakeStorageAdapter: StoragePort {
+
+    val pieces = mutableMapOf<String, PieceLocation>()
     override fun write(pieceLocation: PieceLocation) {
         TODO("Not yet implemented")
     }
@@ -37,6 +39,12 @@ class FakeStorageAdapter: StoragePort {
     }
 
     override fun addPiece(pieceLocation: PieceLocation) {
+        pieces[pieceLocation.id] = pieceLocation
+    }
+
+    override fun getPiece(kind: EntityKind, key: String): PieceLocation? {
         TODO("Not yet implemented")
     }
+
+    fun get(key:String): PieceLocation? = pieces[key]
 }

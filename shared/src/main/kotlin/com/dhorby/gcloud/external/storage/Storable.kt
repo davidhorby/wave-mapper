@@ -11,4 +11,5 @@ interface Storable {
     fun getAllEntitiesOfType(kind: EntityKind, type: PieceType): MutableList<Entity>
     fun clearDatastore(kind: EntityKind)
     fun deleteEntity(kind: EntityKind, name: String)
+    fun getEntity(kind: EntityKind, keyValue: String):Entity?
 }

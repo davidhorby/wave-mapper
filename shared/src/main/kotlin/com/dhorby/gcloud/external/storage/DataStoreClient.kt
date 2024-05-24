@@ -86,6 +86,11 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         datastore.delete(key)
     }
 
+    override fun getEntity(kind: EntityKind, keyValue: String): Entity? {
+        val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(keyValue)
+        return datastore.get(key)
+    }
+
     private fun getAllEntitiesByKind(datastore: Datastore, kind: String): Sequence<Entity> {
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind(kind)

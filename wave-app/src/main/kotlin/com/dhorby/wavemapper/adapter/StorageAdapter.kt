@@ -47,6 +47,10 @@ class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOffi
         Response(Status.FOUND).header("Location", "/")
     }
 
+    override fun getPiece(kind:EntityKind, key: String): PieceLocation? {
+        return dataStoreClient.getEntity(kind, key)?.toPieceLocation()
+    }
+
     override fun clear(kind: EntityKind) {
         dataStoreClient.clearDatastore(kind)
     }

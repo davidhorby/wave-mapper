@@ -2,10 +2,10 @@ package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.wavemapper.actions.RaceActions
-import com.dhorby.wavemapper.endpoints.ws.Clear
-import com.dhorby.wavemapper.endpoints.ws.Move
-import com.dhorby.wavemapper.endpoints.ws.Reset
-import com.dhorby.wavemapper.endpoints.ws.Start
+import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints.Clear
+import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints.Move
+import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints.Reset
+import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints.Start
 import com.dhorby.wavemapper.handlers.withReporting
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.events.Event
