@@ -5,8 +5,7 @@ import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
-import com.dhorby.wavemapper.tracing.IncomingWsRequest
-import com.dhorby.wavemapper.tracing.ReportWsTransaction
+import com.dhorby.wavemapper.handlers.withReporting
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
@@ -20,11 +19,11 @@ import org.http4k.format.Jackson
 import org.http4k.lens.Query
 import org.http4k.lens.float
 import org.http4k.routing.ResourceLoader.Companion.Classpath
+import org.http4k.routing.RoutingWsHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.PolyHandler
-import org.http4k.websocket.then
 
 
 object WaveServiceRoutes {
@@ -65,26 +64,14 @@ object WaveServiceRoutes {
                     queries += lonQuery
                 } bindContract Method.GET to waveHandlers.getLocationData()
             }, static(Classpath("public"))
-        )
+        ).withEvents(events)
 
-        val handlerWithEvents: HttpHandler = httpHandler.withEvents(events)
-
-        val webSocketRoutes = WebSocketRoutes(
+        val webSocketHandler: RoutingWsHandler = WebSocketRoutes(
             storagePort = StorageAdapter(dataStoreClient)
-        )
-
-        val reportWsTransaction = ReportWsTransaction {
-            events(
-                IncomingWsRequest(
-                    uri = it.request.uri,
-                    status = 200,
-                    duration = it.duration.toMillis()
-                )
-            )
-        }.then(webSocketRoutes.ws)
+        ).withReporting(events)
 
         return PolyHandler(
-            handlerWithEvents, reportWsTransaction
+            httpHandler, webSocketHandler
         )
     }
 }
