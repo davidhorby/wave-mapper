@@ -3,6 +3,10 @@ package com.dhorby.wavemapper
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
+import com.dhorby.wavemapper.endpoint.DataSheet
+import com.dhorby.wavemapper.endpoint.Properties
+import com.dhorby.wavemapper.endpoint.WaveData
+import com.dhorby.wavemapper.endpoint.WaveMap
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
 import org.http4k.contract.contract
@@ -31,9 +35,11 @@ object HttpRoutes {
 
     operator fun invoke(dataStoreClient: DataStoreClient, events: (Event) -> Unit): HttpHandler {
 
+        val siteListFunction = waveServiceFunctions.siteListFunction
+        val dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
         val waveHandlers = WaveHandlers(
-            siteListFunction = waveServiceFunctions.siteListFunction,
-            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
+            siteListFunction = siteListFunction,
+            dataForSiteFunction = dataForSiteFunction,
             storageAdapter = StorageAdapter(dataStoreClient)
         )
 
@@ -42,10 +48,10 @@ object HttpRoutes {
                 Response(Status.OK).body("pong")
             },
             "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to waveHandlers.getWaveData(),
-            "/properties" bind Method.GET to waveHandlers.getProperties(),
-            "/datasheet" bind Method.GET to waveHandlers.getDataSheet(),
-            "/map" bind Method.GET to waveHandlers.getMap(),
+            "/data" bind Method.GET to WaveData(siteListFunction = siteListFunction, dataForSiteFunction = dataForSiteFunction),
+            "/properties" bind Method.GET to Properties(),
+            "/datasheet" bind Method.GET to DataSheet(),
+            "/map" bind Method.GET to WaveMap(),
             "/" bind Method.POST to waveHandlers.addPiece(),
             "/start" bind Method.GET to waveHandlers.start(),
             "/move" bind Method.GET to waveHandlers.move(),

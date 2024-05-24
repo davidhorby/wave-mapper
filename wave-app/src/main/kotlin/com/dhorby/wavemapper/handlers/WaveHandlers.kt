@@ -13,8 +13,6 @@ import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
-import com.dhorby.wavemapper.model.GMap
-import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
 import com.dhorby.wavemapper.waveLocationListBodyLens
@@ -25,12 +23,10 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.core.body.form
 import org.http4k.lens.Query
 import org.http4k.lens.float
-import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
 
 class WaveHandlers(
     val siteListFunction: SiteListFunction,
@@ -94,42 +90,11 @@ class WaveHandlers(
 
     }
 
-
-    fun getMap(): HttpHandler = {
-
-        GMap(mapsApiKey).let {
-            try {
-                Response(OK).body(renderer(it))
-            } catch (e: Exception) {
-                Response(OK).body(e.stackTraceToString())
-            }
-        }
-
-    }
-
     fun getWaveData(): HttpHandler = {
         val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
         Response(OK).with(waveLocationListBodyLens of allWaveData)
     }
 
-    fun getProperties(): HttpHandler = {
-        val properties: Properties = System.getProperties()
-        val allProperties = properties.filter { it.key != null }.map {
-            it.key.toString() + ":" + it.value
-        }.joinToString("</br>")
-        Response(OK).body(allProperties)
-    }
-
-    fun getDataSheet(): HttpHandler = {
-        val (renderer, _) = buildResourceLoaders(false)
-        val viewModel = Wave("M5", 2.1.toLong())
-        Response(OK).body(renderer(viewModel))
-    }
-
-    private fun buildResourceLoaders(hotReload: Boolean) = when {
-        hotReload -> HandlebarsTemplates().HotReload("./src/main/resources") to ResourceLoader.Classpath("public")
-        else -> HandlebarsTemplates().CachingClasspath() to ResourceLoader.Classpath("public")
-    }
 
     fun getLocationData(): HttpHandler = {
         val lat = latQuery(it)
