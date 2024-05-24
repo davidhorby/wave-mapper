@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.adapters
 
+import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.PieceLocation
@@ -21,7 +22,7 @@ interface StorageAdapterContract {
     fun `should store a piece`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
         storageAdapter.add(pieceLocation)
-        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        val storedPieceLocation = storageAdapter.getPiece(EntityKind.PIECE_LOCATION,pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
     }
 
@@ -39,10 +40,10 @@ interface StorageAdapterContract {
     fun `should delete a datastore entity`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
         storageAdapter.add(pieceLocation)
-        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        val storedPieceLocation = storageAdapter.getPiece(EntityKind.PIECE_LOCATION,pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
         storageAdapter.delete(PIECE_LOCATION, pieceLocation.id)
-        val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
+        val newStoredPieceLocation = storageAdapter.getPiece(EntityKind.PIECE_LOCATION,pieceLocation.id)
         assertThat(newStoredPieceLocation, absent())
     }
 
@@ -50,10 +51,10 @@ interface StorageAdapterContract {
     fun `should clear the datastore `(){
         val storageAdapter = StorageAdapter(dataStoreClient)
         storageAdapter.add(pieceLocation)
-        val storedPieceLocation = storageAdapter.read(pieceLocation.id)
+        val storedPieceLocation = storageAdapter.getPiece(EntityKind.PIECE_LOCATION,pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
         storageAdapter.clear(PIECE_LOCATION)
-        val newStoredPieceLocation = storageAdapter.read(pieceLocation.id)
+        val newStoredPieceLocation = storageAdapter.getPiece(EntityKind.PIECE_LOCATION,pieceLocation.id)
         assertThat(newStoredPieceLocation, absent())
     }
 }

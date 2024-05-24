@@ -7,7 +7,6 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.model.Player
 
 interface StoragePort {
-    fun read(name: String): PieceLocation?
     fun getAllPieces():List<PieceLocation>
     fun getKeysOfType(kind: EntityKind, pieceType: PieceType): List<PieceLocation>
     fun getLocationData(): List<Location>

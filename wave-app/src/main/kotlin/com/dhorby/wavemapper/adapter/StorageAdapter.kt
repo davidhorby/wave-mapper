@@ -11,10 +11,6 @@ import com.dhorby.wavemapper.port.StoragePort
 
 class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOfficePort() {
 
-    override fun read(name: String): PieceLocation? = dataStoreClient
-        .get(PIECE_LOCATION, name)
-        ?.toPieceLocation()
-
     override fun getAllPieces(): List<PieceLocation> =
         dataStoreClient.getAllEntitiesOfKind(PIECE_LOCATION).map { it.toPieceLocation() }
 
