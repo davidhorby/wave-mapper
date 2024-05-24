@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.endpoint
+package com.dhorby.wavemapper.endpoints.http
 
 import com.dhorby.gcloud.wavemapper.Constants
 import com.dhorby.wavemapper.model.GMap

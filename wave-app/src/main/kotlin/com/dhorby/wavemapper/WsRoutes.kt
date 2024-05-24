@@ -6,7 +6,7 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.actions.ResetRace
-import com.dhorby.wavemapper.actions.StartRace
+import com.dhorby.wavemapper.endpoints.ws.Start
 import com.dhorby.wavemapper.handlers.withReporting
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.events.Event
@@ -20,7 +20,7 @@ import org.http4k.websocket.WsResponse
 
 object WsRoutes {
     operator fun invoke(storagePort: StoragePort, events: (Event) -> Unit): RoutingWsHandler {
-        val raceActions = RaceActions(storagePort)
+        val raceActions: RaceActions = RaceActions(storagePort)
         val ws: RoutingWsHandler = websockets(
             "/message/{name}" bind {
                 WsResponse { ws: Websocket ->
@@ -38,13 +38,12 @@ object WsRoutes {
                     returnMessage(waveDataOnly.asJsonObject().toString())
                 }
             },
-            "/start" bind {
-                StartRace(raceActions)
-                returnMessage("Success")
-            },
+            "/start" bind (Start(raceActions)),
+
             "/clear" bind {
                 raceActions.clear()
-                returnMessage("Success")
+                val returnMessage: WsResponse = returnMessage("Success")
+                returnMessage
             },
             "/reset" bind {
                 ResetRace(raceActions)

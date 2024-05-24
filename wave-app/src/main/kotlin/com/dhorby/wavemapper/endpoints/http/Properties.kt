@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.endpoint
+package com.dhorby.wavemapper.endpoints.http
 
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response

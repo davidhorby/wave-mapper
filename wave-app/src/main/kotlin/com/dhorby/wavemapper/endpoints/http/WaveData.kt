@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.endpoint
+package com.dhorby.wavemapper.endpoints.http
 
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction

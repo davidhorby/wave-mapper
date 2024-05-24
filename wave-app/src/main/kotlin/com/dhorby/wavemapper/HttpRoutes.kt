@@ -3,10 +3,10 @@ package com.dhorby.wavemapper
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
-import com.dhorby.wavemapper.endpoint.DataSheet
-import com.dhorby.wavemapper.endpoint.Properties
-import com.dhorby.wavemapper.endpoint.WaveData
-import com.dhorby.wavemapper.endpoint.WaveMap
+import com.dhorby.wavemapper.endpoints.http.DataSheet
+import com.dhorby.wavemapper.endpoints.http.Properties
+import com.dhorby.wavemapper.endpoints.http.WaveData
+import com.dhorby.wavemapper.endpoints.http.WaveMap
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
 import org.http4k.contract.contract
@@ -53,8 +53,6 @@ object HttpRoutes {
             "/datasheet" bind Method.GET to DataSheet(),
             "/map" bind Method.GET to WaveMap(),
             "/" bind Method.POST to waveHandlers.addPiece(),
-            "/start" bind Method.GET to waveHandlers.start(),
-            "/move" bind Method.GET to waveHandlers.move(),
             "/css" bind static(
                 ResourceLoader.Classpath("/css")
             ),
