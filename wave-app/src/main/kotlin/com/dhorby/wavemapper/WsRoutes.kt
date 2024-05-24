@@ -1,11 +1,10 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
-import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.actions.RaceActions
-import com.dhorby.wavemapper.actions.ResetRace
+import com.dhorby.wavemapper.endpoints.ws.Clear
+import com.dhorby.wavemapper.endpoints.ws.Move
+import com.dhorby.wavemapper.endpoints.ws.Reset
 import com.dhorby.wavemapper.endpoints.ws.Start
 import com.dhorby.wavemapper.handlers.withReporting
 import com.dhorby.wavemapper.port.StoragePort
@@ -29,26 +28,10 @@ object WsRoutes {
                     returnMessage(waveDataOnly.asJsonObject().toString())
                 }
             },
-            "/move" bind {
-                storagePort.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
-                    .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-                    .forEach(storagePort::write)
-                WsResponse { ws: Websocket ->
-                    val waveDataOnly = storagePort.getLocationData().toGoogleMapFormatList()
-                    returnMessage(waveDataOnly.asJsonObject().toString())
-                }
-            },
+            "/move" bind (Move(raceActions)),
             "/start" bind (Start(raceActions)),
-
-            "/clear" bind {
-                raceActions.clear()
-                val returnMessage: WsResponse = returnMessage("Success")
-                returnMessage
-            },
-            "/reset" bind {
-                ResetRace(raceActions)
-                returnMessage("Success")
-            }
+            "/clear" bind (Clear(raceActions)),
+            "/reset" bind (Reset(raceActions)),
         )
         return ws.withReporting(events)
     }
