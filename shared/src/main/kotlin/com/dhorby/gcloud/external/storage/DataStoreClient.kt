@@ -10,12 +10,9 @@ import org.http4k.events.Event
 class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
 
     override fun add(kind: EntityKind, pieceLocation: PieceLocation) {
-
         events(DatastoreEvent("writing to datastore"))
 
-        // The Cloud Datastore key for the new entity
         val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(pieceLocation.id)
-        // Prepares the new entity
         val pieceLocationEntity: Entity = Entity
             .newBuilder(key)
             .set("id", pieceLocation.id)
@@ -28,7 +25,6 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
     }
 
     override fun getAllEntitiesOfKind(kind: EntityKind): List<Entity> {
-
         events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind(kind.kind)
@@ -43,7 +39,6 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
     }
 
     override fun getAllEntitiesOfType(kind: EntityKind, type: PieceType): MutableList<Entity> {
-
         events(DatastoreEvent("Reading from to datastore"))
         val query: Query<Entity> = Query.newEntityQueryBuilder()
             .setKind(kind.kind)

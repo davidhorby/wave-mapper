@@ -13,12 +13,16 @@ import org.http4k.format.Gson.asJsonObject
 class RaceActions(private val storagePort: StoragePort) {
 
     fun startRace():String {
-        storagePort.add(WaveHandlers.start)
-        storagePort.add(WaveHandlers.finish)
-        storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
-            .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
-            .forEach(storagePort::add)
-        return "Success"
+        val players = storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
+        return if (players.isEmpty()) "Not enough players"
+        else {
+            storagePort.add(WaveHandlers.start)
+            storagePort.add(WaveHandlers.finish)
+            players
+                .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
+                .forEach(storagePort::add)
+            "Success"
+        }
     }
 
     fun clear(): String {

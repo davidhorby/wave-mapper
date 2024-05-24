@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(DataStoreExtension::class)
-class RaceActionsContract {
+class RaceActionsTests {
 
     private val events: (Event) -> Unit =
         EventFilters.AddTimestamp()
@@ -29,26 +29,34 @@ class RaceActionsContract {
             .then(AutoMarshallingEvents(Jackson))
 
     @Test
-    fun addPiece(datastore: Datastore) {
-        val dataStoreClient = DataStoreClient(events, datastore = datastore)
-        val storagePort = StorageAdapter(dataStoreClient)
-        val raceActions: RaceActions = RaceActions(storagePort)
+    fun `should store a game piece`(datastore: Datastore) {
+        val (storagePort, raceActions: RaceActions) = pair(datastore)
         val pieceLocation = testBoatLocation
         raceActions.addPiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
-        println(events)
     }
 
     @Test
-    fun deletePiece(datastore: Datastore) {
-        val dataStoreClient = DataStoreClient(events, datastore = datastore)
-        val storagePort = StorageAdapter(dataStoreClient)
-        val raceActions: RaceActions = RaceActions(storagePort)
+    fun `should delete a game piece`(datastore: Datastore) {
+        val (storagePort, raceActions: RaceActions) = pair(datastore)
         val pieceLocation = testBoatLocation
         raceActions.addPiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
         raceActions.deletePiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), absent())
-        println(events)
+    }
+
+    @Test
+    fun `should not start the race of there are no players`(datastore: Datastore) {
+        val (storagePort, raceActions: RaceActions) = pair(datastore)
+        val startResponse = raceActions.startRace()
+        assertThat(startResponse, equalTo("Not enough players"))
+    }
+
+    private fun pair(datastore: Datastore): Pair<StorageAdapter, RaceActions> {
+        val dataStoreClient = DataStoreClient(events, datastore = datastore)
+        val storagePort = StorageAdapter(dataStoreClient)
+        val raceActions: RaceActions = RaceActions(storagePort)
+        return Pair(storagePort, raceActions)
     }
 }
