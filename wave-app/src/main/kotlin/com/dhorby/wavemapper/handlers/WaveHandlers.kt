@@ -13,7 +13,6 @@ import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
-import com.dhorby.wavemapper.WaveServiceRoutes
 import com.dhorby.wavemapper.model.GMap
 import com.dhorby.wavemapper.model.Wave
 import com.dhorby.wavemapper.model.WavePage
@@ -24,6 +23,8 @@ import org.http4k.core.*
 import org.http4k.core.Status.Companion.FOUND
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.body.form
+import org.http4k.lens.Query
+import org.http4k.lens.float
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 import org.http4k.template.ViewModel
@@ -36,6 +37,9 @@ class WaveHandlers(
     val dataForSiteFunction: DataForSiteFunction,
     val storageAdapter: StoragePort
 ) {
+
+    val latQuery = Query.float().required("lat")
+    val lonQuery = Query.float().required("lon")
 
     companion object {
         val start = PieceLocation(
@@ -128,8 +132,8 @@ class WaveHandlers(
     }
 
     fun getLocationData(): HttpHandler = {
-        val lat = WaveServiceRoutes.latQuery(it)
-        val lon = WaveServiceRoutes.lonQuery(it)
+        val lat = latQuery(it)
+        val lon = lonQuery(it)
         val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
             .query("latlng", "$lat,$lon")
             .query("key", mapsApiKeyServer)
