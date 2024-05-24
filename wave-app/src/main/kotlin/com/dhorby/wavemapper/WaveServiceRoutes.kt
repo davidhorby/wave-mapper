@@ -1,24 +1,18 @@
 package com.dhorby.wavemapper
 
-import AddRequestCount
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
-import com.dhorby.wavemapper.filters.TracingFilter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.tracing.IncomingHttpRequest
 import com.dhorby.wavemapper.tracing.IncomingWsRequest
 import com.dhorby.wavemapper.tracing.ReportWsTransaction
-import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.v3.OpenApi3
 import org.http4k.core.*
-import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event
-import org.http4k.events.EventFilters
-import org.http4k.events.then
 import org.http4k.filter.ResponseFilters
 import org.http4k.format.Jackson
 import org.http4k.lens.Query
@@ -33,40 +27,18 @@ import org.http4k.websocket.then
 
 object WaveServiceRoutes {
 
-    val events: (Event) -> Unit =
-        EventFilters.AddTimestamp()
-            .then(EventFilters.AddEventName())
-            .then(EventFilters.AddZipkinTraces())
-            .then(AddRequestCount())
-            .then(AutoMarshallingEvents(Jackson))
-
-    private val tracingFilter = TracingFilter()
-
     private val waveServiceFunctions = WaveServiceFunctions()
-
-    private val dataStoreClient = DataStoreClient(events, DatastoreOptions.getDefaultInstance().service!!)
-
-//    private val dbHandler = ReportDbTransaction.invoke {
-//        events(
-//            IncomingDbRequest(
-//                uri = it.request.uri,
-//                status = 200,
-//                duration = it.duration.toMillis()
-//            )
-//        )
-//    }.then(TODO())
-
-
-    private val waveHandlers: WaveHandlers = WaveHandlers(
-        siteListFunction = waveServiceFunctions.siteListFunction,
-        dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
-        storageAdapter = StorageAdapter(dataStoreClient)
-    )
 
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
 
-    operator fun invoke(): PolyHandler {
+    operator fun invoke(dataStoreClient: DataStoreClient, events: (Event) -> Unit): PolyHandler {
+
+        val waveHandlers = WaveHandlers(
+            siteListFunction = waveServiceFunctions.siteListFunction,
+            dataForSiteFunction = waveServiceFunctions.dataForSiteFunction,
+            storageAdapter = StorageAdapter(dataStoreClient)
+        )
 
         val httpHandler: HttpHandler = routes(
             "/ping" bind Method.GET to {
@@ -106,7 +78,7 @@ object WaveServiceRoutes {
             }.then(httpHandler)
 
         val webSocketRoutes = WebSocketRoutes(
-            storagePort =  StorageAdapter(dataStoreClient)
+            storagePort = StorageAdapter(dataStoreClient)
         )
 
         val reportWsTransaction = ReportWsTransaction {

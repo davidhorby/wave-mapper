@@ -13,6 +13,10 @@ class ResetRace(private val raceActions: RaceActions): RaceActions1(raceActions)
     operator fun invoke() = raceActions.resetRace()
 }
 
+class StartRace(private val raceActions: RaceActions): RaceActions1(raceActions) {
+    operator fun invoke() = raceActions.startRace()
+}
+
 class RaceActions(private val storagePort: StoragePort) {
 
     fun startRace() {

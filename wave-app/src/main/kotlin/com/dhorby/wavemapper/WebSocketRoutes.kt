@@ -6,6 +6,7 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.actions.ResetRace
+import com.dhorby.wavemapper.actions.StartRace
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.events.Event
 import org.http4k.format.Gson.asJsonObject
@@ -49,6 +50,8 @@ class WebSocketRoutes(
             WsResponse { ws: Websocket ->
                 startRace(ws)
             }
+            StartRace(raceActions)
+            returnMessage("Success")
         },
         "/clear" bind {
             raceActions.clear()
@@ -56,7 +59,6 @@ class WebSocketRoutes(
         },
         "/reset" bind {
             ResetRace(raceActions)
-            raceActions.resetRace()
             returnMessage("Success")
         }
     )
