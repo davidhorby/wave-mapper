@@ -35,7 +35,6 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
             .build()
         val queryResults: QueryResults<Entity> = datastore.run(query)
 
-
         val results = mutableListOf<Entity>()
         while (queryResults.hasNext()) {
             results += queryResults.next()
@@ -66,6 +65,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
     }
 
     override fun get(kind: EntityKind, name: String): Entity? {
+        events(DatastoreEvent("getting from datastore"))
         val key = datastore.newKeyFactory().setKind(kind.kind).newKey(name)
         return datastore.get(key)
     }
@@ -76,17 +76,18 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         val iterator = allEntitiesByKind.iterator()
         while (iterator.hasNext()) {
             val entity = iterator.next()
-            println("Removing ${entity.key.name} from $datastore")
             datastore.delete(entity.key)
         }
     }
 
     override fun deleteEntity(kind: EntityKind, name:String) {
+        events(DatastoreEvent("deleting from datastore"))
         val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(name)
         datastore.delete(key)
     }
 
     override fun getEntity(kind: EntityKind, keyValue: String): Entity? {
+        events(DatastoreEvent("reading from datastore"))
         val key: Key = datastore.newKeyFactory().setKind(kind.kind).newKey(keyValue)
         return datastore.get(key)
     }

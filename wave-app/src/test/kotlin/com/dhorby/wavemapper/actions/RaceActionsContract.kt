@@ -21,7 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(DataStoreExtension::class)
 class RaceActionsContract {
 
-    val events: (Event) -> Unit =
+    private val events: (Event) -> Unit =
         EventFilters.AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
@@ -36,6 +36,7 @@ class RaceActionsContract {
         val pieceLocation = testBoatLocation
         raceActions.addPiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
+        println(events)
     }
 
     @Test
@@ -48,5 +49,6 @@ class RaceActionsContract {
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
         raceActions.deletePiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), absent())
+        println(events)
     }
 }
