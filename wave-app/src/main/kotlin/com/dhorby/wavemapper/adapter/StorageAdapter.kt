@@ -8,15 +8,11 @@ import com.dhorby.gcloud.external.storage.toPieceLocation
 import com.dhorby.gcloud.model.*
 import com.dhorby.wavemapper.port.MetOfficePort
 import com.dhorby.wavemapper.port.StoragePort
-import org.http4k.core.Response
-import org.http4k.core.Status
 
 class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOfficePort() {
-    override fun write(pieceLocation: PieceLocation) =
-        dataStoreClient.writeToDatastore(kind = PIECE_LOCATION, pieceLocation = pieceLocation)
 
     override fun read(name: String): PieceLocation? = dataStoreClient
-        .readFromDatastore(PIECE_LOCATION, name)
+        .get(PIECE_LOCATION, name)
         ?.toPieceLocation()
 
     override fun getAllPieces(): List<PieceLocation> =
@@ -42,9 +38,12 @@ class StorageAdapter(private val dataStoreClient: Storable):StoragePort, MetOffi
         } ?: emptyList()
     }
 
-    override fun addPiece(pieceLocation: PieceLocation)  {
-        write(pieceLocation)
-        Response(Status.FOUND).header("Location", "/")
+    override fun add(pieceLocation: PieceLocation)  {
+        dataStoreClient.add(kind = PIECE_LOCATION, pieceLocation = pieceLocation)
+    }
+
+    override fun delete(pieceLocation: PieceLocation) {
+        TODO("Not yet implemented")
     }
 
     override fun getPiece(kind:EntityKind, key: String): PieceLocation? {

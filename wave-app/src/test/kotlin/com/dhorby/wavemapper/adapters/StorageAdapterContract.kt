@@ -20,7 +20,7 @@ interface StorageAdapterContract {
     @Test
     fun `should store a piece`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
-        storageAdapter.write(pieceLocation)
+        storageAdapter.add(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
     }
@@ -29,7 +29,7 @@ interface StorageAdapterContract {
     fun `should store multiple pieces`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
         multiplePieces.forEach {
-            storageAdapter.write(it)
+            storageAdapter.add(it)
         }
         val storedPieces = storageAdapter.getAllPieces()
         assertThat(storedPieces, present(hasSize(equalTo(2))))
@@ -38,7 +38,7 @@ interface StorageAdapterContract {
     @Test
     fun `should delete a datastore entity`(){
         val storageAdapter = StorageAdapter(dataStoreClient)
-        storageAdapter.write(pieceLocation)
+        storageAdapter.add(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
         storageAdapter.deleteEntity(PIECE_LOCATION, pieceLocation.id)
@@ -49,7 +49,7 @@ interface StorageAdapterContract {
     @Test
     fun `should clear the datastore `(){
         val storageAdapter = StorageAdapter(dataStoreClient)
-        storageAdapter.write(pieceLocation)
+        storageAdapter.add(pieceLocation)
         val storedPieceLocation = storageAdapter.read(pieceLocation.id)
         assertThat(storedPieceLocation, present(pieceLocationMatcher))
         storageAdapter.clear(PIECE_LOCATION)

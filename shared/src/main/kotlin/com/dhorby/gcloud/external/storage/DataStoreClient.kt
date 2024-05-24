@@ -9,7 +9,7 @@ import org.http4k.events.Event
 
 class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datastore): Storable {
 
-    override fun writeToDatastore(kind: EntityKind, pieceLocation: PieceLocation) {
+    override fun add(kind: EntityKind, pieceLocation: PieceLocation) {
 
         events(DatastoreEvent("writing to datastore"))
 
@@ -65,7 +65,7 @@ class DataStoreClient(val events: (Event) -> Unit, private val datastore: Datast
         return results
     }
 
-    override fun readFromDatastore(kind: EntityKind, name: String): Entity? {
+    override fun get(kind: EntityKind, name: String): Entity? {
         val key = datastore.newKeyFactory().setKind(kind.kind).newKey(name)
         return datastore.get(key)
     }

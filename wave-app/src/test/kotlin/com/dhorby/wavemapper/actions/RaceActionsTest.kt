@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test
 
 class RaceActionsTest {
 
-    val fakeStorageAdapter = FakeStorageAdapter()
-    val raceActions = RaceActions(fakeStorageAdapter)
+    private val fakeStorageAdapter = FakeStorageAdapter()
+    private val raceActions = RaceActions(fakeStorageAdapter)
 
     @Test
     fun addPiece() {
@@ -17,4 +17,6 @@ class RaceActionsTest {
         raceActions.addPiece(pieceLocation)
         assertThat(fakeStorageAdapter.get(key = pieceLocation.id), equalTo(testBoatLocation))
     }
+
+
 }

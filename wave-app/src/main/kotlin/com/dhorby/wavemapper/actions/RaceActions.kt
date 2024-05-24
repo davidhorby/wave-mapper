@@ -13,11 +13,11 @@ import org.http4k.format.Gson.asJsonObject
 class RaceActions(private val storagePort: StoragePort) {
 
     fun startRace():String {
-        storagePort.write(WaveHandlers.start)
-        storagePort.write(WaveHandlers.finish)
+        storagePort.add(WaveHandlers.start)
+        storagePort.add(WaveHandlers.finish)
         storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
             .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
-            .forEach(storagePort::write)
+            .forEach(storagePort::add)
         return "Success"
     }
 
@@ -27,23 +27,23 @@ class RaceActions(private val storagePort: StoragePort) {
     }
 
     fun resetRace(): String {
-        storagePort.write(startLocation)
-        storagePort.write(finishLocation)
-        storagePort.write(testSharkLocation)
-        storagePort.write(testBoatLocation)
-        storagePort.write(testPirateLocation)
+        storagePort.add(startLocation)
+        storagePort.add(finishLocation)
+        storagePort.add(testSharkLocation)
+        storagePort.add(testBoatLocation)
+        storagePort.add(testPirateLocation)
         return "Success"
     }
 
     fun move(): String {
         storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-            .forEach(storagePort::write)
+            .forEach(storagePort::add)
         return  storagePort.getLocationData().toGoogleMapFormatList().asJsonObject().toString()
     }
 
     fun addPiece(pieceLocation: PieceLocation) {
-        storagePort.addPiece(pieceLocation)
+        storagePort.add(pieceLocation)
     }
 
     fun getPiece(kind: EntityKind, keyValue:String): PieceLocation? {

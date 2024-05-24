@@ -120,18 +120,18 @@ class WaveHandlers(
             pieceType = pieceType,
             geoLocation = GeoLocation(lat = lat, lon = lon)
         )
-        storageAdapter.write(pieceLocation)
+        storageAdapter.add(pieceLocation)
         Response(FOUND).header("Location", "/")
     }
 
 
     private fun startRace() {
-        storageAdapter.write(start)
-        storageAdapter.write(finish)
+        storageAdapter.add(start)
+        storageAdapter.add(finish)
         val keysOfType: List<PieceLocation> = storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
         keysOfType
             .map { it.copy(geoLocation = start.geoLocation) }
-            .forEach(storageAdapter::write)
+            .forEach(storageAdapter::add)
     }
 
     fun start(): HttpHandler = {
@@ -142,7 +142,7 @@ class WaveHandlers(
     fun move():HttpHandler  = {
         storageAdapter.getKeysOfType(PIECE_LOCATION,PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-            .forEach(storageAdapter::write)
+            .forEach(storageAdapter::add)
         Response(FOUND).header("Location", "/")
     }
 
