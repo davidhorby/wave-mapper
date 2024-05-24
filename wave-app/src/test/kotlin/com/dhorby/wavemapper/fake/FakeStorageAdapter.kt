@@ -9,8 +9,7 @@ import com.dhorby.wavemapper.port.StoragePort
 
 class FakeStorageAdapter: StoragePort {
 
-    val pieces = mutableMapOf<String, PieceLocation>()
-
+    private val pieces = mutableMapOf<String, PieceLocation>()
 
     override fun read(name: String): PieceLocation? {
         TODO("Not yet implemented")
@@ -40,13 +39,12 @@ class FakeStorageAdapter: StoragePort {
         pieces[pieceLocation.id] = pieceLocation
     }
 
-
     override fun getPiece(kind: EntityKind, key: String): PieceLocation? {
         TODO("Not yet implemented")
     }
 
     override fun delete(kind: EntityKind, key: String) {
-        TODO("Not yet implemented")
+        pieces.remove(key)
     }
 
 

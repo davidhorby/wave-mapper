@@ -46,6 +46,10 @@ class RaceActions(private val storagePort: StoragePort) {
         storagePort.add(pieceLocation)
     }
 
+    fun deletePiece(pieceLocation: PieceLocation) {
+        storagePort.delete(EntityKind.PIECE_LOCATION, pieceLocation.id)
+    }
+
     fun getPiece(kind: EntityKind, keyValue:String): PieceLocation? {
         return storagePort.getPiece(kind, keyValue)
     }
