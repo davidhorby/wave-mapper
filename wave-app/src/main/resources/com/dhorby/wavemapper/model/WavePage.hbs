@@ -140,10 +140,10 @@
         function handleMapResponse(wsResponseData, message) {
             if (typeof wsResponseData.data === 'string'){
                 try {
-                    var parsedData = wsResponseData.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
+<!--                    var parsedData = wsResponseData.data.replace(/\\"/g, '"')-->
+<!--                    var obj = JSON.parse(parsedData);-->
+<!--                    console.log(obj);-->
+<!--                    reDrawMap(obj);-->
                     updateLog(message);
                 } catch (e) {
                     updateLog(e.message);
@@ -156,6 +156,44 @@
 
     </script>
     <script type="text/javascript">
+
+        const ping_interval = 12000; // it's in milliseconds, which equals to 120 seconds
+        let interval;
+        const websocket = new WebSocket(
+           "ws://{{hostname}}:{{port}}/add"
+        );
+
+        // subscribe to `open` event
+        websocket.addEventListener('open', (event) => {
+          console.log('websocket connection established: ', event);
+          const sendMessage = JSON.stringify({ ping: 1 });
+          websocket.send(sendMessage);
+
+          // to Keep the connection alive
+          interval = setInterval(() => {
+            const sendMessage = JSON.stringify({ ping: 1 });
+            websocket.send(sendMessage);
+            }, ping_interval);
+        });
+
+        // subscribe to `message` event
+        websocket.addEventListener('message', (event) => {
+          const receivedMessage = JSON.parse(event.data);
+          updateLog(receivedMessage.message);
+          console.log('new message received from server: ', receivedMessage);
+        });
+
+        // subscribe to `close` event
+        websocket.addEventListener('close', (event) => {
+          console.log('websocket connectioned closed: ', event);
+          clearInterval(interval);
+        });
+
+        // subscribe to `error` event
+        websocket.addEventListener('error', (event) => {
+          console.log('an error happend in our websocket connection', event);
+        });
+
         function sendMessage(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/message/david"
@@ -188,14 +226,10 @@
                 handleMapResponse(e, 'map reset');
             };
         }
-        function addPiece(data)  {
-            const conn = new WebSocket(
-                  "ws://{{hostname}}:{{port}}/add"
-            );
-            conn.onmessage = function(e){
-                handleMapResponse(e, 'piece added');
-            };
+        function addPiece()  {
+            addConnection.send('{ "hello": "world"}');
         }
+
         function start(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/start"
@@ -228,7 +262,7 @@
                 <tr style="vertical-align: top;">
                     <td >
                         <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 10%;">
-                            <form action="/" method="POST" class="form-example">
+                            <form name="add-piece">
                                 <div class="form-example">
                                     <table>
                                         <tr>
@@ -254,7 +288,7 @@
                                     </table>
                                 </div>
                                 <div class="form-example">
-                                    <input type="submit" value="Submit">
+                                    <button onclick="addPiece()">Add Piece</button>
                                 </div>
                             </form>
                         </div>

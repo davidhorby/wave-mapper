@@ -28,6 +28,18 @@ class RaceActionsEndpoints(private val storagePort: StoragePort) {
         generateWsResponse(getMapData(storagePort))
     }
 
+//    fun addPiece(raceActions: RaceActions): (Request) -> WsResponse = { it ->
+//        WsResponse { ws: Websocket ->
+//            val name = namePath(req)
+//            ws.send(WsMessage("hello $name"))
+//            ws.onMessage {
+//                ws.send(WsMessage("$name is responding"))
+//            }
+//            ws.onClose { println("$name is closing") }
+//        }
+//    }
+
+
 }
 
 
