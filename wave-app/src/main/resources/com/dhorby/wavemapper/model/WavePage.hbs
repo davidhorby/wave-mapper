@@ -163,6 +163,8 @@
            "ws://{{hostname}}:{{port}}/add"
         );
 
+        var counterVal = 0;
+
         // subscribe to `open` event
         websocket.addEventListener('open', (event) => {
           console.log('websocket connection established: ', event);
@@ -171,7 +173,7 @@
 
           // to Keep the connection alive
           interval = setInterval(() => {
-            const sendMessage = JSON.stringify({ ping: 1 });
+            const sendMessage = JSON.stringify({ message:"hello", "counter": counterVal });
             websocket.send(sendMessage);
             }, ping_interval);
         });
@@ -179,19 +181,20 @@
         // subscribe to `message` event
         websocket.addEventListener('message', (event) => {
           const receivedMessage = JSON.parse(event.data);
-          updateLog(receivedMessage.message);
+          counterVal = receivedMessage.counter + 1;
+          updateLog(receivedMessage.message + " " + counterVal);
           console.log('new message received from server: ', receivedMessage);
         });
 
         // subscribe to `close` event
         websocket.addEventListener('close', (event) => {
-          console.log('websocket connectioned closed: ', event);
+          console.log('websocket connection closed: ', event);
           clearInterval(interval);
         });
 
         // subscribe to `error` event
         websocket.addEventListener('error', (event) => {
-          console.log('an error happend in our websocket connection', event);
+          console.log('an error happened in our websocket connection', event);
         });
 
         function sendMessage(data)  {
