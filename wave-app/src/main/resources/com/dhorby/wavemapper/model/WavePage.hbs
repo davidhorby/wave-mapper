@@ -130,6 +130,29 @@
 
         }
 
+        function updateLog(message) {
+            var logBox = document.getElementById("log-text")
+            var currentText = logBox.value;
+            logBox.value += currentText.concat(" \n", message);
+            console.log(message);
+        }
+
+        function handleMapResponse(wsResponseData, message) {
+            if (typeof wsResponseData.data === 'string'){
+                try {
+                    var parsedData = wsResponseData.data.replace(/\\"/g, '"')
+                    var obj = JSON.parse(parsedData);
+                    console.log(obj);
+                    reDrawMap(obj);
+                    updateLog(message);
+                } catch (e) {
+                    updateLog(e.message);
+                }
+            } else {
+                updateLog("Invalid response".concat(e));
+            }
+        }
+
 
     </script>
     <script type="text/javascript">
@@ -166,28 +189,16 @@
                   "ws://{{hostname}}:{{port}}/clear"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'map cleared');
             };
-            conn.onopen = () => conn.send('hello');
         }
         function reset(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/reset"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'map reset');
             };
-            conn.onopen = () => conn.send('hello');
         }
         function addPiece(data)  {
             const conn = new WebSocket(
@@ -337,6 +348,11 @@
                             </td>
                     </tr>
                 {{/each}}
+                <tr style="vertical-align: top;">
+                    <td style="width: 100%;" colspan="4">
+                        <textarea id="log-text" width="100%"></textarea>
+                    </td>
+                </tr>
             </table>
         </td>
     </tr>

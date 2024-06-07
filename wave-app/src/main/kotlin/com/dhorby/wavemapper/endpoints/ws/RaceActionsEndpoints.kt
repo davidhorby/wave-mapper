@@ -1,20 +1,24 @@
 package com.dhorby.wavemapper.endpoints.ws
 
 import com.dhorby.wavemapper.actions.RaceActions
-import org.http4k.websocket.Websocket
-import org.http4k.websocket.WsMessage
+import com.dhorby.wavemapper.endpoints.utils.WsUtils.generateWsResponse
+import com.dhorby.wavemapper.endpoints.utils.WsUtils.getMapData
+import com.dhorby.wavemapper.port.StoragePort
+import org.http4k.core.Request
 import org.http4k.websocket.WsResponse
 
-object RaceActionsEndpoints {
-    fun Start(raceActions: RaceActions) = generateWsResponse(raceActions.startRace())
-    fun Clear(raceActions: RaceActions) = generateWsResponse(raceActions.clear())
-    fun Reset(raceActions: RaceActions) = generateWsResponse(raceActions.resetRace())
-    fun Move(raceActions: RaceActions) = generateWsResponse(raceActions.move())
+class RaceActionsEndpoints(val storagePort: StoragePort) {
+    fun Start(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.startRace()) }
 
-    private fun generateWsResponse(message: String) = WsResponse { ws: Websocket ->
-        ws.send(WsMessage(message))
-        ws.close()
+    fun Clear(raceActions: RaceActions): (Request) -> WsResponse = {
+        raceActions.clear()
+        generateWsResponse(getMapData(storagePort))
     }
+
+    fun Reset(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.resetRace()) }
+
+    fun Move(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.move()) }
+
 }
 
 
