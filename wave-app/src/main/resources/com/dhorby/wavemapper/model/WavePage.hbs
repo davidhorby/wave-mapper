@@ -133,7 +133,7 @@
         function updateLog(message) {
             var logBox = document.getElementById("log-text")
             var currentText = logBox.value;
-            logBox.value += currentText.concat(" \n", message);
+            logBox.value = currentText.concat(" \n", message);
             console.log(message);
         }
 
@@ -161,28 +161,16 @@
                   "ws://{{hostname}}:{{port}}/message/david"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'message sent');
             };
-            conn.onopen = () => conn.send('hello');
         }
         function move(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/move"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'move completed');
             };
-            conn.onopen = () => conn.send('hello');
         }
         function clearData(data)  {
             const conn = new WebSocket(
@@ -205,28 +193,16 @@
                   "ws://{{hostname}}:{{port}}/add"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'piece added');
             };
-            conn.onopen = () => conn.send('hello');
         }
         function start(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/start"
             );
             conn.onmessage = function(e){
-                if (typeof e.data === 'string'){
-                    var parsedData = e.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    reDrawMap(obj);
-                }
+                handleMapResponse(e, 'race started');
             };
-            conn.onopen = () => conn.send('hello');
         }
     </script>
     <style>

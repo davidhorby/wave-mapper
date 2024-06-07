@@ -7,17 +7,26 @@ import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.core.Request
 import org.http4k.websocket.WsResponse
 
-class RaceActionsEndpoints(val storagePort: StoragePort) {
-    fun Start(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.startRace()) }
+class RaceActionsEndpoints(private val storagePort: StoragePort) {
+    fun Start(raceActions: RaceActions): (Request) -> WsResponse = {
+        raceActions.startRace()
+        generateWsResponse(getMapData(storagePort))
+    }
 
     fun Clear(raceActions: RaceActions): (Request) -> WsResponse = {
         raceActions.clear()
         generateWsResponse(getMapData(storagePort))
     }
 
-    fun Reset(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.resetRace()) }
+    fun Reset(raceActions: RaceActions): (Request) -> WsResponse = {
+        raceActions.resetRace()
+        generateWsResponse(getMapData(storagePort))
+    }
 
-    fun Move(raceActions: RaceActions): (Request) -> WsResponse = { generateWsResponse(raceActions.move()) }
+    fun Move(raceActions: RaceActions): (Request) -> WsResponse = {
+        raceActions.move()
+        generateWsResponse(getMapData(storagePort))
+    }
 
 }
 

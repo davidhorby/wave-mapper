@@ -12,10 +12,11 @@ import org.http4k.format.Gson.asJsonObject
 
 class RaceActions(private val storagePort: StoragePort) {
 
-    fun startRace():String {
+    fun startRace(): String {
         val players = storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
-        return if (players.isEmpty()) "Not enough players"
-        else {
+        return if (players.isEmpty()) {
+            "Not enough players"
+        } else {
             storagePort.add(WaveHandlers.start)
             storagePort.add(WaveHandlers.finish)
             players
@@ -30,20 +31,19 @@ class RaceActions(private val storagePort: StoragePort) {
         return "Success"
     }
 
-    fun resetRace(): String {
+    fun resetRace() {
         storagePort.add(startLocation)
         storagePort.add(finishLocation)
         storagePort.add(testSharkLocation)
         storagePort.add(testBoatLocation)
         storagePort.add(testPirateLocation)
-        return "Success"
     }
 
     fun move(): String {
         storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(storagePort::add)
-        return  storagePort.getLocationData().toGoogleMapFormatList().asJsonObject().toString()
+        return storagePort.getLocationData().toGoogleMapFormatList().asJsonObject().toString()
     }
 
     fun addPiece(pieceLocation: PieceLocation) {
@@ -54,7 +54,7 @@ class RaceActions(private val storagePort: StoragePort) {
         storagePort.delete(EntityKind.PIECE_LOCATION, pieceLocation.id)
     }
 
-    fun getPiece(kind: EntityKind, keyValue:String): PieceLocation? {
+    fun getPiece(kind: EntityKind, keyValue: String): PieceLocation? {
         return storagePort.getPiece(kind, keyValue)
     }
 
