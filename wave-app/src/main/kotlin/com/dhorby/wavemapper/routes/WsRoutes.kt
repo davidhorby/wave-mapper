@@ -4,7 +4,9 @@ import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
 import com.dhorby.wavemapper.handlers.withReporting
+import com.dhorby.wavemapper.model.WaveResponseWsMessage
 import com.dhorby.wavemapper.model.WaveWsMessage
+import com.dhorby.wavemapper.model.waveResponseWsMessageLens
 import com.dhorby.wavemapper.model.waveWsMessageLens
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.core.Request
@@ -40,11 +42,11 @@ object WsRoutes {
                     ws.send(WsMessage("""{ "message":"socket open"}"""))
                     ws.onMessage {
                         val message: WaveWsMessage = waveWsMessageLens(it)
-                        println("Got a request" + message.message + "counter " + message.counter)
+                        println("Got a request" + message)
                         val updatedCounter = message.counter?.plus(1) ?: 1
-                        val responseMessage = WaveWsMessage(message = "pong", counter = updatedCounter)
+                        val responseMessage = WaveResponseWsMessage(message=message.action, counter = updatedCounter)
                         println("Returning message $responseMessage")
-                        ws.send(waveWsMessageLens.create(responseMessage))
+                        ws.send(waveResponseWsMessageLens.create(responseMessage))
                     }
                     ws.onClose {
                         println("socket is closing")
