@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper
+package com.dhorby.wavemapper.routes
 
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.wavemapper.actions.RaceActions

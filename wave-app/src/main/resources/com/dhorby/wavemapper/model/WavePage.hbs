@@ -189,6 +189,20 @@
             };
             conn.onopen = () => conn.send('hello');
         }
+        function addPiece(data)  {
+            const conn = new WebSocket(
+                  "ws://{{hostname}}:{{port}}/add"
+            );
+            conn.onmessage = function(e){
+                if (typeof e.data === 'string'){
+                    var parsedData = e.data.replace(/\\"/g, '"')
+                    var obj = JSON.parse(parsedData);
+                    console.log(obj);
+                    reDrawMap(obj);
+                }
+            };
+            conn.onopen = () => conn.send('hello');
+        }
         function start(data)  {
             const conn = new WebSocket(
                   "ws://{{hostname}}:{{port}}/start"

@@ -20,5 +20,4 @@ fun WaveMap(): HttpHandler = {
             Response(Status.OK).body(e.stackTraceToString())
         }
     }
-
 }

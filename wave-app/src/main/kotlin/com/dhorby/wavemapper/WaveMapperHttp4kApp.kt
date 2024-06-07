@@ -1,6 +1,7 @@
 package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.external.storage.DataStoreClient
+import com.dhorby.wavemapper.routes.WaveServiceRoutes
 import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.events.*
 import org.http4k.format.Jackson

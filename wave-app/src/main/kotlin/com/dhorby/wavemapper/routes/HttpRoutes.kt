@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper
+package com.dhorby.wavemapper.routes
 
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
