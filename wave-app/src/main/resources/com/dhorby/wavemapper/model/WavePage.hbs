@@ -135,6 +135,7 @@
             var currentText = logBox.value;
             logBox.value = currentText.concat(" \n", message);
             console.log(message);
+            logBox.scrollTop = logBox.scrollHeight;
         }
 
         function handleMapResponse(wsResponseData, message) {
@@ -160,30 +161,43 @@
         const ping_interval = 12000; // it's in milliseconds, which equals to 120 seconds
         let interval;
         const websocket = new WebSocket(
-           "ws://{{hostname}}:{{port}}/add"
+           "ws://{{hostname}}:{{port}}/action"
         );
+
+        const messageWebsocket = new WebSocket(
+           "ws://{{hostname}}:{{port}}/message"
+        );
+
 
         var counterVal = 0;
 
         // subscribe to `open` event
-        websocket.addEventListener('open', (event) => {
-          console.log('websocket connection established: ', event);
-          const sendMessage = JSON.stringify({ ping: 1 });
-          websocket.send(sendMessage);
+        messageWebsocket.addEventListener('open', (event) => {
+          console.log('messageWebsocket connection established: ', event);
+          const sendMessage = JSON.stringify({ ping: counterVal + 1 });
+          messageWebsocket.send(sendMessage);
 
           // to Keep the connection alive
           interval = setInterval(() => {
+            counterVal = counterVal + 1
             const sendMessage = JSON.stringify({ message:"hello", "counter": counterVal });
-            websocket.send(sendMessage);
+            messageWebsocket.send(sendMessage);
             }, ping_interval);
         });
 
         // subscribe to `message` event
-        websocket.addEventListener('message', (event) => {
-          const receivedMessage = JSON.parse(event.data);
-          counterVal = receivedMessage.counter + 1;
-          updateLog(receivedMessage.message + " " + counterVal);
-          console.log('new message received from server: ', receivedMessage);
+        messageWebsocket.addEventListener('message', (event) => {
+            if (typeof event.data === 'string'){
+                var parsedData = event.data.replace(/\\"/g, '"')
+                var obj = JSON.parse(parsedData);
+                console.log(obj);
+                var itsType = typeof obj
+                if (typeof obj.message != "undefined") {
+                   updateLog(obj.message);
+                } else {
+                    reDrawMap(obj);
+                }
+            }
         });
 
         // subscribe to `close` event
@@ -200,10 +214,33 @@
         function sendMessage(action)  {
             websocket.send(JSON.stringify({ "counter": counterVal, "action": action}));
         }
+
+        function addPiece() {
+           var name = document.getElementsByName('name')[0].value
+           var pieceType = document.getElementsByName('pieceType')[0].value
+           var lat = document.getElementsByName('lat')[0].value
+           var lon = document.getElementsByName('lon')[0].value
+           const data = new Map([
+              ["name", name],
+              ["pieceType", pieceType],
+              ["lat", lat],
+              ["lon", lon]
+           ]);
+           let myObj = Object.fromEntries(data);
+           let myJSON = JSON.stringify(myObj);
+           console.log(`the name is ${myJSON} `);
+           sendMessage(myJSON)
+        }
     </script>
     <style>
         table, th, td {
             border: 1px solid black;
+        }
+        textarea {
+            resize: none;
+        }
+        textarea.ta10em {
+            height: 10em;
         }
     </style>
 </head>
@@ -224,7 +261,7 @@
                 <tr style="vertical-align: top;">
                     <td >
                         <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 10%;">
-                            <form name="add-piece">
+<!--                            <form name="add-piece">-->
                                 <div class="form-example">
                                     <table>
                                         <tr>
@@ -252,7 +289,7 @@
                                 <div class="form-example">
                                     <button onclick="addPiece()">Add Piece</button>
                                 </div>
-                            </form>
+<!--                            </form>-->
                         </div>
                     </td>
                     <td colspan="3">
@@ -320,9 +357,9 @@
                             </td>
                     </tr>
                 {{/each}}
-                <tr style="vertical-align: top;">
-                    <td style="width: 100%;" colspan="4">
-                        <textarea id="log-text" width="100%"></textarea>
+                <tr style="vertical-align: top;" width="100%" height="200">
+                    <td style="width: 100%;" colspan="4" width="100%" height="200">
+                        <textarea class="ta10em" name="log-text" id="log-text" width="100%" height="200"></textarea>
                     </td>
                 </tr>
             </table>
