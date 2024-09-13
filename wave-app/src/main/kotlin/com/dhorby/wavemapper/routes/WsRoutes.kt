@@ -8,6 +8,7 @@ import com.dhorby.wavemapper.model.AddPieceWsMessage
 import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
 import com.dhorby.wavemapper.model.WaveResponseWsMessage
 import com.dhorby.wavemapper.model.WaveWsMessage
+import com.dhorby.wavemapper.model.toPieceLocation
 import com.dhorby.wavemapper.model.waveResponseWsMessageLens
 import com.dhorby.wavemapper.model.waveWsMessageLens
 import com.dhorby.wavemapper.port.StoragePort
@@ -58,8 +59,9 @@ object WsRoutes {
                     println("post socket open")
 //                    postSocketLocal.send(WsMessage("""{ "message":"socket open"}"""))
                     postSocketLocal.onMessage { message: WsMessage ->
-                        val message: AddPieceWsMessage = addPieceWsMessageLens(message)
+                        val pieceLocation = addPieceWsMessageLens(message).toPieceLocation()
                         println("Got a request" + message)
+                        raceActions.addPiece(pieceLocation = pieceLocation)
                     }
                     postSocketLocal.onClose {
                         println("post socket is closing")

@@ -21,8 +21,8 @@ class LensesTest {
         val expectedMessage = AddPieceWsMessage(
             name = "Sue",
             pieceType = "BOAT",
-            lat = 51.35F,
-            lon = -71.31F
+            lat = 51.35,
+            lon = -71.31
         )
         val message: AddPieceWsMessage = addPieceWsMessageLens(WsMessage(remoteMessage))
         assertThat(message, equalTo(expectedMessage))
