@@ -4,7 +4,6 @@ import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.endpoints.utils.WsUtils
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
 import com.dhorby.wavemapper.handlers.withReporting
-import com.dhorby.wavemapper.model.AddPieceWsMessage
 import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
 import com.dhorby.wavemapper.model.WaveResponseWsMessage
 import com.dhorby.wavemapper.model.WaveWsMessage
@@ -63,6 +62,10 @@ object WsRoutes {
                         println("Got a request" + message)
                         raceActions.addPiece(pieceLocation = pieceLocation)
                     }
+                    val wsResponse = WsUtils.getMapData(storagePort)
+                    val returnMessage = WsMessage(wsResponse)
+                    wsMessageSocket?.send(returnMessage)
+                    sendMessage("action complete: add piece")
                     postSocketLocal.onClose {
                         println("post socket is closing")
                     }
