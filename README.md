@@ -102,3 +102,8 @@ gcloud app browse
 gcloud app deploy ./wave-app/build/libs/wave-app.jar
 ```
 
+### Run the app
+```bash
+./gradlew run
+```
+The goto http://localhost:8080/

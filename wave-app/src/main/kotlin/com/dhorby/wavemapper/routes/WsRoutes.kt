@@ -4,6 +4,8 @@ import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.endpoints.utils.WsUtils
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
 import com.dhorby.wavemapper.handlers.withReporting
+import com.dhorby.wavemapper.model.AddPieceWsMessage
+import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
 import com.dhorby.wavemapper.model.WaveResponseWsMessage
 import com.dhorby.wavemapper.model.WaveWsMessage
 import com.dhorby.wavemapper.model.waveResponseWsMessageLens
@@ -19,17 +21,30 @@ import org.http4k.websocket.WsMessage
 import org.http4k.websocket.WsResponse
 
 object WsRoutes {
-    operator fun invoke(storagePort: StoragePort, events: (Event) -> Unit, raceActionsEndpoints: RaceActionsEndpoints): RoutingWsHandler {
+    var wsMessageSocket: Websocket? = null
+    var wsActionSocket: Websocket? = null
+    var wsPostSocket: Websocket? = null
+
+    operator fun invoke(
+        storagePort: StoragePort,
+        events: (Event) -> Unit,
+        raceActionsEndpoints: RaceActionsEndpoints
+    ): RoutingWsHandler {
         val raceActions: RaceActions = RaceActions(storagePort)
+
         val ws: RoutingWsHandler = websockets(
             "/message" bind {
-                WsResponse { ws: Websocket ->
+                WsResponse { messageSocketLocal ->
+                    wsMessageSocket = messageSocketLocal
                     println("socket message open")
-                    ws.send(WsMessage("""{ "message":"socket message open"}"""))
-                    ws.onMessage {
+                    sendMessage("socket message open")
+                    messageSocketLocal.onMessage {
                         val message: WaveResponseWsMessage = waveResponseWsMessageLens(it)
                         println("Got a request" + message)
-                        ws.send(WsMessage("""{ "message":"pong ${message.counter}" }"""))
+                        sendMessage("pong ${message.counter}")
+                    }
+                    messageSocketLocal.onClose {
+                        println("message socket is closing")
                     }
                 }
             },
@@ -37,14 +52,30 @@ object WsRoutes {
             "/start" bind (raceActionsEndpoints.Start(raceActions)),
             "/clear" bind (raceActionsEndpoints.Clear(raceActions)),
             "/reset" bind (raceActionsEndpoints.Reset(raceActions)),
+            "/post" bind { req: Request ->
+                WsResponse { postSocketLocal ->
+                    wsPostSocket = postSocketLocal
+                    println("post socket open")
+//                    postSocketLocal.send(WsMessage("""{ "message":"socket open"}"""))
+                    postSocketLocal.onMessage { message: WsMessage ->
+                        val message: AddPieceWsMessage = addPieceWsMessageLens(message)
+                        println("Got a request" + message)
+                    }
+                    postSocketLocal.onClose {
+                        println("post socket is closing")
+                    }
+                }
+            },
+
             "/action" bind { req: Request ->
-                WsResponse { ws: Websocket ->
+                WsResponse { actionSocketLocal ->
+                    wsActionSocket = actionSocketLocal
                     println("socket open")
-                    ws.send(WsMessage("""{ "message":"socket open"}"""))
-                    ws.onMessage {
+                    actionSocketLocal.send(WsMessage("""{ "message":"socket open"}"""))
+                    actionSocketLocal.onMessage {
                         val message: WaveWsMessage = waveWsMessageLens(it)
                         println("Got a request" + message)
-                        when(message.action) {
+                        when (message.action) {
                             "start" -> raceActions.startRace()
                             "clear" -> raceActions.clear()
                             "reset" -> raceActions.resetRace()
@@ -53,15 +84,20 @@ object WsRoutes {
                         val wsResponse = WsUtils.getMapData(storagePort)
                         val returnMessage = WsMessage(wsResponse)
                         val updatedCounter = message.counter?.plus(1) ?: 1
-                        ws.send(returnMessage)
+                        actionSocketLocal.send(returnMessage)
+                        sendMessage("action complete  ${message.action}")
                     }
-                    ws.onClose {
-                        println("socket is closing")
+                    actionSocketLocal.onClose {
+                        println("action socket is closing")
                     }
                 }
             }
         )
         return ws.withReporting(events)
+    }
+
+    private fun sendMessage(message: String) {
+        wsMessageSocket?.send(WsMessage("""{ "message":"action complete  $message" }"""))
     }
 
     private fun returnMessage(message: String) = WsResponse { ws: Websocket ->

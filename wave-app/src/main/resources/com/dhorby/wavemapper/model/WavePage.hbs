@@ -168,6 +168,16 @@
            "ws://{{hostname}}:{{port}}/message"
         );
 
+        var postWebsocket = new WebSocket(
+            "ws://{{hostname}}:{{port}}/post"
+        );
+
+        postWebsocket.onclose = function() {
+            // don't copy and paste this it's a terrible idea
+            console.log('The server closed the post connection again!')
+            postWebsocket = new WebSocket("ws://{{hostname}}:{{port}}/post")
+        }
+
 
         var counterVal = 0;
 
@@ -215,6 +225,10 @@
             websocket.send(JSON.stringify({ "counter": counterVal, "action": action}));
         }
 
+        function sendPostMessage(action)  {
+            postWebsocket.send(action);
+        }
+
         function addPiece() {
            var name = document.getElementsByName('name')[0].value
            var pieceType = document.getElementsByName('pieceType')[0].value
@@ -229,7 +243,7 @@
            let myObj = Object.fromEntries(data);
            let myJSON = JSON.stringify(myObj);
            console.log(`the name is ${myJSON} `);
-           sendMessage(myJSON)
+            sendPostMessage(myJSON)
         }
     </script>
     <style>

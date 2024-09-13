@@ -16,10 +16,10 @@ data class WaveResponseWsMessage(
 data class AddPieceWsMessage(
     val name:String,
     val pieceType: String,
-    val lat:Long,
-    val lon:Long
+    val lat: Float,
+    val lon:Float
 )
 
 val waveWsMessageLens = WsMessage.auto<WaveWsMessage>().toLens()
 val waveResponseWsMessageLens = WsMessage.auto<WaveResponseWsMessage>().toLens()
-val addPieceWsMessageLens = WsMessage.auto<AddPieceWsMessage>().toLens()
+
