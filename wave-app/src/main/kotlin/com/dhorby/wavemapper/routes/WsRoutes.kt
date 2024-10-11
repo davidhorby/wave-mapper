@@ -61,6 +61,10 @@ object WsRoutes {
                         val pieceLocation = addPieceWsMessageLens(message).toPieceLocation()
                         println("Got a request" + message)
                         raceActions.addPiece(pieceLocation = pieceLocation)
+                        val wsResponse = WsUtils.getMapData(storagePort)
+                        val returnMessage = WsMessage(wsResponse)
+                        wsMessageSocket?.send(returnMessage)
+                        sendMessage("action complete: add piece")
                     }
                     val wsResponse = WsUtils.getMapData(storagePort)
                     val returnMessage = WsMessage(wsResponse)
