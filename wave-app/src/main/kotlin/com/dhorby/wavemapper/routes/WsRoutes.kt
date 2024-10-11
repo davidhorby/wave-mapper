@@ -5,10 +5,8 @@ import com.dhorby.wavemapper.endpoints.utils.WsUtils
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
 import com.dhorby.wavemapper.handlers.withReporting
 import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
-import com.dhorby.wavemapper.model.WaveResponseWsMessage
 import com.dhorby.wavemapper.model.WaveWsMessage
 import com.dhorby.wavemapper.model.toPieceLocation
-import com.dhorby.wavemapper.model.waveResponseWsMessageLens
 import com.dhorby.wavemapper.model.waveWsMessageLens
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.core.Request
@@ -38,10 +36,8 @@ object WsRoutes {
                     wsMessageSocket = messageSocketLocal
                     println("socket message open")
                     sendMessage("socket message open")
-                    messageSocketLocal.onMessage {
-                        val message: WaveResponseWsMessage = waveResponseWsMessageLens(it)
-                        println("Got a request" + message)
-                        sendMessage("pong ${message.counter}")
+                    messageSocketLocal.onMessage { message ->
+                        handleAddPiece(message, raceActions, storagePort)
                     }
                     messageSocketLocal.onClose {
                         println("message socket is closing")
@@ -56,20 +52,11 @@ object WsRoutes {
                 WsResponse { postSocketLocal ->
                     wsPostSocket = postSocketLocal
                     println("post socket open")
-//                    postSocketLocal.send(WsMessage("""{ "message":"socket open"}"""))
                     postSocketLocal.onMessage { message: WsMessage ->
-                        val pieceLocation = addPieceWsMessageLens(message).toPieceLocation()
-                        println("Got a request" + message)
-                        raceActions.addPiece(pieceLocation = pieceLocation)
-                        val wsResponse = WsUtils.getMapData(storagePort)
-                        val returnMessage = WsMessage(wsResponse)
-                        wsMessageSocket?.send(returnMessage)
-                        sendMessage("action complete: add piece")
+                        raceActions.addPiece(pieceLocation = addPieceWsMessageLens(message).toPieceLocation())
+                        returnMapData(storagePort, "add piece")
                     }
-                    val wsResponse = WsUtils.getMapData(storagePort)
-                    val returnMessage = WsMessage(wsResponse)
-                    wsMessageSocket?.send(returnMessage)
-                    sendMessage("action complete: add piece")
+                    returnMapData(storagePort, "add piece")
                     postSocketLocal.onClose {
                         println("post socket is closing")
                     }
@@ -92,7 +79,6 @@ object WsRoutes {
                         }
                         val wsResponse = WsUtils.getMapData(storagePort)
                         val returnMessage = WsMessage(wsResponse)
-                        val updatedCounter = message.counter?.plus(1) ?: 1
                         actionSocketLocal.send(returnMessage)
                         sendMessage("action complete  ${message.action}")
                     }
@@ -103,6 +89,19 @@ object WsRoutes {
             }
         )
         return ws.withReporting(events)
+    }
+
+    private fun handleAddPiece(message: WsMessage,raceActions: RaceActions, storagePort: StoragePort) {
+        raceActions.addPiece(pieceLocation = addPieceWsMessageLens(message).toPieceLocation())
+        returnMapData(storagePort, "add piece")
+    }
+
+
+    private fun returnMapData(storagePort: StoragePort, actionMessage: String) {
+        val wsResponse = WsUtils.getMapData(storagePort)
+        val returnMessage = WsMessage(wsResponse)
+        wsMessageSocket?.send(returnMessage)
+        sendMessage("action complete: $actionMessage")
     }
 
     private fun sendMessage(message: String) {
