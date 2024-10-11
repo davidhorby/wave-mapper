@@ -4,7 +4,6 @@ plugins {
     `idea`
     `java-library`
     `java-test-fixtures`
-    `kotlin-dsl`
     alias(libs.plugins.kotlinjvm)
 }
 
