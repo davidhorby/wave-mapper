@@ -7,7 +7,6 @@ import com.dhorby.gcloud.model.Site
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.env.FunctionalTestEnv
-import com.dhorby.wavemapper.fake.FakeWaveAdapter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.assertion.assertThat

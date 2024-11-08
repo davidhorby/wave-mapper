@@ -6,4 +6,5 @@ import org.http4k.template.ViewModel
 interface WavePort {
     fun getWavePage(): ViewModel?
     fun getWaveData():MutableList<Location>
+    fun getLocationData(lat:Float, lon:Float): String
 }

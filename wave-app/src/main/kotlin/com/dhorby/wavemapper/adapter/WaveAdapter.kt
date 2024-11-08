@@ -1,35 +1,23 @@
 package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.config.Settings
-import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
 import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
-import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.handlers.WaveHandlers
-import com.dhorby.wavemapper.handlers.WaveHandlers.Companion.finish
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
 import com.dhorby.wavemapper.port.WavePort
-import com.dhorby.wavemapper.waveLocationListBodyLens
-import org.http4k.core.HttpHandler
+import org.http4k.client.ApacheClient
+import org.http4k.client.ApacheClient.invoke
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.Request.Companion.invoke
-import org.http4k.core.Response
-import org.http4k.core.Response.Companion.invoke
-import org.http4k.core.Status.Companion.FOUND
-import org.http4k.core.Status.Companion.OK
-import org.http4k.core.body.form
-import org.http4k.core.toParametersMap
-import org.http4k.core.with
+import org.http4k.lens.Query
+import org.http4k.lens.float
 import org.http4k.template.ViewModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -65,17 +53,18 @@ class WaveAdapter(
      override fun getWaveData():MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
 
 
-//
-//    fun getLocationData(): HttpHandler = {
-//        val lat = latQuery(it)
-//        val lon = lonQuery(it)
-//        val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
-//            .query("latlng", "$lat,$lon")
-//            .query("key", mapsApiKeyServer)
-//        val response = client(request)
-//        val bodyString = response.bodyString()
-//        Response(OK).body(bodyString)
-//    }
+    val latQuery = Query.float().required("lat")
+    val lonQuery = Query.float().required("lon")
+
+    private val client = ApacheClient()
+
+    override fun getLocationData(lat:Float, lon:Float): String  {
+        val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
+            .query("latlng", "$lat,$lon")
+            .query("key", mapsApiKeyServer)
+        val response = client(request)
+        return response.bodyString()
+    }
 //
 //    fun addPiece(): HttpHandler = { request ->
 //        val parametersMap: Map<String, List<String?>> = request.form().toParametersMap()

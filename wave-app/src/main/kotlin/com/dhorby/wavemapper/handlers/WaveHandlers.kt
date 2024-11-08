@@ -74,13 +74,9 @@ class WaveHandlers(
 
 
     fun getLocationData(): HttpHandler = {
-        val lat = latQuery(it)
+        val lat: Float = latQuery(it)
         val lon = lonQuery(it)
-        val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
-            .query("latlng", "$lat,$lon")
-            .query("key", mapsApiKeyServer)
-        val response = client(request)
-        val bodyString = response.bodyString()
+        val bodyString = wavePort.getLocationData(lat, lon)
         Response(OK).body(bodyString)
     }
 
