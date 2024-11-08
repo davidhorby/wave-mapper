@@ -7,20 +7,16 @@ import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
-import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
 import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
+import com.dhorby.wavemapper.external.google.GoogleMapsClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
 import com.dhorby.wavemapper.port.WavePort
-import org.http4k.client.ApacheClient
-import org.http4k.client.ApacheClient.invoke
-import org.http4k.core.Method
-import org.http4k.core.Request
 import org.http4k.template.ViewModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,7 +24,8 @@ import org.slf4j.LoggerFactory
 class WaveAdapter(
     val siteListFunction: SiteListFunction,
     val dataForSiteFunction: DataForSiteFunction,
-    val storageAdapter: StoragePort
+    val storageAdapter: StoragePort,
+    val googleMapsClient: GoogleMapsClient
 ): WavePort {
     val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
@@ -70,16 +67,7 @@ class WaveAdapter(
 
      override fun getWaveData():MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
 
-
-    private val client = ApacheClient()
-
-    override fun getLocationData(lat:Float, lon:Float): String  {
-        val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
-            .query("latlng", "$lat,$lon")
-            .query("key", mapsApiKeyServer)
-        val response = client(request)
-        return response.bodyString()
-    }
+    override fun getLocationData(lat: Float, lon: Float): String = googleMapsClient.getLocationData(lat, lon)
 
     override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean  {
         val name = parametersMap["name"]?.first() ?: "Unknown"

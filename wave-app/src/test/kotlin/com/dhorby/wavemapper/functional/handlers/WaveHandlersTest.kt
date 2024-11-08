@@ -7,10 +7,12 @@ import com.dhorby.gcloud.model.Site
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.env.FunctionalTestEnv
+import com.dhorby.wavemapper.external.google.GoogleMapsClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import org.http4k.client.ApacheClient
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -42,7 +44,8 @@ internal class WaveHandlersTest : FunctionalTestEnv() {
             wavePort = WaveAdapter(
                 siteListFunction = invalidSiteList,
                 dataForSiteFunction = dataForSiteFunction,
-                storageAdapter = storageAdapter
+                storageAdapter = storageAdapter,
+                googleMapsClient = GoogleMapsClient(ApacheClient())
             )
         ).getWaveData()
         val response = wavePage(Request(Method.GET, "/"))
