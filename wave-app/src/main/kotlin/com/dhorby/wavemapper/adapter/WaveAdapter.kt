@@ -1,7 +1,10 @@
 package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.config.Settings
+import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
+import com.dhorby.gcloud.model.PieceLocation
+import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
@@ -16,8 +19,6 @@ import org.http4k.client.ApacheClient
 import org.http4k.client.ApacheClient.invoke
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.lens.Query
-import org.http4k.lens.float
 import org.http4k.template.ViewModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -53,9 +54,6 @@ class WaveAdapter(
      override fun getWaveData():MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
 
 
-    val latQuery = Query.float().required("lat")
-    val lonQuery = Query.float().required("lon")
-
     private val client = ApacheClient()
 
     override fun getLocationData(lat:Float, lon:Float): String  {
@@ -65,23 +63,22 @@ class WaveAdapter(
         val response = client(request)
         return response.bodyString()
     }
-//
-//    fun addPiece(): HttpHandler = { request ->
-//        val parametersMap: Map<String, List<String?>> = request.form().toParametersMap()
-//        val name = parametersMap["name"]?.first() ?: "Unknown"
-//        val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first() ?: "UNKNOWN")
-//        val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
-//        val lon = parametersMap["lon"]?.first()?.toDouble() ?: 0.0
-//
-//        val pieceLocation = PieceLocation(
-//            id = name,
-//            name = name,
-//            pieceType = pieceType,
-//            geoLocation = GeoLocation(lat = lat, lon = lon)
-//        )
-//        storageAdapter.add(pieceLocation)
-//        Response(FOUND).header("Location", "/")
-//    }
+
+    override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean  {
+        val name = parametersMap["name"]?.first() ?: "Unknown"
+        val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first() ?: "UNKNOWN")
+        val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
+        val lon = parametersMap["lon"]?.first()?.toDouble() ?: 0.0
+
+        val pieceLocation = PieceLocation(
+            id = name,
+            name = name,
+            pieceType = pieceType,
+            geoLocation = GeoLocation(lat = lat, lon = lon)
+        )
+        storageAdapter.add(pieceLocation)
+        return true
+    }
 //
 //
 //    private fun startRace() {
