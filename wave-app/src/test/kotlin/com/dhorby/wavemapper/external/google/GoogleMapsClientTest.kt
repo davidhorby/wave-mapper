@@ -21,8 +21,14 @@ class GoogleMapsClientTest {
     }
 
     @Test
-    fun `should retrieve the data as object 2`(){
+    fun `should retrieve the long name`(){
         val locationData = GoogleMapsClient(ApacheClient()).getLocationDatAsObject(23.00F, 34.02F)
         assertThat(locationData.results.get(1).addressComponents.get(0).longName, equalTo("Al Shalateen Desert"))
+    }
+
+    @Test
+    fun `should retrieve the formatted address`(){
+        val locationData = GoogleMapsClient(ApacheClient()).getLocationDatAsObject(23.00F, 34.02F)
+        assertThat(locationData.results.get(1).formattedAddress, equalTo("Al Shalateen Desert, Red Sea Governorate 1910001, Egypt"))
     }
 }

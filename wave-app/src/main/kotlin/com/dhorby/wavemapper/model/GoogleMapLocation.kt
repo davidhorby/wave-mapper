@@ -14,7 +14,8 @@ data class PlusCode(@JsonProperty("global_code") val globalCode:String)
 data class GoogleMapLocationResults(val results: List<GoogleMapLocation>)
 
 data class AddressComponents(
-    @JsonProperty("address_components") val addressComponents: List<AddressComponent>
+    @JsonProperty("address_components") val addressComponents: List<AddressComponent>,
+    @JsonProperty("formatted_address") val formattedAddress: String
 )
 
 data class AddressComponent(
