@@ -25,8 +25,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class WaveHandlers(
-    val siteListFunction: SiteListFunction,
-    val dataForSiteFunction: DataForSiteFunction,
     val storageAdapter: StoragePort,
     val wavePort: WavePort
 ) {
@@ -49,8 +47,6 @@ class WaveHandlers(
         )
     }
 
-    val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
-
     private val devMode = false;
     private val client = ApacheClient()
 
@@ -60,7 +56,6 @@ class WaveHandlers(
     }
 
     fun getWavePage(): HttpHandler = {
-
         val waveViewModel = wavePort.getWavePage()
         waveViewModel?.let {
             try {
@@ -73,7 +68,7 @@ class WaveHandlers(
     }
 
     fun getWaveData(): HttpHandler = {
-        val allWaveData: MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
+        val allWaveData: MutableList<Location> = wavePort.getWaveData()
         Response(OK).with(waveLocationListBodyLens of allWaveData)
     }
 

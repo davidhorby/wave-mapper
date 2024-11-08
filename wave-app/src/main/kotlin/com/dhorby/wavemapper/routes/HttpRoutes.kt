@@ -38,12 +38,14 @@ object HttpRoutes {
 
         val siteListFunction = waveServiceFunctions.siteListFunction
         val dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
-        val storageAdapter =  StorageAdapter(dataStoreClient)
+        val storageAdapter = StorageAdapter(dataStoreClient)
         val waveHandlers = WaveHandlers(
-            siteListFunction = siteListFunction,
-            dataForSiteFunction = dataForSiteFunction,
             storageAdapter = storageAdapter,
-            wavePort = WaveAdapter(storageAdapter)
+            wavePort = WaveAdapter(
+                siteListFunction = siteListFunction,
+                dataForSiteFunction = dataForSiteFunction,
+                storageAdapter = storageAdapter
+            )
         )
 
         val httpHandler: HttpHandler = routes(
@@ -51,7 +53,10 @@ object HttpRoutes {
                 Response(Status.OK).body("pong")
             },
             "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to WaveData(siteListFunction = siteListFunction, dataForSiteFunction = dataForSiteFunction),
+            "/data" bind Method.GET to WaveData(
+                siteListFunction = siteListFunction,
+                dataForSiteFunction = dataForSiteFunction
+            ),
             "/properties" bind Method.GET to Properties(),
             "/datasheet" bind Method.GET to DataSheet(),
             "/map" bind Method.GET to WaveMap(),
