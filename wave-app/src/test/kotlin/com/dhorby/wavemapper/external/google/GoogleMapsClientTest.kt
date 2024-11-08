@@ -17,6 +17,12 @@ class GoogleMapsClientTest {
     @Test
     fun `should retrieve the data as object`(){
         val locationData = GoogleMapsClient(ApacheClient()).getLocationDatAsObject(23.00F, 34.02F)
-        assertThat(locationData.plus_code.global_code, equalTo("7GMP2229+2X5"))
+        assertThat(locationData.plusCode.globalCode, equalTo("7GMP2229+2X5"))
+    }
+
+    @Test
+    fun `should retrieve the data as object 2`(){
+        val locationData = GoogleMapsClient(ApacheClient()).getLocationDatAsObject(23.00F, 34.02F)
+        assertThat(locationData.results.get(1).addressComponents.get(0).longName, equalTo("Al Shalateen Desert"))
     }
 }

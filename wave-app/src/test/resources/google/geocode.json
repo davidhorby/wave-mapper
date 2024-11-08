@@ -1,343 +1,279 @@
 {
-  "plus_code" :
-  {
-    "global_code" : "7GMP2229+2X5"
+  "plus_code": {
+    "global_code": "7GMP2229+2X5"
   },
-  "results" :
-  [
+  "results": [
     {
-      "address_components" :
-      [
+      "address_components": [
         {
-          "long_name" : "7GMP2229+2X",
-          "short_name" : "7GMP2229+2X",
-          "types" :
-          [
+          "long_name": "7GMP2229+2X",
+          "short_name": "7GMP2229+2X",
+          "types": [
             "plus_code"
           ]
         }
       ],
-      "formatted_address" : "7GMP2229+2X",
-      "geometry" :
-      {
-        "bounds" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.000125,
-            "lng" : 34.02
+      "formatted_address": "7GMP2229+2X",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 23.000125,
+            "lng": 34.02
           },
-          "southwest" :
-          {
-            "lat" : 23,
-            "lng" : 34.019875
+          "southwest": {
+            "lat": 23,
+            "lng": 34.019875
           }
         },
-        "location" :
-        {
-          "lat" : 23,
-          "lng" : 34.02
+        "location": {
+          "lat": 23,
+          "lng": 34.02
         },
-        "location_type" : "GEOMETRIC_CENTER",
-        "viewport" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.0014114802915,
-            "lng" : 34.02128648029149
+        "location_type": "GEOMETRIC_CENTER",
+        "viewport": {
+          "northeast": {
+            "lat": 23.0014114802915,
+            "lng": 34.02128648029149
           },
-          "southwest" :
-          {
-            "lat" : 22.9987135197085,
-            "lng" : 34.01858851970849
+          "southwest": {
+            "lat": 22.9987135197085,
+            "lng": 34.01858851970849
           }
         }
       },
-      "place_id" : "GhIJAAAAAAAAN0ARwvUoXI8CQUA",
-      "plus_code" :
-      {
-        "global_code" : "7GMP2229+2X"
+      "place_id": "GhIJAAAAAAAAN0ARwvUoXI8CQUA",
+      "plus_code": {
+        "global_code": "7GMP2229+2X"
       },
-      "types" :
-      [
+      "types": [
         "plus_code"
       ]
     },
     {
-      "address_components" :
-      [
+      "address_components": [
         {
-          "long_name" : "Al Shalateen Desert",
-          "short_name" : "Al Shalateen Desert",
-          "types" :
-          [
+          "long_name": "Al Shalateen Desert",
+          "short_name": "Al Shalateen Desert",
+          "types": [
             "administrative_area_level_2",
             "political"
           ]
         },
         {
-          "long_name" : "Red Sea Governorate",
-          "short_name" : "Red Sea Governorate",
-          "types" :
-          [
+          "long_name": "Red Sea Governorate",
+          "short_name": "Red Sea Governorate",
+          "types": [
             "administrative_area_level_1",
             "political"
           ]
         },
         {
-          "long_name" : "Egypt",
-          "short_name" : "EG",
-          "types" :
-          [
+          "long_name": "Egypt",
+          "short_name": "EG",
+          "types": [
             "country",
             "political"
           ]
         },
         {
-          "long_name" : "1910001",
-          "short_name" : "1910001",
-          "types" :
-          [
+          "long_name": "1910001",
+          "short_name": "1910001",
+          "types": [
             "postal_code"
           ]
         }
       ],
-      "formatted_address" : "Al Shalateen Desert, Red Sea Governorate 1910001, Egypt",
-      "geometry" :
-      {
-        "bounds" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.5833093,
-            "lng" : 35.2892424
+      "formatted_address": "Al Shalateen Desert, Red Sea Governorate 1910001, Egypt",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 23.5833093,
+            "lng": 35.2892424
           },
-          "southwest" :
-          {
-            "lat" : 22.5909756,
-            "lng" : 33.4876028
+          "southwest": {
+            "lat": 22.5909756,
+            "lng": 33.4876028
           }
         },
-        "location" :
-        {
-          "lat" : 23.1394094,
-          "lng" : 34.3310364
+        "location": {
+          "lat": 23.1394094,
+          "lng": 34.3310364
         },
-        "location_type" : "APPROXIMATE",
-        "viewport" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.5833093,
-            "lng" : 35.2892424
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 23.5833093,
+            "lng": 35.2892424
           },
-          "southwest" :
-          {
-            "lat" : 22.5909756,
-            "lng" : 33.4876028
+          "southwest": {
+            "lat": 22.5909756,
+            "lng": 33.4876028
           }
         }
       },
-      "place_id" : "ChIJf4NVXfSDzBURK58sg3xxq9s",
-      "types" :
-      [
+      "place_id": "ChIJf4NVXfSDzBURK58sg3xxq9s",
+      "types": [
         "administrative_area_level_2",
         "political"
       ]
     },
     {
-      "address_components" :
-      [
+      "address_components": [
         {
-          "long_name" : "1910001",
-          "short_name" : "1910001",
-          "types" :
-          [
+          "long_name": "1910001",
+          "short_name": "1910001",
+          "types": [
             "postal_code"
           ]
         },
         {
-          "long_name" : "Red Sea Governorate",
-          "short_name" : "Red Sea Governorate",
-          "types" :
-          [
+          "long_name": "Red Sea Governorate",
+          "short_name": "Red Sea Governorate",
+          "types": [
             "administrative_area_level_1",
             "political"
           ]
         },
         {
-          "long_name" : "Egypt",
-          "short_name" : "EG",
-          "types" :
-          [
+          "long_name": "Egypt",
+          "short_name": "EG",
+          "types": [
             "country",
             "political"
           ]
         }
       ],
-      "formatted_address" : "Red Sea Governorate 1910001, Egypt",
-      "geometry" :
-      {
-        "bounds" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.5833093,
-            "lng" : 35.6346737
+      "formatted_address": "Red Sea Governorate 1910001, Egypt",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 23.5833093,
+            "lng": 35.6346737
           },
-          "southwest" :
-          {
-            "lat" : 22.5910108,
-            "lng" : 33.4876028
+          "southwest": {
+            "lat": 22.5910108,
+            "lng": 33.4876028
           }
         },
-        "location" :
-        {
-          "lat" : 23.1394094,
-          "lng" : 34.3310364
+        "location": {
+          "lat": 23.1394094,
+          "lng": 34.3310364
         },
-        "location_type" : "APPROXIMATE",
-        "viewport" :
-        {
-          "northeast" :
-          {
-            "lat" : 23.5833093,
-            "lng" : 35.6346737
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 23.5833093,
+            "lng": 35.6346737
           },
-          "southwest" :
-          {
-            "lat" : 22.5910108,
-            "lng" : 33.4876028
+          "southwest": {
+            "lat": 22.5910108,
+            "lng": 33.4876028
           }
         }
       },
-      "place_id" : "ChIJNdt9h4ZNyxURbcgoUOXBCuo",
-      "types" :
-      [
+      "place_id": "ChIJNdt9h4ZNyxURbcgoUOXBCuo",
+      "types": [
         "postal_code"
       ]
     },
     {
-      "address_components" :
-      [
+      "address_components": [
         {
-          "long_name" : "Red Sea Governorate",
-          "short_name" : "Red Sea Governorate",
-          "types" :
-          [
+          "long_name": "Red Sea Governorate",
+          "short_name": "Red Sea Governorate",
+          "types": [
             "administrative_area_level_1",
             "political"
           ]
         },
         {
-          "long_name" : "Egypt",
-          "short_name" : "EG",
-          "types" :
-          [
+          "long_name": "Egypt",
+          "short_name": "EG",
+          "types": [
             "country",
             "political"
           ]
         }
       ],
-      "formatted_address" : "Red Sea Governorate, Egypt",
-      "geometry" :
-      {
-        "bounds" :
-        {
-          "northeast" :
-          {
-            "lat" : 29.1223944,
-            "lng" : 36.8944924
+      "formatted_address": "Red Sea Governorate, Egypt",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 29.1223944,
+            "lng": 36.8944924
           },
-          "southwest" :
-          {
-            "lat" : 22.0000001,
-            "lng" : 31.7215166
+          "southwest": {
+            "lat": 22.0000001,
+            "lng": 31.7215166
           }
         },
-        "location" :
-        {
-          "lat" : 24.6826316,
-          "lng" : 34.1531947
+        "location": {
+          "lat": 24.6826316,
+          "lng": 34.1531947
         },
-        "location_type" : "APPROXIMATE",
-        "viewport" :
-        {
-          "northeast" :
-          {
-            "lat" : 29.1223944,
-            "lng" : 36.8944924
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 29.1223944,
+            "lng": 36.8944924
           },
-          "southwest" :
-          {
-            "lat" : 22.0000001,
-            "lng" : 31.7215166
+          "southwest": {
+            "lat": 22.0000001,
+            "lng": 31.7215166
           }
         }
       },
-      "place_id" : "ChIJu0BOz2nESxQRcpmBbGaEHaA",
-      "types" :
-      [
+      "place_id": "ChIJu0BOz2nESxQRcpmBbGaEHaA",
+      "types": [
         "administrative_area_level_1",
         "political"
       ]
     },
     {
-      "address_components" :
-      [
+      "address_components": [
         {
-          "long_name" : "Egypt",
-          "short_name" : "EG",
-          "types" :
-          [
+          "long_name": "Egypt",
+          "short_name": "EG",
+          "types": [
             "country",
             "political"
           ]
         }
       ],
-      "formatted_address" : "Egypt",
-      "geometry" :
-      {
-        "bounds" :
-        {
-          "northeast" :
-          {
-            "lat" : 31.8122,
-            "lng" : 37.0569
+      "formatted_address": "Egypt",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 31.8122,
+            "lng": 37.0569
           },
-          "southwest" :
-          {
-            "lat" : 21.9999999,
-            "lng" : 24.696775
+          "southwest": {
+            "lat": 21.9999999,
+            "lng": 24.696775
           }
         },
-        "location" :
-        {
-          "lat" : 26.820553,
-          "lng" : 30.802498
+        "location": {
+          "lat": 26.820553,
+          "lng": 30.802498
         },
-        "location_type" : "APPROXIMATE",
-        "viewport" :
-        {
-          "northeast" :
-          {
-            "lat" : 31.8122,
-            "lng" : 37.0569
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 31.8122,
+            "lng": 37.0569
           },
-          "southwest" :
-          {
-            "lat" : 21.9999999,
-            "lng" : 24.696775
+          "southwest": {
+            "lat": 21.9999999,
+            "lng": 24.696775
           }
         }
       },
-      "place_id" : "ChIJ6TZcw3aJNhQRRMTEJQmgRSw",
-      "types" :
-      [
+      "place_id": "ChIJ6TZcw3aJNhQRRMTEJQmgRSw",
+      "types": [
         "country",
         "political"
       ]
     }
   ],
-  "status" : "OK"
+  "status": "OK"
 }
