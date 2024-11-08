@@ -5,8 +5,8 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
+import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.game.*
-import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.format.Gson.asJsonObject
 
@@ -17,10 +17,10 @@ class RaceActions(private val storagePort: StoragePort) {
         return if (players.isEmpty()) {
             "Not enough players"
         } else {
-            storagePort.add(WaveHandlers.start)
-            storagePort.add(WaveHandlers.finish)
+            storagePort.add(WaveAdapter.start)
+            storagePort.add(WaveAdapter.finish)
             players
-                .map { it.copy(geoLocation = WaveHandlers.start.geoLocation) }
+                .map { it.copy(geoLocation = WaveAdapter.start.geoLocation) }
                 .forEach(storagePort::add)
             "Success"
         }

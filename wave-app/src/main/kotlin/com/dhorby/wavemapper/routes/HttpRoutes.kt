@@ -40,7 +40,6 @@ object HttpRoutes {
         val dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
         val storageAdapter = StorageAdapter(dataStoreClient)
         val waveHandlers = WaveHandlers(
-            storageAdapter = storageAdapter,
             wavePort = WaveAdapter(
                 siteListFunction = siteListFunction,
                 dataForSiteFunction = dataForSiteFunction,

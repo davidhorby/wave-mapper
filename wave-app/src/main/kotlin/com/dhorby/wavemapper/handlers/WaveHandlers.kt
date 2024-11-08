@@ -1,12 +1,6 @@
 package com.dhorby.wavemapper.handlers
 
-import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.wavemapper.sailMove
-import com.dhorby.wavemapper.port.StoragePort
 import com.dhorby.wavemapper.port.WavePort
 import com.dhorby.wavemapper.waveLocationListBodyLens
 import org.http4k.core.*
@@ -18,27 +12,11 @@ import org.http4k.lens.float
 import org.http4k.template.HandlebarsTemplates
 
 class WaveHandlers(
-    val storageAdapter: StoragePort,
     val wavePort: WavePort
 ) {
 
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
-
-    companion object {
-        val start = PieceLocation(
-            id = "NewportR",
-            name = "Newport, Rhode Island",
-            pieceType = PieceType.START,
-            geoLocation = GeoLocation(lat = 41.49, lon = -71.31)
-        )
-        val finish = PieceLocation(
-            id = "Newport",
-            name = "Newport, Wales",
-            pieceType = PieceType.FINISH,
-            geoLocation = GeoLocation(lat = 51.35, lon = -2.59)
-        )
-    }
 
     private val devMode = false;
 
@@ -79,30 +57,19 @@ class WaveHandlers(
     }
 
 
-    private fun startRace() {
-        storageAdapter.add(start)
-        storageAdapter.add(finish)
-        val keysOfType: List<PieceLocation> = storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
-        keysOfType
-            .map { it.copy(geoLocation = start.geoLocation) }
-            .forEach(storageAdapter::add)
-    }
-
     fun start(): HttpHandler = {
-        startRace()
+        wavePort.startRace()
         Response(FOUND).header("Location", "/")
     }
 
     fun move():HttpHandler  = {
-        storageAdapter.getKeysOfType(PIECE_LOCATION,PieceType.BOAT)
-            .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
-            .forEach(storageAdapter::add)
+        wavePort.move()
         Response(FOUND).header("Location", "/")
     }
 
 
     fun clear(): HttpHandler = {
-        storageAdapter.clear(PIECE_LOCATION)
+        wavePort.clear()
         Response(FOUND).header("Location", "/")
     }
 }

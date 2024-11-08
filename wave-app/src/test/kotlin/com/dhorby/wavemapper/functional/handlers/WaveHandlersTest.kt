@@ -39,7 +39,6 @@ internal class WaveHandlersTest : FunctionalTestEnv() {
         val dataStoreClient = DataStoreClient(events = events, datastore = datastore)
         val storageAdapter = StorageAdapter(dataStoreClient)
         val wavePage: (Request) -> Response = WaveHandlers(
-            storageAdapter = storageAdapter,
             wavePort = WaveAdapter(
                 siteListFunction = invalidSiteList,
                 dataForSiteFunction = dataForSiteFunction,
