@@ -10,7 +10,9 @@ dependencies {
     implementation(libs.bundles.jackson)
     implementation(libs.bundles.http4k)
     implementation(project(":domain"))
-//    implementation("wave-mapper:domain")
+
+    testFixturesImplementation(libs.bundles.googleCloud)
+    testFixturesImplementation(project(":domain"))
 
     testImplementation(libs.bundles.test)
     testRuntimeOnly(libs.bundles.testRuntime)
