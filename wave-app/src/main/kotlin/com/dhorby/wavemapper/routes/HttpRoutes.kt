@@ -3,6 +3,7 @@ package com.dhorby.wavemapper.routes
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
+import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.endpoints.http.DataSheet
 import com.dhorby.wavemapper.endpoints.http.Properties
 import com.dhorby.wavemapper.endpoints.http.WaveData
@@ -37,10 +38,12 @@ object HttpRoutes {
 
         val siteListFunction = waveServiceFunctions.siteListFunction
         val dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
+        val storageAdapter =  StorageAdapter(dataStoreClient)
         val waveHandlers = WaveHandlers(
             siteListFunction = siteListFunction,
             dataForSiteFunction = dataForSiteFunction,
-            storageAdapter = StorageAdapter(dataStoreClient)
+            storageAdapter = storageAdapter,
+            wavePort = WaveAdapter(storageAdapter)
         )
 
         val httpHandler: HttpHandler = routes(

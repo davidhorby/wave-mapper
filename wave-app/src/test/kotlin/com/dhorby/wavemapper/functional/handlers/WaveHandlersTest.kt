@@ -6,6 +6,7 @@ import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.Site
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.env.FunctionalTestEnv
+import com.dhorby.wavemapper.fake.FakeWaveAdapter
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.assertion.assertThat
@@ -39,7 +40,8 @@ internal class WaveHandlersTest : FunctionalTestEnv() {
         val wavePage: (Request) -> Response = WaveHandlers(
             siteListFunction = invalidSiteList,
             dataForSiteFunction = dataForSiteFunctionFake,
-            storageAdapter = StorageAdapter(dataStoreClient)
+            storageAdapter = StorageAdapter(dataStoreClient),
+            wavePort = FakeWaveAdapter()
         ).getWaveData()
         val response = wavePage(Request(Method.GET, "/"))
         assertThat(response.status, equalTo(OK))

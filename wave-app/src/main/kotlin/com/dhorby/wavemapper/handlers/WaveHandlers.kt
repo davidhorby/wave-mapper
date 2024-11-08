@@ -1,20 +1,17 @@
 package com.dhorby.wavemapper.handlers
 
-import com.dhorby.gcloud.config.Settings
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
 import com.dhorby.gcloud.wavemapper.SiteListFunction
-import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
-import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
+import com.dhorby.wavemapper.port.WavePort
 import com.dhorby.wavemapper.waveLocationListBodyLens
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
@@ -24,14 +21,14 @@ import org.http4k.core.body.form
 import org.http4k.lens.Query
 import org.http4k.lens.float
 import org.http4k.template.HandlebarsTemplates
-import org.http4k.template.ViewModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class WaveHandlers(
     val siteListFunction: SiteListFunction,
     val dataForSiteFunction: DataForSiteFunction,
-    val storageAdapter: StoragePort
+    val storageAdapter: StoragePort,
+    val wavePort: WavePort
 ) {
 
     val latQuery = Query.float().required("lat")
@@ -64,25 +61,10 @@ class WaveHandlers(
 
     fun getWavePage(): HttpHandler = {
 
-        val theData: String = storageAdapter.getLocationData().toGoogleMapFormat()
-        val viewModel: ViewModel? =
-            mapsApiKey.let { mapsApiKey ->
-                try {
-                    WavePage(
-                        waveData = theData,
-                        mapsApiKey = mapsApiKey,
-                        players = storageAdapter.getDistances(),
-                        hostname = Settings.HOST,
-                        port = Settings.PORT
-                    )
-                } catch (e: Exception) {
-                    LOG.error("Failed to get wave data", e)
-                    null
-                }
-            }
-        viewModel?.let {
+        val waveViewModel = wavePort.getWavePage()
+        waveViewModel?.let {
             try {
-                Response(OK).body(renderer(viewModel))
+                Response(OK).body(renderer(waveViewModel))
             } catch (e: Exception) {
                 Response(OK).body(e.stackTraceToString())
             }
