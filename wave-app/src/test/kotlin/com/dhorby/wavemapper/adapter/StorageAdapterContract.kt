@@ -1,10 +1,9 @@
-package com.dhorby.wavemapper.adapters
+package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.google.cloud.datastore.Entity
 import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat

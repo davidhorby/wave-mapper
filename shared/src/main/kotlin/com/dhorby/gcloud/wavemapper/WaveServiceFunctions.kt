@@ -3,13 +3,11 @@ package com.dhorby.gcloud.wavemapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import java.net.URI
 
-class WaveServiceFunctions: AppFunctions {
+object WaveServiceFunctions : AppFunctions {
 
     private val xmlMapper = XmlMapper()
 
-    companion object {
-        private val setListUrls = URI(Constants.siteListUrl).toURL()
-    }
+    private val setListUrls = URI(Constants.siteListUrl).toURL()
 
     override val siteListFunction: SiteListFunction = {
         val xmlText = setListUrls.readText()

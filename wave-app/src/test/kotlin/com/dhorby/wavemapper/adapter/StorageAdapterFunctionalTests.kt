@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.adapters
+package com.dhorby.wavemapper.adapter
 
 import AddRequestCount
 import com.dhorby.gcloud.external.junit.DataStoreExtension
@@ -14,6 +14,7 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
 import com.natpryce.hamkrest.isA
 import org.http4k.events.AutoMarshallingEvents
+import org.http4k.events.AutoMarshallingEvents.invoke
 import org.http4k.events.Event
 import org.http4k.events.EventFilters
 import org.http4k.events.then

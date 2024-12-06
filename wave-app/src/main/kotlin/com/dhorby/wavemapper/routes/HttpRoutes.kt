@@ -32,7 +32,6 @@ import org.http4k.routing.static
 
 object HttpRoutes {
 
-    private val waveServiceFunctions = WaveServiceFunctions()
 
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
@@ -40,8 +39,8 @@ object HttpRoutes {
     operator fun invoke(dataStoreClient: DataStoreClient, events: (Event) -> Unit): HttpHandler {
 
         val apacheHandler: HttpHandler = ApacheClient()
-        val siteListFunction = waveServiceFunctions.siteListFunction
-        val dataForSiteFunction = waveServiceFunctions.dataForSiteFunction
+        val siteListFunction = WaveServiceFunctions.siteListFunction
+        val dataForSiteFunction = WaveServiceFunctions.dataForSiteFunction
         val storageAdapter = StorageAdapter(dataStoreClient)
         val waveHandlers = WaveHandlers(
             wavePort = WaveAdapter(
