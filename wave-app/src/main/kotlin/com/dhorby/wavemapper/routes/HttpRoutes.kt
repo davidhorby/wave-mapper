@@ -9,6 +9,7 @@ import com.dhorby.wavemapper.endpoints.http.Properties
 import com.dhorby.wavemapper.endpoints.http.WaveData
 import com.dhorby.wavemapper.endpoints.http.WaveMap
 import com.dhorby.wavemapper.external.google.GoogleMapsClient
+import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
 import org.http4k.client.ApacheClient
@@ -44,10 +45,10 @@ object HttpRoutes {
         val storageAdapter = StorageAdapter(dataStoreClient)
         val waveHandlers = WaveHandlers(
             wavePort = WaveAdapter(
-                siteListFunction = siteListFunction,
                 dataForSiteFunction = dataForSiteFunction,
                 storageAdapter = storageAdapter,
-                googleMapsClient = GoogleMapsClient(apacheHandler)
+                googleMapsClient = GoogleMapsClient(apacheHandler),
+                metOfficeClient = MetOfficeClient()
             )
         )
 

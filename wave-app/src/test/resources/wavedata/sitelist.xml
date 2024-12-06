@@ -1,0 +1,23 @@
+<Locations>
+    <Location id="162103" latitude="49.9167" longitude="-2.883" obsLocationType="Buoy" obsRegion="South Coast" obsSource="FM-13 SHIP" name="Channel"/>
+    <Location id="162305" latitude="50.4167" longitude="0.0" obsLocationType="Light Vessel" obsRegion="South Coast" obsSource="FM-13 SHIP" name="Greenwich Light Vessel"/>
+    <Location id="162001" latitude="45.23" longitude="-5.0" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="Gascogne"/>
+    <Location id="162029" latitude="48.59" longitude="-12.44" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="K1"/>
+    <Location id="162081" latitude="51.01" longitude="-13.26" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="K2"/>
+    <Location id="162105" latitude="55.405" longitude="-11.777" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-13 SHIP" name="K4"/>
+    <Location id="162163" latitude="47.55" longitude="-8.47" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="Brittany"/>
+    <Location id="162304" latitude="51.15" longitude="1.78" obsLocationType="Light Vessel" obsRegion="East and North Coasts" obsSource="FM-13 SHIP" name="Sandettie"/>
+    <Location id="164045" latitude="59.07" longitude="-11.42" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-13 SHIP" name="K5"/>
+    <Location id="164046" latitude="60.48" longitude="-4.17" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="K7"/>
+    <Location id="162027" latitude="49.08" longitude="-2.22" obsLocationType="Buoy" obsRegion="South Coast" obsSource="FM-13 SHIP" name="Jersey Buoy"/>
+    <Location id="162091" latitude="53.29" longitude="-5.26" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-18 BUOY" name="M2"/>
+    <Location id="162092" latitude="51.13" longitude="-10.33" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-18 BUOY" name="M3"/>
+    <Location id="162093" latitude="55.0" longitude="-10.0" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-18 BUOY" name="M4"/>
+    <Location id="162094" latitude="51.41" longitude="-6.42" obsLocationType="Buoy" obsRegion="West Coast" obsSource="FM-18 BUOY" name="M5"/>
+    <Location id="162095" latitude="53.04" longitude="-15.53" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="M6"/>
+    <Location id="162107" latitude="50.04" longitude="-6.04" obsLocationType="Light Vessel" obsRegion="South Coast" obsSource="FM-13 SHIP" name="Seven Stones"/>
+    <Location id="162170" latitude="51.24" longitude="2.0" obsLocationType="Light Vessel" obsRegion="East and North Coasts" obsSource="FM-13 SHIP" name="F3"/>
+    <Location id="162442" latitude="49.0" longitude="-16.5" obsLocationType="Buoy" obsRegion="Offshore" obsSource="FM-13 SHIP" name="Pap"/>
+    <Location id="162050" latitude="50.0" longitude="-4.4" obsLocationType="Buoy" obsRegion="South Coast" obsSource="FM-13 SHIP" name="E1"/>
+    <Location id="162030" latitude="50.25" longitude="-4.2167" obsLocationType="Buoy" obsRegion="South Coast" obsSource="FM-13 SHIP" name="L4"/>
+</Locations>

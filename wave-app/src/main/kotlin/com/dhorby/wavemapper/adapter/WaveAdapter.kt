@@ -8,11 +8,10 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
-import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
-import com.dhorby.gcloud.wavemapper.getAllWaveData
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.external.google.GoogleMapsClient
+import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
@@ -22,11 +21,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class WaveAdapter(
-    val siteListFunction: SiteListFunction,
     val dataForSiteFunction: DataForSiteFunction,
     val storageAdapter: StoragePort,
-    val googleMapsClient: GoogleMapsClient
-): WavePort {
+    val googleMapsClient: GoogleMapsClient,
+    val metOfficeClient: MetOfficeClient
+) : WavePort {
     val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
     companion object {
@@ -65,11 +64,11 @@ class WaveAdapter(
     }
 
 
-     override fun getWaveData():MutableList<Location> = getAllWaveData(siteListFunction, dataForSiteFunction)
+    override fun getWaveData(): MutableList<Location> = metOfficeClient.getSiteList()
 
     override fun getLocationData(lat: Float, lon: Float): String = googleMapsClient.getLocationData(lat, lon)
 
-    override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean  {
+    override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean {
         val name = parametersMap["name"]?.first() ?: "Unknown"
         val pieceType = PieceType.valueOf(parametersMap["pieceType"]?.first() ?: "UNKNOWN")
         val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
@@ -96,12 +95,11 @@ class WaveAdapter(
     }
 
 
-    override fun move()  =
-        storageAdapter.getKeysOfType(PIECE_LOCATION,PieceType.BOAT)
+    override fun move() =
+        storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(storageAdapter::add)
 
 
-
-    override fun clear()  = storageAdapter.clear(PIECE_LOCATION)
+    override fun clear() = storageAdapter.clear(PIECE_LOCATION)
 }

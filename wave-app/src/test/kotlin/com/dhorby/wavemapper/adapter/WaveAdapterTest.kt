@@ -8,6 +8,7 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.external.google.GoogleMapsClient
+import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
 import org.http4k.client.ApacheClient
@@ -51,10 +52,10 @@ class WaveAdapterTest {
     @Test
     fun `wave page should be present`(){
         val waveAdapter = WaveAdapter(
-            siteListFunction = WaveServiceFunctions.siteListFunction,
             dataForSiteFunction = WaveServiceFunctions.dataForSiteFunction,
             storageAdapter = storageAdapter,
-            googleMapsClient = GoogleMapsClient(ApacheClient())
+            googleMapsClient = GoogleMapsClient(ApacheClient()),
+            metOfficeClient = MetOfficeClient()
         )
         storageAdapter.add(pieceLocation)
         val wavePage: ViewModel? = waveAdapter.getWavePage()
