@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.model
 
 
-import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
+import com.dhorby.wavemapper.addPieceWsMessageLens
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.websocket.WsMessage

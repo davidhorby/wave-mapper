@@ -1,10 +1,10 @@
 package com.dhorby.wavemapper.routes
 
 import com.dhorby.wavemapper.actions.RaceActions
+import com.dhorby.wavemapper.addPieceWsMessageLens
 import com.dhorby.wavemapper.endpoints.utils.WsUtils
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
 import com.dhorby.wavemapper.handlers.withReporting
-import com.dhorby.wavemapper.model.Lenses.addPieceWsMessageLens
 import com.dhorby.wavemapper.model.WaveWsMessage
 import com.dhorby.wavemapper.model.toPieceLocation
 import com.dhorby.wavemapper.model.waveWsMessageLens
@@ -53,7 +53,8 @@ object WsRoutes {
                     wsPostSocket = postSocketLocal
                     println("post socket open")
                     postSocketLocal.onMessage { message: WsMessage ->
-                        raceActions.addPiece(pieceLocation = addPieceWsMessageLens(message).toPieceLocation())
+                        raceActions.addPiece(
+                            pieceLocation = addPieceWsMessageLens(message).toPieceLocation())
                         returnMapData(storagePort, "add piece")
                     }
                     returnMapData(storagePort, "add piece")
