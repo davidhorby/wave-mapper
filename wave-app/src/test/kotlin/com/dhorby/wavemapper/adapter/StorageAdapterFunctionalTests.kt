@@ -1,12 +1,12 @@
 package com.dhorby.wavemapper.adapter
 
-import AddRequestCount
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
+import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Value
 import com.natpryce.hamkrest.Matcher
@@ -57,7 +57,4 @@ class StorageAdapterFunctionalTests:StorageAdapterContract {
     )
     override val pieceLocationMatcher: Matcher<PieceLocation> = isA<PieceLocation>(equalTo(pieceLocation))
 
-//    init {
-//        dataStoreClient.writeToDatastore(PIECE_LOCATION_KIND, pieceLocation)
-//    }
 }

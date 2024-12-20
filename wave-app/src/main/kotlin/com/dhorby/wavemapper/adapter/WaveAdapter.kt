@@ -7,13 +7,12 @@ import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
-import com.dhorby.gcloud.wavemapper.DataForSiteFunction
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.sailMove
+import com.dhorby.wavemapper.components.WavePage
 import com.dhorby.wavemapper.external.google.GoogleMapsClient
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
-import com.dhorby.wavemapper.model.WavePage
 import com.dhorby.wavemapper.port.StoragePort
 import com.dhorby.wavemapper.port.WavePort
 import org.http4k.template.ViewModel
@@ -21,7 +20,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class WaveAdapter(
-    val dataForSiteFunction: DataForSiteFunction,
     val storageAdapter: StoragePort,
     val googleMapsClient: GoogleMapsClient,
     val metOfficeClient: MetOfficeClient

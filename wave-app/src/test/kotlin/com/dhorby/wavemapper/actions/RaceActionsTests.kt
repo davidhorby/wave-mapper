@@ -3,9 +3,9 @@ package com.dhorby.wavemapper.actions
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.external.storage.EntityKind
-import com.dhorby.wavemapper.AddRequestCount
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.testBoatLocation
+import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat

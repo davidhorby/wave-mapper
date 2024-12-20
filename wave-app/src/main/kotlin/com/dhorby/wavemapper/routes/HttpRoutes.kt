@@ -48,7 +48,6 @@ object HttpRoutes {
         val waveDataAdapter: WaveDataPort = WaveDataAdapter(siteListFunction, dataForSiteFunction)
         val waveHandlers = WaveHandlers(
             wavePort = WaveAdapter(
-                dataForSiteFunction = dataForSiteFunction,
                 storageAdapter = storageAdapter,
                 googleMapsClient = GoogleMapsClient(apacheHandler),
                 metOfficeClient = MetOfficeClient()

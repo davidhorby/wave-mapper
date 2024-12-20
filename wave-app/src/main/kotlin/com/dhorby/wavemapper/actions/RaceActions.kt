@@ -10,6 +10,7 @@ import com.dhorby.wavemapper.game.*
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.format.Gson.asJsonObject
 
+@Suppress("SameReturnValue")
 class RaceActions(private val storagePort: StoragePort) {
 
     fun startRace(): String {
@@ -54,9 +55,11 @@ class RaceActions(private val storagePort: StoragePort) {
         storagePort.delete(EntityKind.PIECE_LOCATION, pieceLocation.id)
     }
 
-    fun getPiece(kind: EntityKind, keyValue: String): PieceLocation? {
-        return storagePort.getPiece(kind, keyValue)
-    }
+// --Commented out by Inspection START (20/12/2024, 12:37):
+//    fun getPiece(kind: EntityKind, keyValue: String): PieceLocation? {
+//        return storagePort.getPiece(kind, keyValue)
+//    }
+// --Commented out by Inspection STOP (20/12/2024, 12:37)
 
     fun getStartAndFinish(): List<PieceLocation> {
         return storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START) + storagePort.getKeysOfType(

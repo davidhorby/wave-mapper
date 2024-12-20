@@ -1,14 +1,13 @@
 package com.dhorby.wavemapper.adapter
 
-import AddRequestCount
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.external.google.GoogleMapsClient
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
+import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
 import org.http4k.client.ApacheClient
@@ -52,7 +51,6 @@ class WaveAdapterTest {
     @Test
     fun `wave page should be present`(){
         val waveAdapter = WaveAdapter(
-            dataForSiteFunction = WaveServiceFunctions.dataForSiteFunction,
             storageAdapter = storageAdapter,
             googleMapsClient = GoogleMapsClient(ApacheClient()),
             metOfficeClient = MetOfficeClient()

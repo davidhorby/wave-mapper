@@ -1,3 +1,5 @@
+package com.dhorby.wavemapper.tracing
+
 import org.http4k.events.EventFilter
 import org.http4k.events.plus
 
@@ -13,12 +15,3 @@ fun AddRequestCount(): EventFilter {
     }
 }
 
-//    private val dbHandler = ReportDbTransaction.invoke {
-//        events(
-//            IncomingDbRequest(
-//                uri = it.request.uri,
-//                status = 200,
-//                duration = it.duration.toMillis()
-//            )
-//        )
-//    }.then(TODO())

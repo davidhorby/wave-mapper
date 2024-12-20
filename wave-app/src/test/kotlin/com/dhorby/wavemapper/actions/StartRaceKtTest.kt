@@ -1,6 +1,5 @@
 package com.dhorby.wavemapper.actions
 
-import AddRequestCount
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.PieceLocation
@@ -9,6 +8,7 @@ import com.dhorby.wavemapper.game.finishLocation
 import com.dhorby.wavemapper.game.startLocation
 import com.dhorby.wavemapper.game.testBoatLocation
 import com.dhorby.wavemapper.port.StoragePort
+import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat

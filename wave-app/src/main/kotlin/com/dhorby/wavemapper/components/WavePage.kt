@@ -1,4 +1,4 @@
-package com.dhorby.wavemapper.model
+package com.dhorby.wavemapper.components
 
 import com.dhorby.gcloud.model.Player
 import org.http4k.template.ViewModel
