@@ -30,7 +30,7 @@ class MetOfficeClient {
                 val xmlText = metOfficeUrls.readText()
                 xmlMapper.readTree(xmlText).getLocation()
             } catch (ex: Exception) {
-                println("Failed to read url ${URI(Constants.metOfficeUrl).toURL()} ${ex.message}")
+                println("Failed to read url ${URI(metOfficeUrl).toURL()} ${ex.message}")
                 null
             }
         }.filterNotNull().toMutableList()

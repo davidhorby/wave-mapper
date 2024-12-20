@@ -14,7 +14,7 @@ class GoogleMapsClient(val client: HttpHandler) {
             .query("latlng", "$lat,$lon")
             .query("key", mapsApiKeyServer)
         val response = client(request)
-        val googleMapLocation: GoogleMapLocation = googleMapLocationLens.extract(response)
+        googleMapLocationLens.extract(response)
         return response.bodyString()
     }
 

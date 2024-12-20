@@ -1,5 +1,3 @@
 package com.dhorby.wavemapper.filters
 
-class DbFilter {
-
-}
+class DbFilter

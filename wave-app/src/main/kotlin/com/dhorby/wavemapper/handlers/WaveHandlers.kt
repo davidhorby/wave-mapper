@@ -18,7 +18,7 @@ class WaveHandlers(
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
 
-    private val devMode = false;
+    private val devMode = false
 
     val renderer = when {
         devMode -> HandlebarsTemplates().HotReload("src/main/resources")
