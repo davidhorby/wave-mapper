@@ -41,7 +41,6 @@ gcloud config set project analytics-springernature
 ```bash
 gcloud config set functions/region europe-west2
 ```
-
 #### Build the deployable jar (from top of repo)
 ```bash
 ../gradlew shadowJar
