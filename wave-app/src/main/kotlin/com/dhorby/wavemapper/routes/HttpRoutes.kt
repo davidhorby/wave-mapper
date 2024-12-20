@@ -4,6 +4,7 @@ import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.adapter.WaveAdapter
+import com.dhorby.wavemapper.adapter.WaveDataAdapter
 import com.dhorby.wavemapper.endpoints.http.DataSheet
 import com.dhorby.wavemapper.endpoints.http.Properties
 import com.dhorby.wavemapper.endpoints.http.WaveData
@@ -12,6 +13,7 @@ import com.dhorby.wavemapper.external.google.GoogleMapsClient
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
+import com.dhorby.wavemapper.port.WaveDataPort
 import org.http4k.client.ApacheClient
 import org.http4k.client.ApacheClient.invoke
 import org.http4k.contract.contract
@@ -43,6 +45,7 @@ object HttpRoutes {
         val siteListFunction = WaveServiceFunctions.siteListFunction
         val dataForSiteFunction = WaveServiceFunctions.dataForSiteFunction
         val storageAdapter = StorageAdapter(dataStoreClient)
+        val waveDataAdapter: WaveDataPort = WaveDataAdapter(siteListFunction, dataForSiteFunction)
         val waveHandlers = WaveHandlers(
             wavePort = WaveAdapter(
                 dataForSiteFunction = dataForSiteFunction,
@@ -57,10 +60,7 @@ object HttpRoutes {
                 Response(Status.OK).body("pong")
             },
             "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to WaveData(
-                siteListFunction = siteListFunction,
-                dataForSiteFunction = dataForSiteFunction
-            ),
+            "/data" bind Method.GET to WaveData(waveDataAdapter),
             "/properties" bind Method.GET to Properties(),
             "/datasheet" bind Method.GET to DataSheet(),
             "/map" bind Method.GET to WaveMap(),

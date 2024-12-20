@@ -3,13 +3,15 @@ package com.dhorby.gcloud.data
 import com.dhorby.gcloud.model.*
 import java.time.LocalDate
 
-val siteId = "12345"
-val siteName = "TestSite"
 
-val sharkId = "Monty"
-val sharkSite = "Eastern Atlantic"
 
 object TestData {
+
+    val siteId = "12345"
+    val siteName = "TestSite"
+
+    val sharkId = "Monty"
+    val sharkSite = "Eastern Atlantic"
 
     val testSiteLocation = Site(
         id = siteId,

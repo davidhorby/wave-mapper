@@ -7,4 +7,4 @@ import org.http4k.format.Jackson.auto
 
 
 val waveLocationBodyLens = Body.auto<WaveLocation>().toLens()
-val waveLocationListBodyLens = Body.auto<MutableList<Location>>().toLens()
+val waveLocationListBodyLens = Body.auto<List<Location>>().toLens()

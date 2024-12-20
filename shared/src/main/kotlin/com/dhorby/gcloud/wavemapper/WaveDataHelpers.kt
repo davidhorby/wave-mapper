@@ -21,17 +21,6 @@ fun getMetOfficeUrl(site: String): String {
     return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
 }
 
-fun getAllWaveData(
-    siteListFunction: SiteListFunction,
-    dataForSiteFunction: DataForSiteFunction
-): MutableList<Location> {
-    val mapNotNull: List<WaveLocation> = siteListFunction().mapNotNull { site ->
-        dataForSiteFunction(site.id)
-    }
-    return mapNotNull.filter { location ->
-        location.id.isNotEmpty()
-    }.toMutableList()
-}
 
 fun MutableList<Location>.withAddedShark(): MutableList<Location> {
     this.add(
