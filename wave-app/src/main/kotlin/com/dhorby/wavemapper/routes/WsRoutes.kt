@@ -53,8 +53,8 @@ object WsRoutes {
                     wsPostSocket = postSocketLocal
                     println("post socket open")
                     postSocketLocal.onMessage { message: WsMessage ->
-                        raceActions.addPiece(
-                            pieceLocation = addPieceWsMessageLens(message).toPieceLocation())
+                        val pieceLocation = addPieceWsMessageLens(message).toPieceLocation()
+                        raceActionsEndpoints.Add(raceActions, pieceLocation)
                         returnMapData(storagePort, "add piece")
                     }
                     returnMapData(storagePort, "add piece")

@@ -1,5 +1,6 @@
 package com.dhorby.wavemapper.endpoints.ws
 
+import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.endpoints.utils.WsUtils.generateWsResponse
 import com.dhorby.wavemapper.endpoints.utils.WsUtils.getMapData
@@ -28,17 +29,9 @@ class RaceActionsEndpoints(private val storagePort: StoragePort) {
         generateWsResponse(getMapData(storagePort))
     }
 
-//    fun addPiece(raceActions: RaceActions): (Request) -> WsResponse = { it ->
-//        WsResponse { ws: Websocket ->
-//            val name = namePath(req)
-//            ws.send(WsMessage("hello $name"))
-//            ws.onMessage {
-//                ws.send(WsMessage("$name is responding"))
-//            }
-//            ws.onClose { println("$name is closing") }
-//        }
-//    }
-
+    fun Add(raceActions: RaceActions, pieceLocation: PieceLocation) {
+        raceActions.addPiece(pieceLocation = pieceLocation)
+    }
 
 }
 
