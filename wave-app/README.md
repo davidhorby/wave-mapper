@@ -2,7 +2,7 @@ Data Point Site List
 
 http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/sitelist?res=3hourly&key=<metofficekey>
 
-Wave URL
+**Wave URL**
 
 http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res=3hourly&key=<metofficekey>
 
