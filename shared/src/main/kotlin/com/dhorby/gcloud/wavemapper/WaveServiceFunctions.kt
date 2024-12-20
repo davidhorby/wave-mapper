@@ -1,5 +1,7 @@
 package com.dhorby.gcloud.wavemapper
 
+import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
+import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import java.net.URI
 
@@ -17,7 +19,8 @@ object WaveServiceFunctions : AppFunctions {
 
     override val dataForSiteFunction: DataForSiteFunction = { site ->
         try {
-            val metOfficeUrls = URI(getMetOfficeUrl(site)).toURL()
+            val metOfficeUrls =
+                URI("${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}").toURL()
             val xmlText = metOfficeUrls.readText()
             xmlMapper.readTree(xmlText).getLocation()
         } catch (ex: Exception) {

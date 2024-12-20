@@ -1,8 +1,6 @@
 package com.dhorby.gcloud.wavemapper
 
 import com.dhorby.gcloud.model.*
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.fasterxml.jackson.databind.JsonNode
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -15,10 +13,6 @@ typealias DataForSiteFunction = (site: String) -> WaveLocation?
 fun sailMove(geoLocation: GeoLocation): GeoLocation {
     return GeoLocation(geoLocation.lat  + (0..5).random().toDouble(),
         geoLocation.lon  + (0..10).random().toDouble())
-}
-
-fun getMetOfficeUrl(site: String): String {
-    return "${metOfficeUrl}$site?res=3hourly&key=${metOfficeApiKey}"
 }
 
 
