@@ -70,7 +70,6 @@ gcloud app logs tail -s default
 ```bash
 gcloud app browse
 ```
-
 ## Swagger
 http://localhost/openapi/index.html
 
