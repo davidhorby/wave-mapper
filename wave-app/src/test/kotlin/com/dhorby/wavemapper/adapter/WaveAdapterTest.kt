@@ -3,16 +3,16 @@ package com.dhorby.wavemapper.adapter
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.model.GeoLocation
+import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
-import com.dhorby.wavemapper.external.google.GoogleMapsClient
+import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
 import org.http4k.client.ApacheClient
 import org.http4k.events.AutoMarshallingEvents
-import org.http4k.events.AutoMarshallingEvents.invoke
 import org.http4k.events.Event
 import org.http4k.events.EventFilters
 import org.http4k.events.then
@@ -52,11 +52,23 @@ class WaveAdapterTest {
     fun `wave page should be present`(){
         val waveAdapter = WaveAdapter(
             storageAdapter = storageAdapter,
-            googleMapsClient = GoogleMapsClient(ApacheClient()),
+            googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
             metOfficeClient = MetOfficeClient()
         )
         storageAdapter.add(pieceLocation)
         val wavePage: ViewModel? = waveAdapter.getWavePage()
         assertThat(wavePage, present())
+    }
+
+    @Test
+    fun `wave data should be present`(){
+        val waveAdapter = WaveAdapter(
+            storageAdapter = storageAdapter,
+            googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
+            metOfficeClient = MetOfficeClient()
+        )
+        storageAdapter.add(pieceLocation)
+        val waveData: MutableList<Location> = waveAdapter.getWaveData()
+        assertThat(waveData, present())
     }
 }

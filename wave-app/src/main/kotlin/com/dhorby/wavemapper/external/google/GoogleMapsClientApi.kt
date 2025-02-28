@@ -6,11 +6,13 @@ import com.dhorby.wavemapper.model.googleMapLocationLens
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.Request.Companion.invoke
 
-class GoogleMapsClient(val client: HttpHandler) {
-    fun getLocationData(lat:Float, lon:Float): String  {
+
+
+class GoogleMapsClientApi(val client: HttpHandler):MapsClient {
+    override fun getLocationData(lat:Float, lon:Float): String  {
         val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
+//        val request = Request(Method.GET, "/maps/api/geocode/json")
             .query("latlng", "$lat,$lon")
             .query("key", mapsApiKeyServer)
         val response = client(request)
@@ -18,7 +20,7 @@ class GoogleMapsClient(val client: HttpHandler) {
         return response.bodyString()
     }
 
-    fun getLocationDatAsObject(lat:Float, lon:Float): GoogleMapLocation {
+    override fun getLocationDatAsObject(lat:Float, lon:Float): GoogleMapLocation {
         val request = Request(Method.GET, "https://maps.googleapis.com/maps/api/geocode/json")
             .query("latlng", "$lat,$lon")
             .query("key", mapsApiKeyServer)

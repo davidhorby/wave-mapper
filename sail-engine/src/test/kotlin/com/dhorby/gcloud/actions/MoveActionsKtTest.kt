@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 
 class MoveActionsKtTest {
 
-
     @Test
     fun loadPieceLocation() {
         val sharkLocationAsJson = Json.encodeToString(testSharkLocation)

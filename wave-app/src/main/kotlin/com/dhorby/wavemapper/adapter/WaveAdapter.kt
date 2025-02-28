@@ -10,7 +10,7 @@ import com.dhorby.gcloud.wavemapper.Constants.mapsApiKey
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.components.WavePage
-import com.dhorby.wavemapper.external.google.GoogleMapsClient
+import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.port.StoragePort
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
 
 class WaveAdapter(
     val storageAdapter: StoragePort,
-    val googleMapsClient: GoogleMapsClient,
+    val googleMapsClientApi: GoogleMapsClientApi,
     val metOfficeClient: MetOfficeClient
 ) : WavePort {
     val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
@@ -65,7 +65,7 @@ class WaveAdapter(
 
     override fun getWaveData(): MutableList<Location> = metOfficeClient.getSiteList()
 
-    override fun getLocationData(lat: Float, lon: Float): String = googleMapsClient.getLocationData(lat, lon)
+    override fun getLocationData(lat: Float, lon: Float): String = googleMapsClientApi.getLocationData(lat, lon)
 
     override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean {
         val name = parametersMap["name"]?.first() ?: "Unknown"
