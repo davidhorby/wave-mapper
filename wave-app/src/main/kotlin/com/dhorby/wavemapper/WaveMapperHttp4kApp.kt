@@ -4,7 +4,10 @@ import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.wavemapper.routes.WaveServiceRoutes
 import com.dhorby.wavemapper.tracing.AddRequestCount
 import com.google.cloud.datastore.DatastoreOptions
-import org.http4k.events.*
+import org.http4k.events.AutoMarshallingEvents
+import org.http4k.events.Event
+import org.http4k.events.EventFilters
+import org.http4k.events.then
 import org.http4k.format.Jackson
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
@@ -12,14 +15,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
-
-
 object WaveMapperHttp4kApp {
 
     private val LOG: Logger = LoggerFactory.getLogger(WaveMapperHttp4kApp::class.java)
 
     @JvmStatic
-    fun main() {
+    fun main(args: Array<String>) {
 
         val events: (Event) -> Unit =
             EventFilters.AddTimestamp()

@@ -13,10 +13,8 @@ class MoveActionsKtTest {
 
     @Test
     fun loadPieceLocation() {
-
         val sharkLocationAsJson = Json.encodeToString(testSharkLocation)
         val pieceLocation = sharkLocationAsJson.jsonToObject<PieceLocation>()
         assertThat(pieceLocation, equalTo(testSharkLocation))
-
     }
 }

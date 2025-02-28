@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.config.Settings
-import com.dhorby.gcloud.external.storage.EntityKind.*
+import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.model.GeoLocation
 import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.model.PieceLocation
@@ -51,7 +51,8 @@ class WaveAdapter(
                         mapsApiKey = mapsApiKey,
                         players = storageAdapter.getDistances(),
                         hostname = Settings.HOST,
-                        port = Settings.PORT
+                        port = Settings.PORT,
+                        template = "/templates/WavePage"
                     )
                 } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)

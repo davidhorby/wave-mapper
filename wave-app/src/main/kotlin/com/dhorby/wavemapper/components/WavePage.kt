@@ -8,5 +8,8 @@ data class WavePage(
     val mapsApiKey: String,
     val players: List<Player>,
     val hostname:String = "localhost",
-    val port:Int = 8080
-): ViewModel
+    val port:Int = 8080,
+    val template: String
+): ViewModel {
+    override fun template(): String  = template
+}

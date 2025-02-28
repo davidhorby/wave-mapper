@@ -10,6 +10,7 @@ import org.http4k.core.body.form
 import org.http4k.lens.Query
 import org.http4k.lens.float
 import org.http4k.template.HandlebarsTemplates
+import org.http4k.template.ViewModel
 
 class WaveHandlers(
     val wavePort: WavePort
@@ -26,7 +27,7 @@ class WaveHandlers(
     }
 
     fun getWavePage(): HttpHandler = {
-        val waveViewModel = wavePort.getWavePage()
+        val waveViewModel: ViewModel? = wavePort.getWavePage()
         waveViewModel?.let {
             try {
                 Response(OK).body(renderer(waveViewModel))
