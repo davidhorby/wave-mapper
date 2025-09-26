@@ -22,51 +22,55 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
 class WaveAdapterTest {
-
     companion object {
         @JvmStatic
         @RegisterExtension
-        val server = DataStoreExtension()
-            .builder()
-            .build()
+        val server =
+            DataStoreExtension()
+                .builder()
+                .build()
     }
 
     private val datastore = server.localDatastoreHelper.options.service
 
     private val events: (Event) -> Unit =
-        EventFilters.AddTimestamp()
+        EventFilters
+            .AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
             .then(AddRequestCount())
             .then(AutoMarshallingEvents(Jackson))
     val storageAdapter = StorageAdapter(DataStoreClient(events, datastore))
 
-    val pieceLocation = PieceLocation(
-        id = "test",
-        name = "test piece",
-        geoLocation = GeoLocation(-0.34, 45.03),
-        pieceType = PieceType.BOAT
-    )
+    val pieceLocation =
+        PieceLocation(
+            id = "test",
+            name = "test piece",
+            geoLocation = GeoLocation(-0.34, 45.03),
+            pieceType = PieceType.BOAT,
+        )
 
     @Test
-    fun `wave page should be present`(){
-        val waveAdapter = WaveAdapter(
-            storageAdapter = storageAdapter,
-            googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
-            metOfficeClient = MetOfficeClient()
-        )
+    fun `wave page should be present`() {
+        val waveAdapter =
+            WaveAdapter(
+                storageAdapter = storageAdapter,
+                googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
+                metOfficeClient = MetOfficeClient(),
+            )
         storageAdapter.add(pieceLocation)
         val wavePage: ViewModel? = waveAdapter.getWavePage()
         assertThat(wavePage, present())
     }
 
     @Test
-    fun `wave data should be present`(){
-        val waveAdapter = WaveAdapter(
-            storageAdapter = storageAdapter,
-            googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
-            metOfficeClient = MetOfficeClient()
-        )
+    fun `wave data should be present`() {
+        val waveAdapter =
+            WaveAdapter(
+                storageAdapter = storageAdapter,
+                googleMapsClientApi = GoogleMapsClientApi(ApacheClient()),
+                metOfficeClient = MetOfficeClient(),
+            )
         storageAdapter.add(pieceLocation)
         val waveData: MutableList<Location> = waveAdapter.getWaveData()
         assertThat(waveData, present())

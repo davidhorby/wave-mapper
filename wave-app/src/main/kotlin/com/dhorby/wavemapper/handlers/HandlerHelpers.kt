@@ -10,25 +10,26 @@ import org.http4k.filter.ResponseFilters
 import org.http4k.routing.RoutingWsHandler
 import org.http4k.websocket.then
 
-
 fun HttpHandler.withEvents(events: (Event) -> Unit) =
-    ResponseFilters.ReportHttpTransaction {
-        // to "emit" an event, just invoke() the Events!
-        events(
-            IncomingHttpRequest(
-                uri = it.request.uri,
-                status = it.response.status.code,
-                duration = it.duration.toMillis()
+    ResponseFilters
+        .ReportHttpTransaction {
+            // to "emit" an event, just invoke() the Events!
+            events(
+                IncomingHttpRequest(
+                    uri = it.request.uri,
+                    status = it.response.status.code,
+                    duration = it.duration.toMillis(),
+                ),
             )
+        }.then(this)
+
+fun RoutingWsHandler.withReporting(events: (Event) -> Unit) =
+    ReportWsTransaction {
+        events(
+            IncomingWsRequest(
+                uri = it.request.uri,
+                status = 200,
+                duration = it.duration.toMillis(),
+            ),
         )
     }.then(this)
-
-fun RoutingWsHandler.withReporting(events: (Event) -> Unit) = ReportWsTransaction {
-    events(
-        IncomingWsRequest(
-            uri = it.request.uri,
-            status = 200,
-            duration = it.duration.toMillis()
-        )
-    )
-}.then(this)

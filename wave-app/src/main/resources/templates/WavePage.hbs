@@ -1,391 +1,214 @@
 <html title="Wave Mapper">
 <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.load("current", {
-            "packages":['map','geochart', 'table'],
-            // Note: you will need to get a mapsApiKey for your project.
-            // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-            "mapsApiKey": "{{mapsApiKey}}",
-            "callback": drawMap
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        // Google Charts setup
+        google.charts.load('current', {
+            packages: ['corechart', 'map', 'geochart', 'table'],
+            mapsApiKey: "{{mapsApiKey}}",
+            callback: drawMap
         });
-        // google.charts.setOnLoadCallback(drawMap);
-        var waveurl = 'https://icons.iconarchive.com/icons/iconsmind/outline/'
-        var sharkicon ="https://icons.iconarchive.com/icons/martin-berube/animal/32/shark-icon.png"
-        var sailboaticon = "https://icons.iconarchive.com/icons/aha-soft/transport/32/sailing-ship-icon.png"
-        var pirateshipico = "https://icons.iconarchive.com/icons/pixelpress/pirates/48/Pirate-Ship-icon.png"
-        var notavailable = "https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png"
-        var starticon = "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Flag-yellow-icon.png"
-        var finishicon = "https://icons.iconarchive.com/icons/icons8/windows-8/48/Sports-Finish-Flag-icon.png"
-        var waveicon = 'Wave-icon.png'
 
-        var options = {
+        // Icon URLs
+        const icons = {
+            verybig: { url: 'https://icons.iconarchive.com/icons/iconsmind/outline/72/Wave-icon.png' },
+            big: { url: 'https://icons.iconarchive.com/iconsmind/outline/64/Wave-icon.png' },
+            medium: { url: 'https://icons.iconarchive.com/iconsmind/outline/48/Wave-icon.png' },
+            small: { url: 'https://icons.iconarchive.com/iconsmind/outline/32/Wave-icon.png' },
+            verysmall: { url: 'https://icons.iconarchive.com/iconsmind/outline/24/Wave-icon.png' },
+            shark: { url: 'https://icons.iconarchive.com/icons/martin-berube/animal/32/shark-icon.png' },
+            boat: { url: 'https://icons.iconarchive.com/icons/aha-soft/transport/32/sailing-ship-icon.png' },
+            pirate: { url: 'https://icons.iconarchive.com/icons/pixelpress/pirates/48/Pirate-Ship-icon.png' },
+            notavailable: { url: 'https://icons.iconarchive.com/icons/webiconset/blogging/16/Not-Available-for-Work-icon.png' },
+            start: { url: 'https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/24/Flag-yellow-icon.png' },
+            finish: { url: 'https://icons.iconarchive.com/icons/icons8/windows-8/48/Sports-Finish-Flag-icon.png' }
+        };
+
+        const mapOptions = {
             zoomLevel: 3,
             showTooltip: true,
             showInfoWindow: true,
             useMapTypeControl: true,
             showLine: true,
-            icons: {
-                verybig: {
-                    normal:   waveurl + '/72/' + waveicon,
-                    selected: waveurl + '/72/' + waveicon
-                },
-                big: {
-                    normal:   waveurl + '/64/' + waveicon,
-                    selected: waveurl + '/64/' + waveicon
-                },
-                medium: {
-                    normal:   waveurl + '/48/' + waveicon,
-                    selected: waveurl + '/48/' + waveicon
-                },
-                small: {
-                    normal:   waveurl + '/32/' + waveicon,
-                    selected: waveurl + '/32/' + waveicon
-                },
-                verysmall: {
-                    normal:   waveurl + '/24/' + waveicon,
-                    selected: waveurl + '/24/' + waveicon,
-                },
-                shark: {
-                    normal:   sharkicon,
-                    selected: sharkicon,
-                },
-                boat: {
-                    normal:   sailboaticon,
-                    selected: sailboaticon,
-                },
-                start: {
-                    normal:   starticon,
-                    selected: starticon,
-                },
-                finish: {
-                    normal:   finishicon,
-                    selected: finishicon,
-                },
-                pirate: {
-                    normal:   pirateshipico,
-                    selected: pirateshipico,
-                },
-                notavailable: {
-                    normal:   notavailable,
-                    selected: notavailable,
-                }
-            }
+            icons: Object.fromEntries(Object.entries(icons).map(([k, v]) => [k, { normal: v.url, selected: v.url }]))
         };
 
-
         function drawChart() {
-
-             var data = google.visualization.arrayToDataTable([{{{waveData}}}]);
-
-            //Graph styling and legend
-            var options = {
+            const data = google.visualization.arrayToDataTable([{{{waveData}}}]);
+            const options = {
                 title: 'sumVar2 (%)',
                 curveType: 'function',
                 legend: { position: 'bottom' },
-                vAxis: { title: 'someVar2 %'},
-                hAxis: { title: 'someVar1'}
+                vAxis: { title: 'someVar2 %' },
+                hAxis: { title: 'someVar1' }
             };
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-            chart.draw(data, options);
-        }
-
-        function redoMap() {
-                var dataArray = [['Lat', 'Long', 'Name', 'Marker'],[49.9167,-2.883,'CHANNEL  0.0m 44km E', 'notavailable']];
-                reDrawMap(dataArray);
+            new google.visualization.LineChart(document.getElementById('chart_div')).draw(data, options);
         }
 
         function reDrawMap(dataArray) {
-<!--            var data = google.visualization.arrayToDataTable(newData)-->
-            var data = google.visualization.arrayToDataTable(dataArray);
-            var map = new google.visualization.Map(document.getElementById('map_div'));
-            map.draw(data, options);
+            const data = google.visualization.arrayToDataTable(dataArray);
+            const map = new google.visualization.Map(document.getElementById('map_div'));
+            map.draw(data, mapOptions);
 
-            var table =
-                    new google.visualization.Table(document.getElementById('table_div'));
-            table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
+            const table = new google.visualization.Table(document.getElementById('table_div'));
+            table.draw(data, { showRowNumber: false, width: '100%', height: '100%' });
 
-            google.visualization.events.addListener(map, 'select',
-                    function() {
-                        table.setSelection(map.getSelection());
-                    });
+            google.visualization.events.addListener(map, 'select', () => {
+                table.setSelection(map.getSelection());
+            });
         }
 
         function drawMap() {
-            var data = google.visualization.arrayToDataTable([{{{waveData}}}])
-            var map = new google.visualization.Map(document.getElementById('map_div'));
-            map.draw(data, options);
-
-            var table =
-                    new google.visualization.Table(document.getElementById('table_div'));
-            table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
-
-            google.visualization.events.addListener(map, 'select',
-                    function() {
-                        table.setSelection(map.getSelection());
-                    });
-
+            reDrawMap([{{{waveData}}}]);
         }
 
         function updateLog(message) {
-            var logBox = document.getElementById("log-text")
-            var currentText = logBox.value;
-            logBox.value = currentText.concat(" \n", message);
+            const logBox = document.getElementById("log-text");
+            logBox.value += `\n${message}`;
             console.log(message);
             logBox.scrollTop = logBox.scrollHeight;
         }
 
-        function handleMapResponse(wsResponseData, message) {
-            if (typeof wsResponseData.data === 'string'){
-                try {
-<!--                    var parsedData = wsResponseData.data.replace(/\\"/g, '"')-->
-<!--                    var obj = JSON.parse(parsedData);-->
-<!--                    console.log(obj);-->
-<!--                    reDrawMap(obj);-->
-                    updateLog(message);
-                } catch (e) {
-                    updateLog(e.message);
-                }
-            } else {
-                updateLog("Invalid response".concat(e));
-            }
-        }
+        // WebSocket setup
+        const ping_interval = 12000;
+        let interval, counterVal = 0;
+        let actionWebsocket, messageWebsocket, postWebsocket;
 
+        function setupWebsockets() {
+            actionWebsocket = new WebSocket(`ws://{{hostname}}:{{port}}/action`);
+            actionWebsocket.onerror = e => console.log('Action WS error', e);
+            actionWebsocket.onclose = () => setTimeout(setupWebsockets, 1000);
 
-    </script>
-    <script type="text/javascript">
-
-        const ping_interval = 12000; // it's in milliseconds, which equals to 120 seconds
-        let interval;
-        var actionWebsocket;
-        var messageWebsocket;
-        var postWebsocket;
-
-        function setupActionWebsocket(){
-            this.actionWebsocket = new WebSocket("ws://{{hostname}}:{{port}}/action");
-            actionWebsocket.addEventListener('error', (event) => {
-                console.log('an error happened in our actionWebsocket connection', event);
-            });
-            this.actionWebsocket.onclose = function(){
-                setTimeout(setupActionWebsocket, 1000);
-            };
-        }
-
-        setupActionWebsocket();
-
-        function setupActionWebsocket(){
-            this.messageWebsocket = new WebSocket("ws://{{hostname}}:{{port}}/message");
-            this.messageWebsocket.addEventListener('open', (event) => {
-                console.log('messageWebsocket connection established: ', event);
-                const sendMessage = JSON.stringify({ ping: counterVal + 1 });
-                messageWebsocket.send(sendMessage);
-
-                // to Keep the connection alive
+            messageWebsocket = new WebSocket(`ws://{{hostname}}:{{port}}/message`);
+            messageWebsocket.onopen = () => {
+                messageWebsocket.send(JSON.stringify({ ping: ++counterVal }));
                 interval = setInterval(() => {
-                    counterVal = counterVal + 1
-                    const sendMessage = JSON.stringify({ message:"hello", "counter": counterVal });
-                    messageWebsocket.send(sendMessage);
+                    messageWebsocket.send(JSON.stringify({ message: "hello", counter: ++counterVal }));
                 }, ping_interval);
-            });
-            // subscribe to `message` event
-            messageWebsocket.addEventListener('message', (event) => {
-                if (typeof event.data === 'string'){
-                    var parsedData = event.data.replace(/\\"/g, '"')
-                    var obj = JSON.parse(parsedData);
-                    console.log(obj);
-                    var itsType = typeof obj
-                    if (typeof obj.message != "undefined") {
-                        updateLog(obj.message);
-                    } else {
-                        reDrawMap(obj);
-                    }
-                }
-            });
-            this.messageWebsocket.onclose = function(){
-                setTimeout(setupActionWebsocket, 1000);
             };
-        }
-
-        setupActionWebsocket();
-
-        function setupPostWebsocket(){
-            this.postWebsocket = new WebSocket("ws://{{hostname}}:{{port}}/post");
-            this.postWebsocket.addEventListener('error', (event) => {
-                console.log('an error happened in our actionWebsocket connection', event);
-            });
-            this.postWebsocket.onclose = function(){
-                setTimeout(setupActionWebsocket, 1000);
+            messageWebsocket.onmessage = event => {
+                try {
+                    const obj = JSON.parse(event.data.replace(/\\"/g, '"'));
+                    if (obj.message !== undefined) updateLog(obj.message);
+                    else reDrawMap(obj);
+                } catch (e) { updateLog(e.message); }
             };
+            messageWebsocket.onclose = () => setTimeout(setupWebsockets, 1000);
+
+            postWebsocket = new WebSocket(`ws://{{hostname}}:{{port}}/post`);
+            postWebsocket.onerror = e => console.log('Post WS error', e);
+            postWebsocket.onclose = () => setTimeout(setupWebsockets, 1000);
+        }
+        setupWebsockets();
+
+        function sendMessage(action) {
+            actionWebsocket.send(JSON.stringify({ counter: counterVal, action }));
         }
 
-        setupPostWebsocket();
-
-        var counterVal = 0;
-
-
-        function sendMessage(action)  {
-            actionWebsocket.send(JSON.stringify({ "counter": counterVal, "action": action}));
-        }
-
-        function sendPostMessage(action)  {
+        function sendPostMessage(action) {
             postWebsocket.send(action);
         }
 
         function addPiece() {
-           var name = document.getElementsByName('name')[0].value
-           var pieceType = document.getElementsByName('pieceType')[0].value
-           var lat = document.getElementsByName('lat')[0].value
-           var lon = document.getElementsByName('lon')[0].value
-           const data = new Map([
-              ["name", name],
-              ["pieceType", pieceType],
-              ["lat", lat],
-              ["lon", lon]
-           ]);
-           let myObj = Object.fromEntries(data);
-           let myJSON = JSON.stringify(myObj);
-           console.log(`the name is ${myJSON} `);
-            sendPostMessage(myJSON)
+            const name = document.getElementsByName('name')[0].value;
+            const pieceType = document.getElementsByName('pieceType')[0].value;
+            const lat = document.getElementsByName('lat')[0].value;
+            const lon = document.getElementsByName('lon')[0].value;
+            const myJSON = JSON.stringify({ name, pieceType, lat, lon });
+            console.log(`the name is ${myJSON}`);
+            sendPostMessage(myJSON);
         }
     </script>
     <style>
-        table, th, td {
-            border: 1px solid black;
-        }
-        textarea {
-            resize: none;
-        }
-        textarea.ta10em {
-            height: 10em;
-        }
+        table, th, td { border: 1px solid black; }
+        textarea { resize: none; }
+        textarea.ta10em { height: 10em; }
     </style>
 </head>
-
 <body>
 <table align="center" width="100%" height="100%">
     <tr valign="top">
-        <td style="width: 50%;">
-            <div id="map_div" style="width: 100%; height: 100%;"></div>
-        </td>
+        <td style="width: 50%;"><div id="map_div" style="width: 100%; height: 100%;"></div></td>
         <td>
             <table style="width: 100%; height: 500px">
-                <tr style="vertical-align: top;" >
-                    <td style="width: 100%;" colspan="4">
-                        <div id="table_div" style="height:300px;"></div>
-                    </td>
-                </tr>
-                <tr style="vertical-align: top;">
-                    <td >
-                        <div id="action_form" style="align: left; vertical-align: top; width: 100%; height: 10%;">
-<!--                            <form name="add-piece">-->
-                                <div class="form-example">
-                                    <table>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td><input type="test" name="name" id="name_ip" required></td>
-                                            <td>Type</td>
-                                            <td>
-                                                <select id="pieceType" name="pieceType">
-                                                    <option value="BOAT">Boat</option>
-                                                    <option value="SHARK">Shark</option>
-                                                    <option value="PIRATE">Pirate</option>
-                                                    <option value="START">Start</option>
-                                                    <option value="FINISH">Finish</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Lat</td>
-                                            <td><input type="text" name="lat" id="lat_ip" required></td>
-                                            <td>Lon</td>
-                                            <td><input type="text" name="lon" id="long_ip" required></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="form-example">
-                                    <button onclick="addPiece()">Add Piece</button>
-                                </div>
-<!--                            </form>-->
+                <tr><td colspan="4"><div id="table_div" style="height:300px;"></div></td></tr>
+                <tr>
+                    <td>
+                        <div id="action_form">
+                            <table>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input type="text" name="name" required></td>
+                                    <td>Type</td>
+                                    <td>
+                                        <select name="pieceType">
+                                            <option value="BOAT">Boat</option>
+                                            <option value="SHARK">Shark</option>
+                                            <option value="PIRATE">Pirate</option>
+                                            <option value="START">Start</option>
+                                            <option value="FINISH">Finish</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Lat</td>
+                                    <td><input type="text" name="lat" required></td>
+                                    <td>Lon</td>
+                                    <td><input type="text" name="lon" required></td>
+                                </tr>
+                            </table>
+                            <button onclick="addPiece()">Add Piece</button>
                         </div>
                     </td>
                     <td colspan="3">
                         <table>
+                            <tr><td>Admin</td></tr>
                             <tr>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
-                                        <button onclick="sendMessage('start')">Start</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-clear">
-                                        <button onclick="sendMessage('move')">Move</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-clear">
-                                        <button onclick="sendMessage('clear')">Clear</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-clear">
-                                        <button onclick="sendMessage('reset')">Reset</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="clear_form" style="align: left; vertical-align: top; width: 100%; height: 50%;">
-                                        <button onclick="sendMessage('refresh')">Refresh</button>
-                                    </div>
-                                </td>
+                                <td><button onclick="sendMessage('start')">Start</button></td>
+                                <td><button onclick="sendMessage('move')">Move</button></td>
+                                <td><button onclick="sendMessage('clear')">Clear</button></td>
+                                <td><button onclick="sendMessage('reset')">Reset</button></td>
+                                <td><button onclick="sendMessage('refresh')">Refresh</button></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <tr valign="top">
-                    <td height="20">Players</td>
-                    <td height="20">Distance to finish (km)</td>
-                    <td height="20">Distance from pirates (km)</td>
-                    <td height="20">Distance from sharks (km)</td>
-                    <td style="width: 100%;" colspan="4" width="100%" height="200">
-                        <textarea class="ta10em" name="log-text" id="log-text" width="100%" height="200"></textarea>
-                    </td>
+                <tr>
+                    <td>Players</td>
+                    <td>Distance to finish (km)</td>
+                    <td>Distance from pirates (km)</td>
+                    <td>Distance from sharks (km)</td>
+                    <td colspan="4"><textarea class="ta10em" id="log-text"></textarea></td>
                 </tr>
                 {{#each players}}
-                    <tr valign="top">
-                            <td><div class="row">{{ pieceLocation.name }}</div></td>
-                            <td><div class="row">{{ distanceToFinish }}</div></td>
-                            <td>
-                                <div class="row">
-                                    {{#each distanceFromPirates}}
-                                        <table align="center" width="100%" height="100%">
-                                            <tr style="background-color: {{alertLevel}}"><td>{{name}}</td><td>{{distance}}</td></tr>
-                                        </table>
-                                    {{/each}}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="row">
-                                    {{#each distanceFromSharks}}
-                                        <table align="center" width="100%" height="100%">
-                                            <tr style="background-color: {{alertLevel}}"><td>{{name}}</td><td>{{distance}}</td></tr>
-                                        </table>
-                                    {{/each}}
-                                </div>
-                            </td>
+                    <tr>
+                        <td>{{pieceLocation.name}}</td>
+                        <td>{{distanceToFinish}}</td>
+                        <td>
+                            {{#each distanceFromPirates}}
+                                <table width="100%">
+                                    <tr style="background-color: {{alertLevel}}">
+                                        <td>{{name}}</td><td>{{distance}}</td>
+                                    </tr>
+                                </table>
+                            {{/each}}
+                        </td>
+                        <td>
+                            {{#each distanceFromSharks}}
+                                <table width="100%">
+                                    <tr style="background-color: {{alertLevel}}">
+                                        <td>{{name}}</td><td>{{distance}}</td>
+                                    </tr>
+                                </table>
+                            {{/each}}
+                        </td>
                     </tr>
                 {{/each}}
             </table>
         </td>
     </tr>
     <tr>
-        <td colSpan=1>
-            <div id="chart_div" style="align: center; width: 100%; height: 50%;"></div>
-        </td>
+        <td><div id="chart_div" style="width: 100%; height: 50%;"></div></td>
     </tr>
 </table>
 </body>

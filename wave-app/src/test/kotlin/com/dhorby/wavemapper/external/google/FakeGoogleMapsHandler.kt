@@ -7,8 +7,7 @@ import org.http4k.lens.Header.CONTENT_TYPE
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 
-class FakeGoogleMapsHandler: ChaoticHttpHandler() {
-
+class FakeGoogleMapsHandler : ChaoticHttpHandler() {
     val json =
         this::class.java.getResource("/google/mapsdata.json")!!.readText()
 
@@ -20,5 +19,4 @@ class FakeGoogleMapsHandler: ChaoticHttpHandler() {
                     .body(json)
             },
         )
-
 }

@@ -22,23 +22,25 @@ import org.slf4j.LoggerFactory
 class WaveAdapter(
     val storageAdapter: StoragePort,
     val googleMapsClientApi: GoogleMapsClientApi,
-    val metOfficeClient: MetOfficeClient
+    val metOfficeClient: MetOfficeClient,
 ) : WavePort {
     val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
     companion object {
-        val start = PieceLocation(
-            id = "NewportR",
-            name = "Newport, Rhode Island",
-            pieceType = PieceType.START,
-            geoLocation = GeoLocation(lat = 41.49, lon = -71.31)
-        )
-        val finish = PieceLocation(
-            id = "Newport",
-            name = "Newport, Wales",
-            pieceType = PieceType.FINISH,
-            geoLocation = GeoLocation(lat = 51.35, lon = -2.59)
-        )
+        val start =
+            PieceLocation(
+                id = "NewportR",
+                name = "Newport, Rhode Island",
+                pieceType = PieceType.START,
+                geoLocation = GeoLocation(lat = 41.49, lon = -71.31),
+            )
+        val finish =
+            PieceLocation(
+                id = "Newport",
+                name = "Newport, Wales",
+                pieceType = PieceType.FINISH,
+                geoLocation = GeoLocation(lat = 51.35, lon = -2.59),
+            )
     }
 
     override fun getWavePage(): ViewModel? {
@@ -52,7 +54,7 @@ class WaveAdapter(
                         players = storageAdapter.getDistances(),
                         hostname = Settings.HOST,
                         port = Settings.PORT,
-                        template = "/templates/WavePage"
+                        template = "/templates/WavePage",
                     )
                 } catch (e: Exception) {
                     LOG.error("Failed to get wave data", e)
@@ -62,10 +64,12 @@ class WaveAdapter(
         return viewModel
     }
 
-
     override fun getWaveData(): MutableList<Location> = metOfficeClient.getSiteList()
 
-    override fun getLocationData(lat: Float, lon: Float): String = googleMapsClientApi.getLocationData(lat, lon)
+    override fun getLocationData(
+        lat: Float,
+        lon: Float,
+    ): String = googleMapsClientApi.getLocationData(lat, lon)
 
     override fun addPiece(parametersMap: Map<String, List<String?>>): Boolean {
         val name = parametersMap["name"]?.first() ?: "Unknown"
@@ -73,16 +77,16 @@ class WaveAdapter(
         val lat = parametersMap["lat"]?.first()?.toDouble() ?: 0.0
         val lon = parametersMap["lon"]?.first()?.toDouble() ?: 0.0
 
-        val pieceLocation = PieceLocation(
-            id = name,
-            name = name,
-            pieceType = pieceType,
-            geoLocation = GeoLocation(lat = lat, lon = lon)
-        )
+        val pieceLocation =
+            PieceLocation(
+                id = name,
+                name = name,
+                pieceType = pieceType,
+                geoLocation = GeoLocation(lat = lat, lon = lon),
+            )
         storageAdapter.add(pieceLocation)
         return true
     }
-
 
     override fun startRace() {
         storageAdapter.add(start)
@@ -93,12 +97,11 @@ class WaveAdapter(
             .forEach(storageAdapter::add)
     }
 
-
     override fun move() =
-        storageAdapter.getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
+        storageAdapter
+            .getKeysOfType(PIECE_LOCATION, PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(storageAdapter::add)
-
 
     override fun clear() = storageAdapter.clear(PIECE_LOCATION)
 }

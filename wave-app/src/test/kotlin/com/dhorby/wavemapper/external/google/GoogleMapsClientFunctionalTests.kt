@@ -9,7 +9,7 @@ class GoogleMapsClientFunctionalTests {
     val fakeGoogleMapsHandler: FakeGoogleMapsHandler = FakeGoogleMapsHandler()
 
     @Test
-    fun `should retrieve the map data `(){
+    fun `should retrieve the map data `() {
         val locationData: String = GoogleMapsClientApi(ApacheClient()).getLocationData(23.00F, 34.02F)
         assertThat(locationData, containsSubstring("Al Shalateen Desert"))
     }

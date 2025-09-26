@@ -33,48 +33,54 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 
 object HttpRoutes {
-
-
     val latQuery = Query.float().required("lat")
     val lonQuery = Query.float().required("lon")
 
-    operator fun invoke(dataStoreClient: DataStoreClient, events: (Event) -> Unit): HttpHandler {
-
+    operator fun invoke(
+        dataStoreClient: DataStoreClient,
+        events: (Event) -> Unit,
+    ): HttpHandler {
         val apacheHandler: HttpHandler = ApacheClient()
         val siteListFunction = WaveServiceFunctions.siteListFunction
         val dataForSiteFunction = WaveServiceFunctions.dataForSiteFunction
         val storageAdapter = StorageAdapter(dataStoreClient)
         val waveDataAdapter: WaveDataPort = WaveDataAdapter(siteListFunction, dataForSiteFunction)
-        val waveHandlers = WaveHandlers(
-            wavePort = WaveAdapter(
-                storageAdapter = storageAdapter,
-                googleMapsClientApi = GoogleMapsClientApi(apacheHandler),
-                metOfficeClient = MetOfficeClient()
+        val waveHandlers =
+            WaveHandlers(
+                wavePort =
+                    WaveAdapter(
+                        storageAdapter = storageAdapter,
+                        googleMapsClientApi = GoogleMapsClientApi(apacheHandler),
+                        metOfficeClient = MetOfficeClient(),
+                    ),
             )
-        )
 
-        val httpHandler: HttpHandler = routes(
-            "/ping" bind Method.GET to {
-                Response(Status.OK).body("pong")
-            },
-            "/" bind Method.GET to waveHandlers.getWavePage(),
-            "/data" bind Method.GET to WaveData(waveDataAdapter),
-            "/properties" bind Method.GET to Properties(),
-            "/datasheet" bind Method.GET to DataSheet(),
-            "/map" bind Method.GET to WaveMap(),
-            "/" bind Method.POST to waveHandlers.addPiece(),
-            "/css" bind static(
-                ResourceLoader.Classpath("/css")
-            ),
-            "/api" bind contract {
-                renderer = OpenApi3(ApiInfo("Wave Mapper API", "v1.0"), Jackson)
-                routes += "/location" meta {
-                    summary = "Get location data from Google API for co-ordinates"
-                    queries += latQuery
-                    queries += lonQuery
-                } bindContract Method.GET to waveHandlers.getLocationData()
-            }, static(ResourceLoader.Classpath("public"))
-        ).withEvents(events)
+        val httpHandler: HttpHandler =
+            routes(
+                "/ping" bind Method.GET to {
+                    Response(Status.OK).body("pong")
+                },
+                "/" bind Method.GET to waveHandlers.getWavePage(),
+                "/data" bind Method.GET to WaveData(waveDataAdapter),
+                "/properties" bind Method.GET to Properties(),
+                "/datasheet" bind Method.GET to DataSheet(),
+                "/map" bind Method.GET to WaveMap(),
+                "/" bind Method.POST to waveHandlers.addPiece(),
+                "/css" bind
+                    static(
+                        ResourceLoader.Classpath("/css"),
+                    ),
+                "/api" bind
+                    contract {
+                        renderer = OpenApi3(ApiInfo("Wave Mapper API", "v1.0"), Jackson)
+                        routes += "/location" meta {
+                            summary = "Get location data from Google API for co-ordinates"
+                            queries += latQuery
+                            queries += lonQuery
+                        } bindContract Method.GET to waveHandlers.getLocationData()
+                    },
+                static(ResourceLoader.Classpath("public")),
+            ).withEvents(events)
         return httpHandler
     }
 }

@@ -10,22 +10,23 @@ object ReportWsTransaction {
     operator fun invoke(
         clock: Clock = Clock.systemUTC(),
         transactionLabeler: WsTransactionLabeler = { it },
-        recordFn: (WsTransaction) -> Unit
-    ): WsFilter = WsFilter { next ->
-        {
-            clock.instant().let { start ->
-                next(it).apply {
-                    recordFn(
-                        transactionLabeler(
-                            WsTransaction(
-                                request = it,
-                                response = this,
-                                duration = Duration.between(start, clock.instant())
-                            )
+        recordFn: (WsTransaction) -> Unit,
+    ): WsFilter =
+        WsFilter { next ->
+            {
+                clock.instant().let { start ->
+                    next(it).apply {
+                        recordFn(
+                            transactionLabeler(
+                                WsTransaction(
+                                    request = it,
+                                    response = this,
+                                    duration = Duration.between(start, clock.instant()),
+                                ),
+                            ),
                         )
-                    )
+                    }
                 }
             }
         }
-    }
 }
