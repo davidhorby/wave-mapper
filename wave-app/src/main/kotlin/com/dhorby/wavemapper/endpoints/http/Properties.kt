@@ -5,7 +5,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import java.util.*
 
-fun Properties(): HttpHandler =
+fun properties(): HttpHandler =
     {
         val properties: Properties = System.getProperties()
         val allProperties =

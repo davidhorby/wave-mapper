@@ -1,10 +1,10 @@
 val invoker: Configuration by configurations.creating
 
 //https://github.com/mwhyte-dev/kotlin-google-cloud-function/blob/main/build.gradle.kts
-
-plugins {
-    alias(libs.plugins.shadowJar)
-}
+//
+//plugins {
+//    alias(libs.plugins.shadowJar)
+//}
 
 configurations {
     invoker

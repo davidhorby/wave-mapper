@@ -8,11 +8,20 @@ import com.dhorby.wavemapper.game.finishLocation
 import com.dhorby.wavemapper.game.startLocation
 import com.dhorby.wavemapper.game.testBoatLocation
 import com.dhorby.wavemapper.port.StoragePort
-import com.dhorby.wavemapper.tracing.AddRequestCount
+import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.Datastore
-import com.natpryce.hamkrest.*
+import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.assertion.assertThat
-import org.http4k.events.*
+import com.natpryce.hamkrest.containsSubstring
+import com.natpryce.hamkrest.greaterThan
+import com.natpryce.hamkrest.hasElement
+import com.natpryce.hamkrest.hasSize
+import com.natpryce.hamkrest.isEmpty
+import org.http4k.events.AutoMarshallingEvents
+import org.http4k.events.Event
+import org.http4k.events.EventFilters
+import org.http4k.events.and
+import org.http4k.events.then
 import org.http4k.format.Gson.asJsonObject
 import org.http4k.format.Jackson
 import org.junit.jupiter.api.Test
@@ -20,14 +29,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(DataStoreExtension::class)
 internal class StartRaceKtTest {
-
     private val eventLog = mutableListOf<String>()
 
     private val events: (Event) -> Unit =
-        EventFilters.AddTimestamp()
+        EventFilters
+            .AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
-            .then(AddRequestCount())
+            .then(addRequestCount())
             .then(AutoMarshallingEvents(Jackson))
             .and {
                 eventLog.add(it.asJsonObject().toString())
@@ -36,7 +45,7 @@ internal class StartRaceKtTest {
     @Test
     fun `should be able to add a piece`(datastore: Datastore) {
         val raceActions = raceActions(datastore)
-        raceActions. addPiece(testBoatLocation)
+        raceActions.addPiece(testBoatLocation)
     }
 
     @Test
@@ -44,9 +53,11 @@ internal class StartRaceKtTest {
         val raceActions = raceActions(datastore)
         raceActions.resetRace()
         val finishAndStartLocations: List<PieceLocation> = raceActions.getStartAndFinish()
-        assertThat(finishAndStartLocations,
+        assertThat(
+            finishAndStartLocations,
             hasElement(startLocation)
-                    and hasElement(finishLocation))
+                and hasElement(finishLocation),
+        )
     }
 
     @Test

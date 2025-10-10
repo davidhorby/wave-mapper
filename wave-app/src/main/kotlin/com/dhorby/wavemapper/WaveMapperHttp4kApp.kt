@@ -2,7 +2,7 @@ package com.dhorby.wavemapper
 
 import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.wavemapper.routes.WaveServiceRoutes
-import com.dhorby.wavemapper.tracing.AddRequestCount
+import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event
@@ -24,7 +24,7 @@ object WaveMapperHttp4kApp {
                 .AddTimestamp()
                 .then(EventFilters.AddEventName())
                 .then(EventFilters.AddZipkinTraces())
-                .then(AddRequestCount())
+                .then(addRequestCount())
                 .then(AutoMarshallingEvents(Jackson))
 
         LOG.info("Starting the Wave Mapper App")

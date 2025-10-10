@@ -7,8 +7,7 @@ import org.http4k.core.Status
 import org.http4k.routing.ResourceLoader
 import org.http4k.template.HandlebarsTemplates
 
-@Suppress("ktlint:standard:function-naming")
-fun DataSheet(): HttpHandler =
+fun dataSheet(): HttpHandler =
     {
         val (renderer, _) = buildResourceLoaders(false)
         val viewModel = Wave("M5", 2.1.toLong())

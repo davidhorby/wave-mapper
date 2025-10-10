@@ -7,18 +7,17 @@ buildscript {
         google()
     }
     dependencies {
-        classpath ("com.google.cloud.tools:appengine-gradle-plugin:2.4.4")
+        classpath("com.google.cloud.tools:appengine-gradle-plugin:2.4.4")
     }
 }
 
-
 plugins {
-    alias(libs.plugins.shadowJar)
+    id("com.gradleup.shadow") version "9.2.2"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     application
 }
 
 apply(plugin = "com.google.cloud.tools.appengine")
-apply(plugin = "com.github.johnrengelman.shadow")
 
 application {
     mainClass = "com.dhorby.wavemapper.WaveMapperHttp4kApp"
@@ -57,4 +56,3 @@ configure<AppEngineAppYamlExtension> {
         stopPreviousVersion = true // etc
     }
 }
-

@@ -6,13 +6,18 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.adapter.WaveAdapter
-import com.dhorby.wavemapper.game.*
+import com.dhorby.wavemapper.game.finishLocation
+import com.dhorby.wavemapper.game.startLocation
+import com.dhorby.wavemapper.game.testBoatLocation
+import com.dhorby.wavemapper.game.testPirateLocation
+import com.dhorby.wavemapper.game.testSharkLocation
 import com.dhorby.wavemapper.port.StoragePort
 import org.http4k.format.Gson.asJsonObject
 
 @Suppress("SameReturnValue")
-class RaceActions(private val storagePort: StoragePort) {
-
+class RaceActions(
+    private val storagePort: StoragePort,
+) {
     fun startRace(): String {
         val players = storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
         return if (players.isEmpty()) {
@@ -41,10 +46,15 @@ class RaceActions(private val storagePort: StoragePort) {
     }
 
     fun move(): String {
-        storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
+        storagePort
+            .getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.BOAT)
             .map { pieceLocation -> pieceLocation.copy(geoLocation = sailMove(pieceLocation.geoLocation)) }
             .forEach(storagePort::add)
-        return storagePort.getLocationData().toGoogleMapFormatList().asJsonObject().toString()
+        return storagePort
+            .getLocationData()
+            .toGoogleMapFormatList()
+            .asJsonObject()
+            .toString()
     }
 
     fun addPiece(pieceLocation: PieceLocation) {
@@ -61,10 +71,10 @@ class RaceActions(private val storagePort: StoragePort) {
 //    }
 // --Commented out by Inspection STOP (20/12/2024, 12:37)
 
-    fun getStartAndFinish(): List<PieceLocation> {
-        return storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START) + storagePort.getKeysOfType(
-            EntityKind.PIECE_LOCATION,
-            PieceType.FINISH
-        )
-    }
+    fun getStartAndFinish(): List<PieceLocation> =
+        storagePort.getKeysOfType(EntityKind.PIECE_LOCATION, PieceType.START) +
+            storagePort.getKeysOfType(
+                EntityKind.PIECE_LOCATION,
+                PieceType.FINISH,
+            )
 }

@@ -10,13 +10,20 @@ http://datapoint.metoffice.gov.uk/public/data/val/wxmarineobs/all/xml/162304?res
 
 ## Prerequisites
 
-Java JDK 17 - note that we do not use the Oracle JDK.
+Java JDK 25 - note that we do not use the Oracle JDK.
 
 It is easiest to manage the JDK by using SDKMAN!
 
 - Install [SDKMAN!](https://sdkman.io/install)
-- `sdk install java 17.0.6-librca`
-- `vi ~/.sdkman/etc/config`
+```bash
+sdk install java 24.0.2-librca
+````
+```bash
+sdk use java 21.0.8-librca
+````
+```bash
+vi ~/.sdkman/etc/config
+````
     - ensure this line exists in that file: `sdkman_auto_env=true`
 
 Open new terminal. When you cd into a directory with an appropriate `.sdkmanrc` file, sdkman will set the appropriate jdk for you.

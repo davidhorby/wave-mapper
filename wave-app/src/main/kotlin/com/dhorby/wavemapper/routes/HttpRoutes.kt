@@ -5,10 +5,10 @@ import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.adapter.WaveDataAdapter
-import com.dhorby.wavemapper.endpoints.http.DataSheet
-import com.dhorby.wavemapper.endpoints.http.Properties
-import com.dhorby.wavemapper.endpoints.http.WaveData
-import com.dhorby.wavemapper.endpoints.http.WaveMap
+import com.dhorby.wavemapper.endpoints.http.dataSheet
+import com.dhorby.wavemapper.endpoints.http.properties
+import com.dhorby.wavemapper.endpoints.http.waveData
+import com.dhorby.wavemapper.endpoints.http.waveMap
 import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
@@ -61,10 +61,10 @@ object HttpRoutes {
                     Response(Status.OK).body("pong")
                 },
                 "/" bind Method.GET to waveHandlers.getWavePage(),
-                "/data" bind Method.GET to WaveData(waveDataAdapter),
-                "/properties" bind Method.GET to Properties(),
-                "/datasheet" bind Method.GET to DataSheet(),
-                "/map" bind Method.GET to WaveMap(),
+                "/data" bind Method.GET to waveData(waveDataAdapter),
+                "/properties" bind Method.GET to properties(),
+                "/datasheet" bind Method.GET to dataSheet(),
+                "/map" bind Method.GET to waveMap(),
                 "/" bind Method.POST to waveHandlers.addPiece(),
                 "/css" bind
                     static(

@@ -13,7 +13,7 @@ gcloudBom="8.1.0"
 gcloudSecretmanager="2.32.0"
 gcloudAppEngine="2.0.24"
 gloudAppEngineTest="2.0.24"
-johnRengelmanVersion = '8.1.1'
+johnRengelmanVersion = '9.2.2'
 
 
 [libraries]

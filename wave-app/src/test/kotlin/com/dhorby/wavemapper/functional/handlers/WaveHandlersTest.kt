@@ -6,8 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(DataStoreExtension::class)
 internal class WaveHandlersTest : FunctionalTestEnv() {
-
-//    private val events: (Event) -> Unit =
+    //    private val events: (Event) -> Unit =
 //        EventFilters.AddTimestamp()
 //            .then(EventFilters.AddEventName())
 //            .then(EventFilters.AddZipkinTraces())

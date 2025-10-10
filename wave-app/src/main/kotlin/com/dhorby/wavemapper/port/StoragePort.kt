@@ -7,12 +7,28 @@ import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.model.Player
 
 interface StoragePort {
-    fun getAllPieces():List<PieceLocation>
-    fun getKeysOfType(kind: EntityKind, pieceType: PieceType): List<PieceLocation>
+    fun getAllPieces(): List<PieceLocation>
+
+    fun getKeysOfType(
+        kind: EntityKind,
+        pieceType: PieceType,
+    ): List<PieceLocation>
+
     fun getLocationData(): List<Location>
+
     fun getDistances(): List<Player>
+
     fun clear(kind: EntityKind)
+
     fun add(pieceLocation: PieceLocation)
-    fun getPiece(kind: EntityKind, key: String): PieceLocation?
-    fun delete(kind: EntityKind, key: String)
+
+    fun getPiece(
+        kind: EntityKind,
+        key: String,
+    ): PieceLocation?
+
+    fun delete(
+        kind: EntityKind,
+        key: String,
+    )
 }

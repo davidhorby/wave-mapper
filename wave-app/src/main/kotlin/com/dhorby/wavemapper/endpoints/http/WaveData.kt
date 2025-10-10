@@ -8,7 +8,8 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.with
 
-fun WaveData(waveDataAdapter: WaveDataPort): HttpHandler = {
-    val allWaveData: List<Location> = waveDataAdapter.getAllWaveData()
-    Response(Status.OK).with(waveLocationListBodyLens of allWaveData)
-}
+fun waveData(waveDataAdapter: WaveDataPort): HttpHandler =
+    {
+        val allWaveData: List<Location> = waveDataAdapter.getAllWaveData()
+        Response(Status.OK).with(waveLocationListBodyLens of allWaveData)
+    }

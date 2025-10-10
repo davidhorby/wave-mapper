@@ -12,8 +12,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import java.net.URI
 import java.net.URL
 
-abstract class MetOfficePort() {
-
+abstract class MetOfficePort {
     private val setListUrls = URI(Constants.siteListUrl).toURL()
     private val xmlMapper = XmlMapper()
 
@@ -25,13 +24,18 @@ abstract class MetOfficePort() {
 
     fun waveLocations(): List<Location> {
         val siteListFromMetOffice: MutableList<Site> = getSiteListFromMetOffice()
-        val buoyLocations: List<WaveLocation> = siteListFromMetOffice.filterNot { it.id.isEmpty() }.map { dataForSiteFunction(it.id)  }.filterNotNull()
+        val buoyLocations: List<WaveLocation> =
+            siteListFromMetOffice
+                .filterNot {
+                    it.id.isEmpty()
+                }.map { dataForSiteFunction(it.id) }
+                .filterNotNull()
         return buoyLocations
     }
 
-    private fun dataForSiteFunction(siteId:String): WaveLocation? {
+    private fun dataForSiteFunction(siteId: String): WaveLocation? {
         val metOfficeUrl: URL =
-            URI("${metOfficeUrl}$siteId?res=3hourly&key=${metOfficeApiKey}").toURL()
+            URI("${metOfficeUrl}$siteId?res=3hourly&key=$metOfficeApiKey").toURL()
         return try {
             val xmlText = metOfficeUrl.readText()
             xmlMapper.readTree(xmlText).getLocation()

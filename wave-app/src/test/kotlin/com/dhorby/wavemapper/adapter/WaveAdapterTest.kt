@@ -8,7 +8,7 @@ import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.gcloud.model.PieceType
 import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
-import com.dhorby.wavemapper.tracing.AddRequestCount
+import com.dhorby.wavemapper.tracing.addRequestCount
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
 import org.http4k.client.ApacheClient
@@ -38,7 +38,7 @@ class WaveAdapterTest {
             .AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
-            .then(AddRequestCount())
+            .then(addRequestCount())
             .then(AutoMarshallingEvents(Jackson))
     val storageAdapter = StorageAdapter(DataStoreClient(events, datastore))
 

@@ -5,7 +5,7 @@ import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.testBoatLocation
-import com.dhorby.wavemapper.tracing.AddRequestCount
+import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
@@ -20,12 +20,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(DataStoreExtension::class)
 class RaceActionsTests {
-
     private val events: (Event) -> Unit =
-        EventFilters.AddTimestamp()
+        EventFilters
+            .AddTimestamp()
             .then(EventFilters.AddEventName())
             .then(EventFilters.AddZipkinTraces())
-            .then(AddRequestCount())
+            .then(addRequestCount())
             .then(AutoMarshallingEvents(Jackson))
 
     @Test

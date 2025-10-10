@@ -1,8 +1,7 @@
 package com.dhorby.wavemapper
 
 class WebSocketRoutesTest {
-
-//    val fakeStorageAdapter = FakeStorageAdapter()
+    //    val fakeStorageAdapter = FakeStorageAdapter()
 //
 //    @Test
 //    fun `should reset the race`() {

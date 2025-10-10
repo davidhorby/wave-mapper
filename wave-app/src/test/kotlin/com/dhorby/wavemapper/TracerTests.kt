@@ -1,9 +1,13 @@
 
 import com.natpryce.hamkrest.assertion.assertThat
-import org.http4k.core.*
+import org.http4k.core.Filter
+import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
+import org.http4k.core.Request
+import org.http4k.core.Response
 import org.http4k.core.Status.Companion.INTERNAL_SERVER_ERROR
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.then
 import org.http4k.events.EventFilter
 import org.http4k.events.EventFilters.AddServiceName
 import org.http4k.events.EventFilters.AddZipkinTraces
@@ -34,88 +38,106 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.File
 
 // standardised events stack which records the service name and adds tracing
-fun TraceEvents(actorName: String): EventFilter = AddZipkinTraces().then(AddServiceName(actorName))
+fun traceEvents(actorName: String): EventFilter = AddZipkinTraces().then(AddServiceName(actorName))
 
 // standardised client filter stack which adds tracing and records traffic events
-fun ClientStack(events: Events): Filter = ReportHttpTransaction { events(Outgoing(it)) }
-    .then(ClientFilters.RequestTracing())
+fun clientStack(events: Events): Filter =
+    ReportHttpTransaction { events(Outgoing(it)) }
+        .then(ClientFilters.RequestTracing())
 
 // standardised server filter stack which adds tracing and records traffic events
-fun ServerStack(events: Events): Filter = ReportHttpTransaction { events(Incoming(it)) }
-    .then(RequestTracing())
+fun serverStack(events: Events): Filter =
+    ReportHttpTransaction { events(Incoming(it)) }
+        .then(RequestTracing())
 
 // Our "User" object who will send a request to our system
-class User(rawEvents: Events, rawHttp: HttpHandler) {
-    private val events = TraceEvents("user").then(rawEvents)
+class User(
+    rawEvents: Events,
+    rawHttp: HttpHandler,
+) {
+    private val events = traceEvents("user").then(rawEvents)
 
     // as the user is the initiator of requests, we need to reset the tracing for each call.
-    private val http = ResetRequestTracing().then(ClientStack(events)).then(rawHttp)
+    private val http = ResetRequestTracing().then(clientStack(events)).then(rawHttp)
 
     fun initiateCall() = http(Request(GET, "http://internal1/int1"))
 }
 
 // the first internal app
-fun Internal1(rawEvents: Events, rawHttp: HttpHandler): HttpHandler {
-    val events = TraceEvents("internal1").then(rawEvents).and(rawEvents)
-    val http = ClientStack(events).then(rawHttp)
+fun internal1(
+    rawEvents: Events,
+    rawHttp: HttpHandler,
+): HttpHandler {
+    val events = traceEvents("internal1").then(rawEvents).and(rawEvents)
+    val http = clientStack(events).then(rawHttp)
 
-    return ServerStack(events)
+    return serverStack(events)
         .then(
-            routes("/int1" bind { _: Request ->
-                val first = http(Request(GET, "http://external1/ext1"))
-                when {
-                    first.status.successful -> http(Request(GET, "http://internal2/int2"))
-                    else -> first
-                }
-            })
+            routes(
+                "/int1" bind { _: Request ->
+                    val first = http(Request(GET, "http://external1/ext1"))
+                    when {
+                        first.status.successful -> http(Request(GET, "http://internal2/int2"))
+                        else -> first
+                    }
+                },
+            ),
         )
 }
 
 // the second internal app
-fun Internal2(rawEvents: Events, rawHttp: HttpHandler): HttpHandler {
-    val events = TraceEvents("internal2").then(rawEvents).and(rawEvents)
-    val http = ClientStack(events).then(rawHttp)
+fun internal2(
+    rawEvents: Events,
+    rawHttp: HttpHandler,
+): HttpHandler {
+    val events = traceEvents("internal2").then(rawEvents).and(rawEvents)
+    val http = clientStack(events).then(rawHttp)
 
-    return ServerStack(events)
+    return serverStack(events)
         .then(
-            routes("/int2" bind { _: Request ->
-                http(Request(GET, "http://external2/ext2"))
-            })
+            routes(
+                "/int2" bind { _: Request ->
+                    http(Request(GET, "http://external2/ext2"))
+                },
+            ),
         )
 }
 
 // an external fake system
-fun FakeExternal1(): HttpHandler = { Response(OK) }
+fun fakeExternal1(): HttpHandler = { Response(OK) }
 
 // another external fake system
-fun FakeExternal2(): HttpHandler = { Response(OK) }
+fun fakeExternal2(): HttpHandler = { Response(OK) }
 
-private val actor = ActorResolver {
-    Actor(it.metadata["service"].toString(), ActorType.System)
-}
+private val actor =
+    ActorResolver {
+        Actor(it.metadata["service"].toString(), ActorType.System)
+    }
 
 /**
  * Our test will capture the traffic and render it to the console
  */
 class RenderingTest {
-    @RegisterExtension
     // this events implementation will automatically capture the HTTP traffic
-    val events = TracerBulletEvents(
-        listOf(HttpTracer(actor)), // A tracer to capture HTTP calls
-        listOf(PumlSequenceDiagram), // Render the HTTP traffic as a PUML diagram
-        TraceRenderPersistence.FileSystem(File(".")) // Store the result
-    )
+    @RegisterExtension
+    val events =
+        TracerBulletEvents(
+            listOf(HttpTracer(actor)), // A tracer to capture HTTP calls
+            listOf(PumlSequenceDiagram), // Render the HTTP traffic as a PUML diagram
+            TraceRenderPersistence.FileSystem(File(".")), // Store the result
+        )
 
     @Test
     fun `render successful trace`() {
         // compose our application(s) together
-        val internalApp = Internal1(
-            events,
-            reverseProxy(
-                "external1" to FakeExternal1(),
-                "internal2" to Internal2(events, FakeExternal2())
+        val internalApp =
+            internal1(
+                events,
+                reverseProxy(
+                    "external1" to fakeExternal1(),
+                    "internal2" to internal2(events, fakeExternal2()),
+                ),
             )
-        )
 
         // make a request to the composed stack
         assertThat(User(events, internalApp).initiateCall(), hasStatus(OK))
@@ -125,13 +147,14 @@ class RenderingTest {
     @Disabled("Remove this to run the failing test!")
     fun `render failure trace`() {
         // compose our application(s) together
-        val internalApp = Internal1(
-            events,
-            reverseProxy(
-                "external1" to { _: Request -> Response(INTERNAL_SERVER_ERROR) },
-                "internal2" to Internal2(events, FakeExternal2())
+        val internalApp =
+            internal1(
+                events,
+                reverseProxy(
+                    "external1" to { _: Request -> Response(INTERNAL_SERVER_ERROR) },
+                    "internal2" to internal2(events, fakeExternal2()),
+                ),
             )
-        )
 
         // make a request to the composed stack
         assertThat(User(events, internalApp).initiateCall(), hasStatus(OK))

@@ -12,13 +12,18 @@ data class WsTransaction(
     val request: Request,
     val response: WsResponse,
     val duration: Duration,
-    val labels: Map<String, String> = when {
-        response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
-        request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
-        else -> emptyMap()
-    }
+    val labels: Map<String, String> =
+        when {
+            response is WsConsumer -> mapOf(ROUTING_GROUP_LABEL to response.consumer.toString())
+            request is RequestWithRoute -> mapOf(ROUTING_GROUP_LABEL to request.xUriTemplate.toString())
+            else -> emptyMap()
+        },
 ) {
-    fun label(name: String, value: String) = copy(labels = labels + (name to value))
+    fun label(
+        name: String,
+        value: String,
+    ) = copy(labels = labels + (name to value))
+
     fun label(name: String) = labels[name]
 
     companion object {

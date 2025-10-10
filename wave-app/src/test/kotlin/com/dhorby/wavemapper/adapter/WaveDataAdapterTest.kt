@@ -13,8 +13,7 @@ import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-class WaveDataAdapterTest: FunctionalTestEnv()  {
-
+class WaveDataAdapterTest : FunctionalTestEnv() {
     val waveDataAdapter = WaveDataAdapter(siteListFunctionFake, dataForSiteFunctionFake)
 
     @Test

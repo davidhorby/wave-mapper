@@ -24,7 +24,7 @@ class WaveAdapter(
     val googleMapsClientApi: GoogleMapsClientApi,
     val metOfficeClient: MetOfficeClient,
 ) : WavePort {
-    val LOG: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
+    val log: Logger = LoggerFactory.getLogger(WaveHandlers::class.java)
 
     companion object {
         val start =
@@ -57,7 +57,7 @@ class WaveAdapter(
                         template = "/templates/WavePage",
                     )
                 } catch (e: Exception) {
-                    LOG.error("Failed to get wave data", e)
+                    log.error("Failed to get wave data", e)
                     null
                 }
             }

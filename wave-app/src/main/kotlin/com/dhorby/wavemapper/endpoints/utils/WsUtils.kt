@@ -8,12 +8,16 @@ import org.http4k.websocket.WsMessage
 import org.http4k.websocket.WsResponse
 
 object WsUtils {
+    fun generateWsResponse(message: String) =
+        WsResponse { ws: Websocket ->
+            ws.send(WsMessage(message))
+            ws.close()
+        }
 
-    fun generateWsResponse(message: String) = WsResponse { ws: Websocket ->
-        ws.send(WsMessage(message))
-        ws.close()
-    }
-
-    fun getMapData(storagePort:StoragePort): String =
-        storagePort.getLocationData().toGoogleMapFormatList().asJsonObject().toString()
+    fun getMapData(storagePort: StoragePort): String =
+        storagePort
+            .getLocationData()
+            .toGoogleMapFormatList()
+            .asJsonObject()
+            .toString()
 }
