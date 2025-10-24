@@ -16,7 +16,7 @@ It is easiest to manage the JDK by using SDKMAN!
 
 - Install [SDKMAN!](https://sdkman.io/install)
 ```bash
-sdk install java 24.0.2-librca
+sdk install java 21.0.8-librca
 ````
 ```bash
 sdk use java 21.0.8-librca
