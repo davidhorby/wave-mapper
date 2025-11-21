@@ -5,13 +5,13 @@ import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
 import com.dhorby.gcloud.external.storage.toPieceLocation
-import com.dhorby.gcloud.model.Distance
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
-import com.dhorby.gcloud.model.Player
 import com.dhorby.wavemapper.port.MetOfficePort
 import com.dhorby.wavemapper.port.StoragePort
+import model.Distance
+import model.Location
+import model.PieceLocation
+import model.PieceType
+import model.Player
 
 class StorageAdapter(
     private val dataStoreClient: Storable,

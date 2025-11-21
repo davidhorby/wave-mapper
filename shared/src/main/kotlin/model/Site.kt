@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model
+package model
 
 data class Site (
     val id:String,

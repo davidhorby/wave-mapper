@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper.model
 
-import com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
+import model.GeoLocation
+import model.PieceLocation
+import model.PieceType
 import org.http4k.contract.openapi.OpenAPIJackson.auto
 import org.http4k.websocket.WsMessage
 

@@ -1,6 +1,11 @@
 package com.dhorby.gcloud.data
 
-import com.dhorby.gcloud.model.*
+import model.GeoLocation
+import model.PieceLocation
+import model.PieceType
+import model.Site
+import model.WaveDataReading
+import model.WaveLocation
 import java.time.LocalDate
 
 

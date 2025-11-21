@@ -1,7 +1,7 @@
 package com.dhorby.gcloud.wavemapper.datautils
 
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.PieceType
+import model.Location
+import model.PieceType
 import com.dhorby.gcloud.wavemapper.mapWaveHeightToIcon
 import java.util.*
 

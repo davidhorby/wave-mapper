@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.port
 
-import com.dhorby.gcloud.model.Location
+import model.Location
 
 interface WaveDataPort {
     fun getAllWaveData(): List<Location>

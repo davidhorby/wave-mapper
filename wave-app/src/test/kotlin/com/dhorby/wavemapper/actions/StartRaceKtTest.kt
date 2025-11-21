@@ -2,7 +2,6 @@ package com.dhorby.wavemapper.actions
 
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.model.PieceLocation
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.finishLocation
 import com.dhorby.wavemapper.game.startLocation
@@ -17,6 +16,7 @@ import com.natpryce.hamkrest.greaterThan
 import com.natpryce.hamkrest.hasElement
 import com.natpryce.hamkrest.hasSize
 import com.natpryce.hamkrest.isEmpty
+import model.PieceLocation
 import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event
 import org.http4k.events.EventFilters

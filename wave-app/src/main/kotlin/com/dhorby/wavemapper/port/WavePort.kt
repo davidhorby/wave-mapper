@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.port
 
-import com.dhorby.gcloud.model.Location
+import model.Location
 import org.http4k.template.ViewModel
 
 interface WavePort {

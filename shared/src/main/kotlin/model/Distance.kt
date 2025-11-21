@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model
+package model
 
 data class Distance(val name: String, val distance: Int) {
     val alertLevel: String =

@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model
+package model
 
 enum class CardinalPoint {
     NORTH, SOUTH, WEST, EAST

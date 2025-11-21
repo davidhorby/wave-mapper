@@ -1,10 +1,10 @@
 package com.dhorby.wavemapper.adapter
 
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.WaveLocation
 import com.dhorby.gcloud.wavemapper.DataForSiteFunction
 import com.dhorby.gcloud.wavemapper.SiteListFunction
 import com.dhorby.wavemapper.port.WaveDataPort
+import model.Location
+import model.WaveLocation
 
 class WaveDataAdapter(
     val siteListFunction: SiteListFunction,

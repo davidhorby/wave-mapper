@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model
+package model
 
 data class WaveLocation(
     override val id: String,

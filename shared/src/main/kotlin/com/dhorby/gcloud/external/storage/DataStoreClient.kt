@@ -1,7 +1,7 @@
 package com.dhorby.gcloud.external.storage
 
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
+import model.PieceLocation
+import model.PieceType
 import com.dhorby.gcloud.wavemapper.DatastoreEvent
 import com.google.cloud.datastore.*
 import org.http4k.events.Event

@@ -2,8 +2,8 @@ package com.dhorby.gcloud.algorithms
 
 import com.dhorby.gcloud.algorithms.GeoDistance.kmPerHourToMPerSecond
 import com.dhorby.gcloud.algorithms.GeoDistance.toRadians
-import com.dhorby.gcloud.model.Bearing
-import com.dhorby.gcloud.model.GeoLocation
+import model.Bearing
+import model.GeoLocation
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test

@@ -3,7 +3,6 @@ package com.dhorby.wavemapper.adapter
 import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
 import com.dhorby.gcloud.external.storage.Storable
-import com.dhorby.gcloud.model.PieceLocation
 import com.google.cloud.datastore.Entity
 import com.natpryce.hamkrest.Matcher
 import com.natpryce.hamkrest.absent
@@ -11,6 +10,7 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasSize
 import com.natpryce.hamkrest.present
+import model.PieceLocation
 import org.junit.jupiter.api.Test
 
 interface StorageAdapterContract {

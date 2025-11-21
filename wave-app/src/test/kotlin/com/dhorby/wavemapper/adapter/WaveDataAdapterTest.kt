@@ -5,11 +5,11 @@ import com.dhorby.gcloud.data.TestData.siteName
 import com.dhorby.gcloud.data.TestData.testBoatLocation
 import com.dhorby.gcloud.data.TestData.testPirateLocation
 import com.dhorby.gcloud.data.TestData.testSharkLocation
-import com.dhorby.gcloud.model.Location
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormat
 import com.dhorby.wavemapper.env.FunctionalTestEnv
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import model.Location
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 

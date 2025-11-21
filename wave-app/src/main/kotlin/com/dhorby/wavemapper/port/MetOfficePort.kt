@@ -1,14 +1,14 @@
 package com.dhorby.wavemapper.port
 
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.Site
-import com.dhorby.gcloud.model.WaveLocation
 import com.dhorby.gcloud.wavemapper.Constants
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
 import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
 import com.dhorby.gcloud.wavemapper.getLocation
 import com.dhorby.gcloud.wavemapper.getSiteLocations
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import model.Location
+import model.Site
+import model.WaveLocation
 import java.net.URI
 import java.net.URL
 

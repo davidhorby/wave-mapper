@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.components
 
-import com.dhorby.gcloud.model.Player
+import model.Player
 import org.http4k.template.ViewModel
 
 data class WavePage(

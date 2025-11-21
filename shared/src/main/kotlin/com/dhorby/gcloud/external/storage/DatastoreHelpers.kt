@@ -1,9 +1,9 @@
 package com.dhorby.gcloud.external.storage
 
 import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
+import model.GeoLocation
+import model.PieceLocation
+import model.PieceType
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Key
 import com.google.cloud.datastore.LatLng

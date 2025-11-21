@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.WaveLocation
 import com.dhorby.wavemapper.model.AddPieceWsMessage
+import model.Location
+import model.WaveLocation
 import org.http4k.core.Body
 import org.http4k.format.Jackson.auto
 import org.http4k.websocket.WsMessage

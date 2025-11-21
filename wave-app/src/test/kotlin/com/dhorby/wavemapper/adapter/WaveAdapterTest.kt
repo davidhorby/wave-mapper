@@ -2,15 +2,15 @@ package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.external.junit.DataStoreExtension
 import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.model.GeoLocation
-import com.dhorby.gcloud.model.Location
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
 import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.tracing.addRequestCount
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
+import model.GeoLocation
+import model.Location
+import model.PieceLocation
+import model.PieceType
 import org.http4k.client.ApacheClient
 import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event

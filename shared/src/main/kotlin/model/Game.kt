@@ -1,3 +1,3 @@
-package com.dhorby.gcloud.model
+package model
 
 data class Game(val id:String)

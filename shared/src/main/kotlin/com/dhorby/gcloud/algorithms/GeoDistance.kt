@@ -1,7 +1,7 @@
 package com.dhorby.gcloud.algorithms
 
-import com.dhorby.gcloud.model.Bearing
-import com.dhorby.gcloud.model.GeoLocation
+import model.Bearing
+import model.GeoLocation
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToInt

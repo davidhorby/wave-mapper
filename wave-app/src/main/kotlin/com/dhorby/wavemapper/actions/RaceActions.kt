@@ -1,8 +1,6 @@
 package com.dhorby.wavemapper.actions
 
 import com.dhorby.gcloud.external.storage.EntityKind
-import com.dhorby.gcloud.model.PieceLocation
-import com.dhorby.gcloud.model.PieceType
 import com.dhorby.gcloud.wavemapper.datautils.toGoogleMapFormatList
 import com.dhorby.gcloud.wavemapper.sailMove
 import com.dhorby.wavemapper.adapter.WaveAdapter
@@ -12,6 +10,8 @@ import com.dhorby.wavemapper.game.testBoatLocation
 import com.dhorby.wavemapper.game.testPirateLocation
 import com.dhorby.wavemapper.game.testSharkLocation
 import com.dhorby.wavemapper.port.StoragePort
+import model.PieceLocation
+import model.PieceType
 import org.http4k.format.Gson.asJsonObject
 
 @Suppress("SameReturnValue")

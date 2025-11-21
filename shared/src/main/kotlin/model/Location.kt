@@ -1,4 +1,4 @@
-package com.dhorby.gcloud.model
+package model
 
 interface Location {
     val id: String
