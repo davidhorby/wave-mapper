@@ -1,6 +1,6 @@
 rootProject.name = "wave-mapper"
 
-include("domain","shared","wave-app")
+include("shared","wave-app")
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
