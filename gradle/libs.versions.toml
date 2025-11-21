@@ -15,6 +15,7 @@ gcloudAppEngine="2.0.24"
 gloudAppEngineTest="2.0.24"
 johnRengelmanVersion = '9.2.2'
 testContainersVersion = "2.0.2"
+googleCloudBigqueryVersion = "2.55.3"
 
 
 [libraries]
@@ -37,6 +38,7 @@ gcloud-datastore = { module = "com.google.cloud:google-cloud-datastore", version
 gcloud-bom = { module = "com.google.cloud:libraries-bom", version.ref = "gcloudBom" }
 gcloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager", version.ref = "gcloudSecretmanager" }
 gcloud-appengine = { module = "com.google.appengine:appengine-api-1.0-sdk", version.ref = "gcloudAppEngine" }
+gcloud-bigquery = { module = "com.google.cloud:google-cloud-bigquery", version.ref = "googleCloudBigqueryVersion" }
 
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jacksonVersion" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
@@ -65,7 +67,7 @@ gcloud-json-appengine-tools-sdk = { module = "com.google.appengine:appengine-too
 
 [bundles]
 http4k = ["http4k-core", "http4k-format-jackson", "http4k-format-xml", "http4k-template-handlebars", "http4k-contract", "http4k-format-argo", "http4k-client-apache", "http4k-server-jetty", "http4k-client-websocket", "http4k-client-tracerbullet"]
-googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-secretmanager","gcloud-appengine", "gcloud-bom"]
+googleCloud = ["gcloud-functions","gcloud-storage","gcloud-datastore","gcloud-secretmanager","gcloud-appengine", "gcloud-bom", "gcloud-bigquery"]
 jackson = ["jackson-core","jackson-kotlin","jackson-dataformat","jackson-datatype","jackson-databind"]
 kotlin = ["kotlin-stdlib","kotlin-reflect","kotlin-annotations","kotlin-json"]
 test = [ "junitJupiterApi", "junitJupiterParams", "kotlinTest", "http4kTestingHamkrest" ]

@@ -37,10 +37,10 @@ dependencies {
     testFixturesImplementation("org.testcontainers:gcloud:1.21.3")
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.googleCloudAppEngineTest)
-    testImplementation(libs.testContainers)
-    // https://mvnrepository.com/artifact/org.testcontainers/gcloud
     testImplementation("org.testcontainers:gcloud:1.21.3")
+    testImplementation(libs.bundles.googleCloud)
     testFixturesApi(libs.http4kTestingChaos)
+
     testRuntimeOnly(libs.bundles.testRuntime)
 }
 

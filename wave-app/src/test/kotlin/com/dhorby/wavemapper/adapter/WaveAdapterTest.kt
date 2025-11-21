@@ -24,32 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(DataStoreExtension::class)
 class WaveAdapterTest {
-//    companion object {
-//        val emulator: DatastoreEmulatorContainer = DatastoreEmulatorContainer(
-//            DockerImageName.parse("gcr.io/google.com/cloudsdktool/google-cloud-cli:441.0.0-emulators")
-//        )
-//        lateinit var datastore: Datastore
-//        @JvmStatic
-//        @BeforeAll
-//        fun setup() {
-//            emulator.start()
-//            val options:DatastoreOptions = DatastoreOptions.newBuilder()
-//                .setHost(emulator.emulatorEndpoint)
-//                .setCredentials(NoCredentials.getInstance())
-//                .setRetrySettings(ServiceOptions.getNoRetrySettings())
-//                .setProjectId(emulator.getProjectId())
-//                .build();
-//            datastore = options.getService();
-//        }
-//
-//        @JvmStatic
-//        @AfterAll
-//        fun tearDown() {
-//            emulator.stop()
-//        }
-//
-//    }
-
     private val events: (Event) -> Unit =
         EventFilters
             .AddTimestamp()
