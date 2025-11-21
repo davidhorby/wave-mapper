@@ -6,6 +6,7 @@ import com.google.cloud.bigquery.BigQueryOptions
 import com.google.cloud.bigquery.Dataset
 import com.google.cloud.bigquery.DatasetInfo
 import com.google.cloud.bigquery.Field
+import com.google.cloud.bigquery.InsertAllRequest
 import com.google.cloud.bigquery.Schema
 import com.google.cloud.bigquery.StandardSQLTypeName
 import com.google.cloud.bigquery.StandardTableDefinition
@@ -22,8 +23,9 @@ class TestContainerBQTest {
 
     val schema: Schema? =
         Schema.of(
-            Field.of("stringField", StandardSQLTypeName.STRING),
-            Field.of("booleanField", StandardSQLTypeName.BOOL)
+            Field.of("first_name", StandardSQLTypeName.STRING),
+            Field.of("last_name", StandardSQLTypeName.STRING),
+            Field.of("age", StandardSQLTypeName.INT64)
         )
     val datasetName = "MY_DATASET_NAME"
     val tableName = "MY_TABLE_NAME"
@@ -41,14 +43,16 @@ class TestContainerBQTest {
             .build()
         val bigQuery: BigQuery = options.getService()
 
+        // Create Dataset
         val datasetInfo = DatasetInfo.newBuilder(datasetName).build()
         val newDataset: Dataset? = bigQuery.create(datasetInfo)
-        val newDatasetName: String? = newDataset?.getDatasetId()?.getDataset()
+        val newDatasetName: String? = newDataset?.datasetId?.dataset
+
+        // Create Table
         val tableId = TableId.of(datasetName, tableName)
         val tableDefinition: TableDefinition? = StandardTableDefinition.of(schema)
         val tableInfo = TableInfo.newBuilder(tableId, tableDefinition).build()
         bigQuery.create(tableInfo)
-        println("BigQuery Endpoint: $url")
 
     }
 }
