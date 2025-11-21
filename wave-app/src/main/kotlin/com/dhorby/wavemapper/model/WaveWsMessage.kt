@@ -1,8 +1,5 @@
 package com.dhorby.wavemapper.model
 
-import model.GeoLocation
-import model.PieceLocation
-import model.PieceType
 import org.http4k.contract.openapi.OpenAPIJackson.auto
 import org.http4k.websocket.WsMessage
 

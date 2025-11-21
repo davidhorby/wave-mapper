@@ -1,10 +1,11 @@
 package com.dhorby.wavemapper.adapter
 
-import com.dhorby.gcloud.wavemapper.DataForSiteFunction
-import com.dhorby.gcloud.wavemapper.SiteListFunction
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.Site
+import com.dhorby.wavemapper.model.WaveLocation
 import com.dhorby.wavemapper.port.WaveDataPort
-import model.Location
-import model.WaveLocation
+import com.dhorby.wavemapper.wavemapper.DataForSiteFunction
+import com.dhorby.wavemapper.wavemapper.SiteListFunction
 
 class WaveDataAdapter(
     val siteListFunction: SiteListFunction,
@@ -12,7 +13,7 @@ class WaveDataAdapter(
 ) : WaveDataPort {
     override fun getAllWaveData(): List<Location> {
         val mapNotNull: List<WaveLocation> =
-            siteListFunction().mapNotNull { site ->
+            siteListFunction().mapNotNull { site: Site ->
                 dataForSiteFunction(site.id)
             }
         return mapNotNull

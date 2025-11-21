@@ -1,14 +1,14 @@
 package com.dhorby.wavemapper.port
 
-import com.dhorby.gcloud.wavemapper.Constants
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
-import com.dhorby.gcloud.wavemapper.getLocation
-import com.dhorby.gcloud.wavemapper.getSiteLocations
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.Site
+import com.dhorby.wavemapper.model.WaveLocation
+import com.dhorby.wavemapper.wavemapper.Constants
+import com.dhorby.wavemapper.wavemapper.Constants.MET_OFFICE_URL
+import com.dhorby.wavemapper.wavemapper.Constants.metOfficeApiKey
+import com.dhorby.wavemapper.wavemapper.getLocation
+import com.dhorby.wavemapper.wavemapper.getSiteLocations
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import model.Location
-import model.Site
-import model.WaveLocation
 import java.net.URI
 import java.net.URL
 
@@ -35,7 +35,7 @@ abstract class MetOfficePort {
 
     private fun dataForSiteFunction(siteId: String): WaveLocation? {
         val metOfficeUrl: URL =
-            URI("${metOfficeUrl}$siteId?res=3hourly&key=$metOfficeApiKey").toURL()
+            URI("${MET_OFFICE_URL}$siteId?res=3hourly&key=$metOfficeApiKey").toURL()
         return try {
             val xmlText = metOfficeUrl.readText()
             xmlMapper.readTree(xmlText).getLocation()

@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper.adapter
 
-import com.dhorby.gcloud.external.junit.DataStoreExtension
-import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.external.storage.Storable
+import com.dhorby.wavemapper.model.GeoLocation
+import com.dhorby.wavemapper.model.PieceLocation
+import com.dhorby.wavemapper.model.PieceType
 import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.Entity
 import com.google.cloud.datastore.Value
@@ -10,27 +10,13 @@ import com.natpryce.hamkrest.Matcher
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
 import com.natpryce.hamkrest.isA
-import model.GeoLocation
-import model.PieceLocation
-import model.PieceType
 import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event
 import org.http4k.events.EventFilters
 import org.http4k.events.then
 import org.http4k.format.Jackson
-import org.junit.jupiter.api.extension.RegisterExtension
 
 class StorageAdapterFunctionalTests : StorageAdapterContract {
-    companion object {
-        @JvmStatic
-        @RegisterExtension
-        val server =
-            DataStoreExtension()
-                .builder()
-                .build()
-    }
-
-    private val datastore = server.localDatastoreHelper.options.service
     private val events: (Event) -> Unit =
         EventFilters
             .AddTimestamp()
@@ -39,7 +25,6 @@ class StorageAdapterFunctionalTests : StorageAdapterContract {
             .then(addRequestCount())
             .then(AutoMarshallingEvents(Jackson))
 
-    override val dataStoreClient: Storable = DataStoreClient(datastore = datastore, events = events)
     override val pieceLocation =
         PieceLocation(
             id = "test",
@@ -49,9 +34,14 @@ class StorageAdapterFunctionalTests : StorageAdapterContract {
         )
     override val multiplePieces: List<PieceLocation> =
         listOf(
-            pieceLocation,
             pieceLocation.copy(
-                id = "test2",
+                id = "mp-test1",
+                name = "first piece",
+                geoLocation = GeoLocation(34.12, 32.42),
+                pieceType = PieceType.PIRATE,
+            ),
+            pieceLocation.copy(
+                id = "mp-test2",
                 name = "second piece",
                 geoLocation = GeoLocation(23.32, 67.87),
                 pieceType = PieceType.PIRATE,

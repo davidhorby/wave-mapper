@@ -14,6 +14,7 @@ gcloudSecretmanager="2.32.0"
 gcloudAppEngine="2.0.24"
 gloudAppEngineTest="2.0.24"
 johnRengelmanVersion = '9.2.2'
+testContainersVersion = "2.0.2"
 
 
 [libraries]
@@ -50,6 +51,7 @@ junitPlatforLauncher = { module = "org.junit.platform:junit-platform-launcher", 
 
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 http4kTestingHamkrest = { module = "org.http4k:http4k-testing-hamkrest", version.ref = "http4k" }
+testContainers = { module = "org.testcontainers:testcontainers", version.ref = "testContainersVersion" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref="kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref="kotlin" }

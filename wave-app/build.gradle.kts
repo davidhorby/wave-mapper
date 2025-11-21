@@ -14,6 +14,7 @@ buildscript {
 plugins {
     id("com.gradleup.shadow") version "9.2.2"
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
+    `java-test-fixtures`
     application
 }
 
@@ -31,12 +32,14 @@ dependencies {
     implementation(libs.bundles.jackson)
     implementation(libs.bundles.googleCloud)
 
-    implementation(project(":domain"))
-    implementation(project(":shared"))
-
+    testFixturesImplementation(libs.bundles.googleCloud)
+    testFixturesImplementation(libs.junitJupiterApi)
+    testFixturesImplementation("org.testcontainers:gcloud:1.21.3")
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.googleCloudAppEngineTest)
-    testImplementation(testFixtures(project(":shared")))
+    testImplementation(libs.testContainers)
+    // https://mvnrepository.com/artifact/org.testcontainers/gcloud
+    testImplementation("org.testcontainers:gcloud:1.21.3")
     testFixturesApi(libs.http4kTestingChaos)
     testRuntimeOnly(libs.bundles.testRuntime)
 }

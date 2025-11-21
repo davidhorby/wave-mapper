@@ -1,10 +1,10 @@
 package com.dhorby.wavemapper.port
 
-import com.dhorby.gcloud.external.storage.EntityKind
-import model.Location
-import model.PieceLocation
-import model.PieceType
-import model.Player
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.PieceLocation
+import com.dhorby.wavemapper.model.PieceType
+import com.dhorby.wavemapper.model.Player
+import com.dhorby.wavemapper.storage.EntityKind
 
 interface StoragePort {
     fun getAllPieces(): List<PieceLocation>

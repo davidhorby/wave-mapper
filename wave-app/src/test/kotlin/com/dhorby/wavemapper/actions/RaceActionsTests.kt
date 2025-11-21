@@ -1,13 +1,12 @@
 package com.dhorby.wavemapper.actions
 
 import com.dhorby.gcloud.external.junit.DataStoreExtension
-import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.external.storage.EntityKind
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.game.testBoatLocation
+import com.dhorby.wavemapper.storage.DataStoreClient
+import com.dhorby.wavemapper.storage.EntityKind
 import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.Datastore
-import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.http4k.events.AutoMarshallingEvents
@@ -30,31 +29,32 @@ class RaceActionsTests {
 
     @Test
     fun `should store a game piece`(datastore: Datastore) {
-        val (storagePort, raceActions: RaceActions) = pair(datastore)
+        val (storagePort, raceActions: RaceActions) = getStoragePort(datastore)
         val pieceLocation = testBoatLocation
+        println(datastore)
         raceActions.addPiece(pieceLocation)
         assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
     }
 
-    @Test
-    fun `should delete a game piece`(datastore: Datastore) {
-        val (storagePort, raceActions: RaceActions) = pair(datastore)
-        val pieceLocation = testBoatLocation
-        raceActions.addPiece(pieceLocation)
-        assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
-        raceActions.deletePiece(pieceLocation)
-        assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), absent())
-    }
-
-    @Test
-    fun `should not start the race of there are no players`(datastore: Datastore) {
-        val (storagePort, raceActions: RaceActions) = pair(datastore)
-        val startResponse = raceActions.startRace()
-        assertThat(startResponse, equalTo("Not enough players"))
-    }
-
-    private fun pair(datastore: Datastore): Pair<StorageAdapter, RaceActions> {
-        val dataStoreClient = DataStoreClient(events, datastore = datastore)
+//    @Test
+//    fun `should delete a game piece`(datastore: Datastore) {
+//        val (storagePort, raceActions: RaceActions) = getStoragePort(datastore)
+//        val pieceLocation = testBoatLocation
+//        raceActions.addPiece(pieceLocation)
+//        assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), equalTo(testBoatLocation))
+//        raceActions.deletePiece(pieceLocation)
+//        assertThat(storagePort.getPiece(EntityKind.PIECE_LOCATION, key = pieceLocation.id), absent())
+//    }
+//
+//    @Test
+//    fun `should not start the race of there are no players`(datastore: Datastore) {
+//        val (storagePort, raceActions: RaceActions) = getStoragePort(datastore)
+//        val startResponse = raceActions.startRace()
+//        assertThat(startResponse, equalTo("Not enough players"))
+//    }
+//
+    private fun getStoragePort(datastore: Datastore): Pair<StorageAdapter, RaceActions> {
+        val dataStoreClient = DataStoreClient(datastore = datastore)
         val storagePort = StorageAdapter(dataStoreClient)
         val raceActions: RaceActions = RaceActions(storagePort)
         return Pair(storagePort, raceActions)

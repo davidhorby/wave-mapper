@@ -1,13 +1,13 @@
 package com.dhorby.wavemapper.external.metoffice
 
-import com.dhorby.gcloud.wavemapper.Constants
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeApiKey
-import com.dhorby.gcloud.wavemapper.Constants.metOfficeUrl
-import com.dhorby.gcloud.wavemapper.getLocation
-import com.dhorby.gcloud.wavemapper.getSiteLocations
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.Site
+import com.dhorby.wavemapper.wavemapper.Constants
+import com.dhorby.wavemapper.wavemapper.Constants.MET_OFFICE_URL
+import com.dhorby.wavemapper.wavemapper.Constants.metOfficeApiKey
+import com.dhorby.wavemapper.wavemapper.getLocation
+import com.dhorby.wavemapper.wavemapper.getSiteLocations
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import model.Location
-import model.Site
 import java.net.URI
 
 class MetOfficeClient {
@@ -26,11 +26,11 @@ class MetOfficeClient {
             .map { site ->
                 try {
                     val metOfficeUrls =
-                        URI("${metOfficeUrl}${site.id}?res=3hourly&key=$metOfficeApiKey").toURL()
+                        URI("${MET_OFFICE_URL}${site.id}?res=3hourly&key=$metOfficeApiKey").toURL()
                     val xmlText = metOfficeUrls.readText()
                     xmlMapper.readTree(xmlText).getLocation()
                 } catch (ex: Exception) {
-                    println("Failed to read url ${URI(metOfficeUrl).toURL()} ${ex.message}")
+                    println("Failed to read url ${URI(MET_OFFICE_URL).toURL()} ${ex.message}")
                     null
                 }
             }.filterNotNull()

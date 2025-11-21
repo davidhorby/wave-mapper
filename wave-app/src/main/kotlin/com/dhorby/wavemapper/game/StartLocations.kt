@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper.game
 
-import model.GeoLocation
-import model.PieceLocation
-import model.PieceType
+import com.dhorby.wavemapper.model.GeoLocation
+import com.dhorby.wavemapper.model.PieceLocation
+import com.dhorby.wavemapper.model.PieceType
 
 val startLocation =
     PieceLocation(

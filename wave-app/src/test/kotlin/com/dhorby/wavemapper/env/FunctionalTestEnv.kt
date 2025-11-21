@@ -1,9 +1,9 @@
 package com.dhorby.wavemapper.env
 
 import com.dhorby.gcloud.data.TestData
-import com.dhorby.gcloud.wavemapper.AppFunctions
-import com.dhorby.gcloud.wavemapper.DataForSiteFunction
-import com.dhorby.gcloud.wavemapper.SiteListFunction
+import com.dhorby.wavemapper.wavemapper.AppFunctions
+import com.dhorby.wavemapper.wavemapper.DataForSiteFunction
+import com.dhorby.wavemapper.wavemapper.SiteListFunction
 
 open class FunctionalTestEnv : AppFunctions {
     override val siteListFunction: SiteListFunction = { mutableListOf(TestData.testSiteLocation) }

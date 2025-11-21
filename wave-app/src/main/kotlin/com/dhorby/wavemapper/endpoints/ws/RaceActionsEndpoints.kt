@@ -3,8 +3,8 @@ package com.dhorby.wavemapper.endpoints.ws
 import com.dhorby.wavemapper.actions.RaceActions
 import com.dhorby.wavemapper.endpoints.utils.WsUtils.generateWsResponse
 import com.dhorby.wavemapper.endpoints.utils.WsUtils.getMapData
+import com.dhorby.wavemapper.model.PieceLocation
 import com.dhorby.wavemapper.port.StoragePort
-import model.PieceLocation
 import org.http4k.core.Request
 import org.http4k.websocket.WsResponse
 

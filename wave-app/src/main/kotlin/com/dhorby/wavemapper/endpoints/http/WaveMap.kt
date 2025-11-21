@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper.endpoints.http
 
-import com.dhorby.gcloud.wavemapper.Constants
 import com.dhorby.wavemapper.model.GMap
+import com.dhorby.wavemapper.wavemapper.Constants
 import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status

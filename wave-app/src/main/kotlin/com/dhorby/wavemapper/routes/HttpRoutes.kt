@@ -1,7 +1,5 @@
 package com.dhorby.wavemapper.routes
 
-import com.dhorby.gcloud.external.storage.DataStoreClient
-import com.dhorby.gcloud.wavemapper.WaveServiceFunctions
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.adapter.WaveAdapter
 import com.dhorby.wavemapper.adapter.WaveDataAdapter
@@ -14,6 +12,8 @@ import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
 import com.dhorby.wavemapper.handlers.WaveHandlers
 import com.dhorby.wavemapper.handlers.withEvents
 import com.dhorby.wavemapper.port.WaveDataPort
+import com.dhorby.wavemapper.storage.DataStoreClient
+import com.dhorby.wavemapper.wavemapper.WaveServiceFunctions
 import org.http4k.client.ApacheClient
 import org.http4k.contract.contract
 import org.http4k.contract.meta

@@ -1,7 +1,7 @@
 package com.dhorby.wavemapper
 
-import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.wavemapper.routes.WaveServiceRoutes
+import com.dhorby.wavemapper.storage.DataStoreClient
 import com.dhorby.wavemapper.tracing.addRequestCount
 import com.google.cloud.datastore.DatastoreOptions
 import org.http4k.events.AutoMarshallingEvents
@@ -28,7 +28,7 @@ object WaveMapperHttp4kApp {
                 .then(AutoMarshallingEvents(Jackson))
 
         LOG.info("Starting the Wave Mapper App")
-        val datastoreClient = DataStoreClient(events, DatastoreOptions.getDefaultInstance().service!!)
+        val datastoreClient = DataStoreClient(DatastoreOptions.getDefaultInstance().service!!)
         val server = WaveServiceRoutes(datastoreClient, events).asServer(Jetty(8080)).start()
         println("Server started on " + server.port())
     }

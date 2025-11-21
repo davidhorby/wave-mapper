@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper.external.google
 
-import com.dhorby.gcloud.wavemapper.Constants.mapsApiKeyServer
 import com.dhorby.wavemapper.model.GoogleMapLocation
 import com.dhorby.wavemapper.model.googleMapLocationLens
+import com.dhorby.wavemapper.wavemapper.Constants.mapsApiKeyServer
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request

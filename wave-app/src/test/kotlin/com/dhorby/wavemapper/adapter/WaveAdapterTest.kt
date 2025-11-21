@@ -1,16 +1,17 @@
 package com.dhorby.wavemapper.adapter
 
 import com.dhorby.gcloud.external.junit.DataStoreExtension
-import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.wavemapper.external.google.GoogleMapsClientApi
 import com.dhorby.wavemapper.external.metoffice.MetOfficeClient
+import com.dhorby.wavemapper.model.GeoLocation
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.PieceLocation
+import com.dhorby.wavemapper.model.PieceType
+import com.dhorby.wavemapper.storage.DataStoreClient
 import com.dhorby.wavemapper.tracing.addRequestCount
+import com.google.cloud.datastore.Datastore
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.present
-import model.GeoLocation
-import model.Location
-import model.PieceLocation
-import model.PieceType
 import org.http4k.client.ApacheClient
 import org.http4k.events.AutoMarshallingEvents
 import org.http4k.events.Event
@@ -19,19 +20,35 @@ import org.http4k.events.then
 import org.http4k.format.Jackson
 import org.http4k.template.ViewModel
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(DataStoreExtension::class)
 class WaveAdapterTest {
-    companion object {
-        @JvmStatic
-        @RegisterExtension
-        val server =
-            DataStoreExtension()
-                .builder()
-                .build()
-    }
-
-    private val datastore = server.localDatastoreHelper.options.service
+//    companion object {
+//        val emulator: DatastoreEmulatorContainer = DatastoreEmulatorContainer(
+//            DockerImageName.parse("gcr.io/google.com/cloudsdktool/google-cloud-cli:441.0.0-emulators")
+//        )
+//        lateinit var datastore: Datastore
+//        @JvmStatic
+//        @BeforeAll
+//        fun setup() {
+//            emulator.start()
+//            val options:DatastoreOptions = DatastoreOptions.newBuilder()
+//                .setHost(emulator.emulatorEndpoint)
+//                .setCredentials(NoCredentials.getInstance())
+//                .setRetrySettings(ServiceOptions.getNoRetrySettings())
+//                .setProjectId(emulator.getProjectId())
+//                .build();
+//            datastore = options.getService();
+//        }
+//
+//        @JvmStatic
+//        @AfterAll
+//        fun tearDown() {
+//            emulator.stop()
+//        }
+//
+//    }
 
     private val events: (Event) -> Unit =
         EventFilters
@@ -40,7 +57,6 @@ class WaveAdapterTest {
             .then(EventFilters.AddZipkinTraces())
             .then(addRequestCount())
             .then(AutoMarshallingEvents(Jackson))
-    val storageAdapter = StorageAdapter(DataStoreClient(events, datastore))
 
     val pieceLocation =
         PieceLocation(
@@ -51,7 +67,8 @@ class WaveAdapterTest {
         )
 
     @Test
-    fun `wave page should be present`() {
+    fun `wave page should be present`(datastore: Datastore) {
+        val storageAdapter = StorageAdapter(DataStoreClient(datastore))
         val waveAdapter =
             WaveAdapter(
                 storageAdapter = storageAdapter,
@@ -64,7 +81,8 @@ class WaveAdapterTest {
     }
 
     @Test
-    fun `wave data should be present`() {
+    fun `wave data should be present`(datastore: Datastore) {
+        val storageAdapter = StorageAdapter(DataStoreClient(datastore))
         val waveAdapter =
             WaveAdapter(
                 storageAdapter = storageAdapter,

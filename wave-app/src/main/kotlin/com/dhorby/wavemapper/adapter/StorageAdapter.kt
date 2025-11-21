@@ -1,17 +1,17 @@
 package com.dhorby.wavemapper.adapter
 
-import com.dhorby.gcloud.algorithms.GeoDistance
-import com.dhorby.gcloud.external.storage.EntityKind
-import com.dhorby.gcloud.external.storage.EntityKind.PIECE_LOCATION
-import com.dhorby.gcloud.external.storage.Storable
-import com.dhorby.gcloud.external.storage.toPieceLocation
+import com.dhorby.wavemapper.algorithms.GeoDistance
+import com.dhorby.wavemapper.model.Distance
+import com.dhorby.wavemapper.model.Location
+import com.dhorby.wavemapper.model.PieceLocation
+import com.dhorby.wavemapper.model.PieceType
+import com.dhorby.wavemapper.model.Player
 import com.dhorby.wavemapper.port.MetOfficePort
 import com.dhorby.wavemapper.port.StoragePort
-import model.Distance
-import model.Location
-import model.PieceLocation
-import model.PieceType
-import model.Player
+import com.dhorby.wavemapper.storage.EntityKind
+import com.dhorby.wavemapper.storage.EntityKind.PIECE_LOCATION
+import com.dhorby.wavemapper.storage.Storable
+import com.dhorby.wavemapper.storage.toPieceLocation
 
 class StorageAdapter(
     private val dataStoreClient: Storable,

@@ -1,6 +1,6 @@
 package com.dhorby.wavemapper.components
 
-import model.Player
+import com.dhorby.wavemapper.model.Player
 import org.http4k.template.ViewModel
 
 data class WavePage(

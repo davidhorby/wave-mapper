@@ -1,8 +1,8 @@
 package com.dhorby.wavemapper.routes
 
-import com.dhorby.gcloud.external.storage.DataStoreClient
 import com.dhorby.wavemapper.adapter.StorageAdapter
 import com.dhorby.wavemapper.endpoints.ws.RaceActionsEndpoints
+import com.dhorby.wavemapper.storage.DataStoreClient
 import org.http4k.events.Event
 import org.http4k.server.PolyHandler
 
